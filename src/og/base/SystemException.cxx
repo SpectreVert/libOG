@@ -7,9 +7,9 @@
  *
 */
 
-#include "SystemException.hpp"
+#include <og/base/SystemException.hpp>
 
-using namespace sge;
+using namespace og;
 
 SystemException::SystemException(const char* t_message) :
     m_message(t_message), m_errno(errno)

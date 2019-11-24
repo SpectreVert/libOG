@@ -1,5 +1,5 @@
 /*
- * SGE, 2019
+ * libOG, 2019
  *
  * Name: NonCopyable.hpp
  *
@@ -9,13 +9,16 @@
 
 #pragma once
 
-namespace sge {
+namespace og {
 
-class non_copyable {
+class NonCopyable {
+protected:
+	NonCopyable() {}
+	~NonCopyable() {}
+
 private:
-	non_copyable();
-	non_copyable(const non_copyable&) = delete;
-	non_copyable&operator=(const non_copyable&) = delete;
-}; // class non_copyable
+	NonCopyable (const NonCopyable&);
+	NonCopyable& operator=(const NonCopyable&);
+}; // class NonCopyable
 
-} // namespace sge
+} // namespace og

@@ -12,6 +12,7 @@
 #include <og/network/Socket.hpp>
 
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
@@ -27,7 +28,7 @@ public:
 	static void blocking(SocketHandle socket, bool blocking);
 	static void close(SocketHandle socket);
 
-} // class SocketHelper
+}; // class SocketHelper
 
 } // namespace impl
 

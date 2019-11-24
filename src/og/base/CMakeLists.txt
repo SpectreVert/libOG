@@ -1,9 +1,9 @@
 set(SRCDIR ${PROJECT_SOURCE_DIR}/src/og/base)
-set(INCDIR ${PROJECT_SOURCE_DIR}/include/og/base)
+set(HEADIR ${PROJECT_SOURCE_DIR}/include/og/base)
 
 set(SRC
 	${SRCDIR}/SystemException.cxx
-	${INCDIR}/SystemException.hpp
+	${HEADIR}/SystemException.hpp
 )
 
 # if(UNIX)
@@ -11,3 +11,4 @@ set(SRC
 # endif()
 
 add_library(og-base ${SRC})
+target_include_directories(og-base PUBLIC ${INCDIRS})

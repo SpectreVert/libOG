@@ -7,6 +7,7 @@
  * 
 */
 
+#include <og/base/SystemException.hpp>
 #include <og/network/Socket.hpp>
 #include <og/network/SocketImplementation.hpp>
 
@@ -18,6 +19,12 @@ Socket::Socket(Type t_type) :
 	m_type(t_type)
 {
 
+}
+
+Socket::~Socket()
+{
+	/* RAII */
+	close();
 }
 
 bool Socket::blocking() const
@@ -32,18 +39,18 @@ void Socket::blocking(bool blocking)
 	m_blocking = true;
 }
 
-void open()
+void Socket::open()
 {
 	if (m_socket != impl::SocketHelper::bad_socket())
 		return;
 	
 	SocketHandle t_socket = socket(PF_INET, m_type == UDP ? SOCK_DGRAM : SOCK_STREAM, 0);
-	if (hdl == impl::SocketHelper::bad_socket())
+	if (t_socket == impl::SocketHelper::bad_socket())
 		throw SystemException("socket");
 	open(t_socket);
 }
 
-void open(SocketHandle t_socket)
+void Socket::open(SocketHandle t_socket)
 {
 	if (m_socket != impl::SocketHelper::bad_socket())
 		return;
@@ -53,7 +60,7 @@ void open(SocketHandle t_socket)
 	blocking(true);
 }
 
-void close()
+void Socket::close()
 {
 	if (m_socket != impl::SocketHelper::bad_socket()) {
 		impl::SocketHelper::close(m_socket);

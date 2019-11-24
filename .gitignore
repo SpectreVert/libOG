@@ -31,5 +31,11 @@
 *.out
 *.app
 
+# Files and folders from build
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
 # Editors
 *.swp

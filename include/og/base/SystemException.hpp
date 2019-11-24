@@ -1,5 +1,5 @@
 /*
- * SGE, 2019
+ * libOG, 2019
  *
  * Name: SystemException.hpp
  *
@@ -16,7 +16,7 @@
 #include <cstring>
 #include <cerrno>
 
-namespace sge {
+namespace og {
 
 class SystemException : public std::exception {
 public:
@@ -28,6 +28,7 @@ public:
 private:
     const char* m_message;
     int m_errno;
+
 }; // class SystemException
 
-} // namespace sge
+} // namespace og

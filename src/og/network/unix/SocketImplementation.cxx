@@ -10,7 +10,7 @@
 #include <og/network/unix/SocketImplementation.hpp>
 #include <og/base/SystemException.hpp>
 
-using namespace og;
+using namespace og::impl;
 
 void SocketHelper::blocking(SocketHandle socket, bool blocking)
 {

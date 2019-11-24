@@ -19,9 +19,9 @@ public:
 
 	enum Status {
 		SUCCESS = 0,
-		AGAIN = 1;
+		AGAIN = 1,
 		ERROR = 42,
-	}
+	};
 
 	virtual ~Socket();
 

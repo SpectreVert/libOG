@@ -16,7 +16,6 @@ namespace og {
 
 class Socket : NonCopyable {
 public:
-
 	enum Status {
 		SUCCESS = 0,
 		AGAIN = 1,
@@ -41,7 +40,6 @@ protected:
 	Socket(Type t_type);
 
 private:
-
 	SocketHandle m_socket;
 	bool m_blocking;
 	Type m_type;

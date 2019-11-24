@@ -12,11 +12,13 @@
 using namespace og;
 
 SystemException::SystemException(const char* t_message) :
-    m_message(t_message), m_errno(errno)
+    m_message(t_message),
+	m_errno(errno)
 {}
 
 SystemException::SystemException(const char* t_message, int t_errno) :
-    m_message(t_message), m_errno(t_errno)
+    m_message(t_message),
+	m_errno(t_errno)
 {}
 
 const char* SystemException::what() const noexcept

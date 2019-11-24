@@ -57,7 +57,7 @@ void Socket::open(SocketHandle t_socket)
 	/* Take note of the new handle */
 	m_socket = t_socket;
 	/* Set its blocking status to the current blocking status */
-	blocking(true);
+	blocking(m_blocking);
 }
 
 void Socket::close()

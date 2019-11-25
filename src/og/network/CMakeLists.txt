@@ -5,6 +5,8 @@ set(SRC
 	${SRCDIR}/Socket.cxx
 	${HEADIR}/Socket.hpp
 	${SRCDIR}/SocketImplementation.hpp
+	${HEADIR}/ip/Ipv4.hpp
+	${SRCDIR}/ip/Ipv4.cxx
 )
 
 if(UNIX)

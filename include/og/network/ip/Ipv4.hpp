@@ -15,12 +15,24 @@ namespace og {
 
 class Ipv4 {
 public:
+	static const Ipv4 localhost; // 127.0.0.1
+	static const Ipv4 broadcast; // 255.255.255.255
+	static const Ipv4 any;       // 0.0.0.0
+
 	Ipv4();
-	Ipv4(const char* address);
-	Ipv4(const std::string& address);
 	Ipv4(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);
 	Ipv4(uint32_t address);
+	Ipv4(const char* address);
+	Ipv4(const std::string& address);
 
-} // class v4
+	std::string to_string() const;
+	uint32_t to_int() const;
+
+	static Ipv4 get_local_address();
+	
+private:
+	bool m_good;
+	uint32_t m_address;
+}; // class Ipv4
 
 } // namespace og

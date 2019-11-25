@@ -20,7 +20,10 @@ namespace impl {
 class SocketHelper {
 public:
 
-	static SocketHandle bad_socket();
+	static SocketHandle bad_socket;
+
+    static void blocking(SocketHandle socket, bool blocking);
+    static void close(SocketHandle socket);
 
 } // class SocketHelper
 

@@ -8,9 +8,12 @@
 */
 
 #include <og/network/ip/Ipv4.hpp>
-#include <og/network/Socket.hpp>
+#include <og/network/SocketHandle.hpp>
+#include <og/network/SocketImplementation.hpp>
+#include <og/base/SystemException.hpp>
 
 #include <arpa/inet.h>
+#include <cstring>
 
 namespace og {
 
@@ -55,7 +58,37 @@ uint32_t Ipv4::to_int() const
 
 Ipv4 Ipv4::get_local_address()
 {
-	SocketHandle 
+	Ipv4 local;
+	SocketHandle sock = ::socket(PF_INET, SOCK_DGRAM, 0);
+	sockaddr_in loopback;
+
+	if (sock == impl::SocketHelper::bad_socket)
+		throw SystemException("socket");
+
+	std::memset(&loopback, 0, sizeof(loopback));
+	loopback.sin_family = AF_INET;
+	loopback.sin_addr.s_addr = INADDR_LOOPBACK;
+	loopback.sin_port = htons(9);
+
+	/* Not sure if connect returns -1 on failure on Windows... */
+	if (connect(sock, reinterpret_cast<sockaddr*>(&loopback), sizeof(loopback)) == -1) {
+		SystemException e("connect");
+		impl::SocketHelper::close(sock);
+		throw e;
+	}
+
+	socklen_t addrlen = sizeof(loopback);
+	if (getsockname(sock, reinterpret_cast<sockaddr*>(&loopback), &addrlen) == -1) {
+		SystemException e("getsockname");
+		impl::SocketHelper::close(sock);
+		throw e;
+	}
+
+	impl::SocketHelper::close(sock);
+	
+	local = Ipv4(ntohl(loopback.sin_addr.s_addr));
+
+	return local;
 }
 
 } // namespace og

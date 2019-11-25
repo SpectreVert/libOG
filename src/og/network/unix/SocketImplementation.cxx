@@ -10,7 +10,11 @@
 #include <og/network/unix/SocketImplementation.hpp>
 #include <og/base/SystemException.hpp>
 
-using namespace og::impl;
+namespace og {
+
+namespace impl {
+
+SocketHandle SocketHelper::bad_socket = -1;
 
 void SocketHelper::blocking(SocketHandle socket, bool blocking)
 {
@@ -31,3 +35,7 @@ void SocketHelper::close(SocketHandle socket)
 	if (::close(socket) == -1)
 		throw SystemException("close");
 }
+
+} // namespace impl
+
+} // namespace og

@@ -11,6 +11,8 @@
 #include <og/network/ip/Ipv4.hpp>
 #include <og/base/SystemException.hpp>
 
+#include <cstring>
+
 namespace og {
 
 namespace impl {
@@ -41,6 +43,7 @@ sockaddr_in SocketHelper::fill_ipv4_sockaddr(const Ipv4& address, uint16_t port)
 {
 	sockaddr_in addr;
 
+	std::memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = port;
 	addr.sin_addr.s_addr = address.to_int();

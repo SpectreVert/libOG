@@ -20,6 +20,8 @@ namespace og {
 
 class Ipv4;
 
+typedef socklen_t Addrlen;
+
 namespace impl {
 
 class SocketHelper {

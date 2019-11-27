@@ -17,9 +17,9 @@ namespace og {
 class Socket : NonCopyable {
 public:
 	enum Status {
-		SUCCESS = 0,
-		AGAIN = 1,
-		ERROR = 42,
+		Success = 0,
+		Again = 1,
+		Error = 42,
 	};
 
 	virtual ~Socket();

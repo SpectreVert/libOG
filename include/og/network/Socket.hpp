@@ -27,6 +27,7 @@ public:
 	bool blocking() const;
 	void blocking(bool blocking);
 
+	SocketHandle handle() const;
 protected:
 	void open();
 	void open(SocketHandle t_socket);

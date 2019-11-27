@@ -39,6 +39,11 @@ void Socket::blocking(bool blocking)
 	m_blocking = true;
 }
 
+SocketHandle Socket::handle() const
+{
+	return m_socket;
+}
+
 void Socket::open()
 {
 	if (m_socket != impl::SocketHelper::bad_socket)

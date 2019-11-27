@@ -18,6 +18,8 @@
 
 namespace og {
 
+class Ipv4;
+
 namespace impl {
 
 class SocketHelper {
@@ -27,6 +29,8 @@ public:
 
 	static void blocking(SocketHandle socket, bool blocking);
 	static void close(SocketHandle socket);
+
+	static sockaddr_in fill_ipv4_sockaddr(const Ipv4& address, uint16_t port);
 
 }; // class SocketHelper
 

@@ -8,6 +8,7 @@
 */
 
 #include <og/network/unix/SocketImplementation.hpp>
+#include <og/network/ip/Ipv4.hpp>
 #include <og/base/SystemException.hpp>
 
 namespace og {
@@ -34,6 +35,16 @@ void SocketHelper::close(SocketHandle socket)
 {
 	if (::close(socket) == -1)
 		throw SystemException("close");
+}
+
+sockaddr_in SocketHelper::fill_ipv4_sockaddr(const Ipv4& address, uint16_t port)
+{
+	sockaddr_in addr;
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = port;
+	addr.sin_addr.s_addr = address.to_int();
+	return addr;
 }
 
 } // namespace impl

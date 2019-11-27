@@ -10,30 +10,22 @@
 #pragma once
 
 #include <og/network/Socket.hpp>
+#include <og/network/ip/Ipv4.hpp>
 
 namespace og {
 
 class UdpSocket : public Socket {
 public:
-
-	/* Maximum possible datagram length is coded in a 16 bits section.
-	2^16-1 = 65535 octets max size for an entire IPv4 packet.
-	(including IPv4 header and payload, which would be the UDP
-	header and UDP payload).
-
-	IHL (Internet Header Length) field of IPv4 packet specifies 
-	the number of 32-bit words in the header. Its min value is 5.
-	So min value for header is 160 bits or 20 octets.
-
-	An UDP header consists of four 16 bits fields; so a total
-	length of 8 octets.
-
-	Therefore maximum size of UDP payload is 65535 - 28 = 65507 octets.
-	*/
-	const int maximum_datagram_size = 65507;
+	static const int maximum_datagram_size;
 
 	UdpSocket();
 
-} // class UdpSocket
+	Status bind(const Ipv4& address, uint16_t port);
+	void unbind();
+
+	Status send_to(const void* data, std::size_t len, const Ipv4& address, uint16_t port);
+	Status receive(void* buffer, std::size_t len, std::size_t received, Ipv4& address, uint16_t& port);
+
+}; // class UdpSocket
 
 } // namespace og

@@ -65,10 +65,7 @@ Ipv4 Ipv4::get_local_address()
 	if (sock == impl::SocketHelper::bad_socket)
 		throw SystemException("socket");
 
-	std::memset(&loopback, 0, sizeof(loopback));
-	loopback.sin_family = AF_INET;
-	loopback.sin_addr.s_addr = INADDR_LOOPBACK;
-	loopback.sin_port = htons(9);
+	loopback = impl::SocketHelper::fill_ipv4_sockaddr(INADDR_LOOPBACK, 9);
 
 	/* Not sure if connect returns -1 on failure on Windows... */
 	if (connect(sock, reinterpret_cast<sockaddr*>(&loopback), sizeof(loopback)) == -1) {

@@ -17,9 +17,9 @@
 
 namespace og {
 
-const Ipv4 localhost = Ipv4(127, 0, 0, 1);
-const Ipv4 broadcast = Ipv4(255, 255, 255, 255);
-const Ipv4 any       = Ipv4(0, 0, 0, 0);
+const Ipv4 Ipv4::Localhost = Ipv4(127, 0, 0, 1);
+const Ipv4 Ipv4::Broadcast = Ipv4(255, 255, 255, 255);
+const Ipv4 Ipv4::Any       = Ipv4(0, 0, 0, 0);
 
 Ipv4::Ipv4() :
 	m_good(false),
@@ -42,6 +42,20 @@ Ipv4::Ipv4(uint32_t address) :
 
 }
 
+Ipv4::Ipv4(const char* address) :
+	m_good(false),
+	m_address(0)
+{
+	
+}
+
+Ipv4::Ipv4(const std::string& address) :
+	m_good(false),
+	m_address(0)
+{
+	
+}
+
 std::string Ipv4::to_string() const
 {
 	char str[INET_ADDRSTRLEN];
@@ -55,6 +69,7 @@ uint32_t Ipv4::to_int() const
 {
 	return m_address;
 }
+
 
 Ipv4 Ipv4::get_local_address()
 {

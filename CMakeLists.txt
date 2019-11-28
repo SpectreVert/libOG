@@ -1,7 +1,7 @@
-project( libOG )
-
 cmake_minimum_required(VERSION 2.6)
 # cmake_policy(set cmp0048 new)
+
+project( libOG )
 
 # Define location for cmake acess to headers
 set(INCDIRS
@@ -10,3 +10,4 @@ set(INCDIRS
 )
 
 add_subdirectory(src/og)
+add_subdirectory(examples)

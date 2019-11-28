@@ -15,9 +15,9 @@ namespace og {
 
 class Ipv4 {
 public:
-	static const Ipv4 localhost; // 127.0.0.1
-	static const Ipv4 broadcast; // 255.255.255.255
-	static const Ipv4 any;       // 0.0.0.0
+	static const Ipv4 Localhost; // 127.0.0.1
+	static const Ipv4 Broadcast; // 255.255.255.255
+	static const Ipv4 Any;       // 0.0.0.0
 
 	Ipv4();
 	Ipv4(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);

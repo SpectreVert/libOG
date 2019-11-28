@@ -20,7 +20,7 @@ public:
 
 	UdpSocket();
 
-	Status bind(const Ipv4& address, uint16_t port);
+	Status bind(uint16_t port, const Ipv4& address = Ipv4::Any);
 	void unbind();
 
 	Status send_to(const void* data, std::size_t len, const Ipv4& address, uint16_t port);

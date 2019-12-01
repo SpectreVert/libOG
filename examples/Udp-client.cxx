@@ -20,7 +20,7 @@ int main()
 	client.bind(6969);
 	
 	std::string msg = "Hello, this is " + og::Ipv4::get_local_address().to_string();
-	client.send_to(msg.c_str(), msg.size() + 1, og::Ipv4(127, 0, 0, 1), 6970);
+	client.send(msg.c_str(), msg.size() + 1, og::Ipv4(127, 0, 0, 1), 6970);
 	
 	char buffer[1024];
 	std::size_t recvd = 0;

@@ -55,7 +55,7 @@ void UdpSocket::unbind()
 	close();
 }
 
-Socket::Status UdpSocket::send_to(const void* data, std::size_t len, const Ipv4& address, uint16_t port)
+Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& address, uint16_t port)
 {
 	open();
 

@@ -23,8 +23,8 @@ public:
 	Status bind(uint16_t port, const Ipv4& address = Ipv4::Any);
 	void unbind();
 
-	Status send_to(const void* data, std::size_t len, const Ipv4& address, uint16_t port);
-	Status receive(void* buffer, std::size_t len, std::size_t& received, Ipv4& address, uint16_t& port);
+	Status send(const void* data, std::size_t len, const Ipv4& address, uint16_t port);
+	Status receive(void* buffer, std::size_t len, std::size_t& recvd, Ipv4& address, uint16_t& port);
 
 }; // class UdpSocket
 

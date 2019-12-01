@@ -6,6 +6,8 @@ set(SRC
 	${HEADIR}/Socket.hpp
 	${SRCDIR}/UdpSocket.cxx
 	${HEADIR}/UdpSocket.hpp
+	${SRCDIR}/TcpSocket.cxx
+	${HEADIR}/TcpSocket.hpp
 	${SRCDIR}/SocketImplementation.hpp
 	${HEADIR}/ip/Ipv4.hpp
 	${SRCDIR}/ip/Ipv4.cxx

@@ -28,7 +28,7 @@ int main()
 	std::cout << sender.to_string() << " sent: " << buffer << std::endl;
 
 	std::string msg = "Welcome on the server " + sender.to_string();
-	server.send_to(msg.c_str(), msg.size() + 1, sender, port);
+	server.send(msg.c_str(), msg.size() + 1, sender, port);
 
 	return 0;
 }

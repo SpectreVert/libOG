@@ -18,7 +18,7 @@ class TcpSocket : public Socket {
 public:
 	TcpSocket();
 
-	Status connect(const Ipv4& address, uint16_t port);
+	Status connect(const Ipv4& raddress, uint16_t rport);
 	void disconnect();
 
 	Status send(const void* data, std::size_t len);

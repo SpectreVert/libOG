@@ -19,6 +19,7 @@ public:
 	enum Status {
 		Success = 0,
 		Again = 1,
+		Disconnect = 2,
 		Error = 42,
 	};
 

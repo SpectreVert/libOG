@@ -1,3 +1,12 @@
+GetVersion(${CMAKE_CURRENT_LIST_DIR}/VERSION.txt MAJOR)
+set(MAJOR ${SVERSION})
+GetVersion(${CMAKE_CURRENT_LIST_DIR}/VERSION.txt MINOR)
+set(MINOR ${SVERSION})
+GetVersion(${CMAKE_CURRENT_LIST_DIR}/VERSION.txt PATCH)
+set(PATCH ${SVERSION})
+
+message(STATUS "Configuring libog_network ${MAJOR}.${MINOR}.${PATCH}")
+
 set(SRCDIR ${PROJECT_SOURCE_DIR}/src/og/network)
 set(HEADIR ${PROJECT_SOURCE_DIR}/include/og/network)
 
@@ -26,10 +35,10 @@ elseif(WIN32)
 	)
 endif()
 
-add_library(og-network ${SRC})
-target_link_libraries(og-network PUBLIC og-base)
-target_include_directories(og-network PUBLIC ${INCDIRS})
+add_library(og_network ${SRC})
+target_link_libraries(og_network PUBLIC og_base)
+target_include_directories(og_network PUBLIC ${INCDIRS})
 
 if(WIN32)
-	target_link_libraries(og-base PRIVATE ws2_32)
+	target_link_libraries(og_base PRIVATE ws2_32)
 endif()

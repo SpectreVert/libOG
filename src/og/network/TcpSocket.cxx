@@ -29,7 +29,7 @@ static Socket::Status get_error_status()
 	}
 }
 
-static int get_send_flags()
+static int get_flags()
 {
 	#ifdef _WIN_32
 		return 0;
@@ -71,27 +71,50 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len)
 
 Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& sent)
 {
-	// We'll need to perform the send over a loop -- so that everything is sent correctly.
-	ssize_t delivered = 0;
-	
 	if (!len || !data)
 		return Error;
 
+	// We'll need to perform the send over a loop -- so that everything is sent correctly.
+	ssize_t delivered = 0;
+	sent = 0;
+
 	do {
 		delivered = ::send(handle(), static_cast<const char*>(data) + sent, 
-		static_cast<size_t>(len - sent), get_send_flags());
+		static_cast<size_t>(len - sent), get_flags());
 
 		if (delivered < 0) {
 			Status status = get_error_status();
 			return status;
 		}
+	
+		sent += delivered;
 	} while (sent < len);
 	
 	return Success;
 }
 
+Socket::Status TcpSocket::receive(void* data, std::size_t len)
+{
+	size_t received = 0;
+
+	return receive(data, len, received);
+}
+
 Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& received)
 {
+	if (!data)
+		return Error;
+
+	ssize_t recvd = recv(handle(), data, len, get_flags());
+	received = 0;
+
+	if (recvd > 0) {
+		received = static_cast<std::size_t>(recvd);
+		return Success;
+	} else if (recvd == 0) {
+		return get_error_status();
+	}
+
 	return Success;
 }
 

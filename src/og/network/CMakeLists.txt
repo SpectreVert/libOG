@@ -12,6 +12,8 @@ set(SRC
 	${HEADIR}/UdpSocket.hpp
 	${SRCDIR}/TcpSocket.cxx
 	${HEADIR}/TcpSocket.hpp
+	${SRCDIR}/TcpListener.cxx
+	${HEADIR}/TcpListener.hpp
 	${SRCDIR}/SocketImplementation.hpp
 	${HEADIR}/ip/Ipv4.hpp
 	${SRCDIR}/ip/Ipv4.cxx
@@ -37,3 +39,12 @@ target_include_directories(og_network PUBLIC ${INCDIRS})
 if(WIN32)
 	target_link_libraries(og_base PRIVATE ws2_32)
 endif()
+
+install(TARGETS og_network
+				ARCHIVE
+					DESTINATION lib
+					COMPONENT Libraries
+				PUBLIC_HEADER
+					DESTINATION include
+					COMPONENT Development
+)

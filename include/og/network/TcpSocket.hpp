@@ -25,6 +25,11 @@ public:
 	Status send(const void* data, std::size_t len, std::size_t& sent);
 	Status receive(void* data, std::size_t len);
 	Status receive(void* data, std::size_t len, std::size_t& received);
+
+private:
+	// So we can access open/close of the Socket class from TcpListener methods.
+	friend class TcpListener;
+
 }; // class TcpSocket
 
 } // namespace og

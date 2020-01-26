@@ -17,9 +17,9 @@ namespace og {
 
 class Ipv4;
 
-typedef int Addrlen;
-
 namespace impl {
+
+typedef int Addrlen;
 
 class SocketHelper {
 public:

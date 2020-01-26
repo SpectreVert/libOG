@@ -31,11 +31,11 @@ static Socket::Status get_error_status()
 
 static int get_flags()
 {
-	#ifdef _WIN_32
-		return 0;
-	#else
-		return MSG_NOSIGNAL;
-	#endif
+#ifdef _WIN_32
+	return 0;
+#else
+	return MSG_NOSIGNAL;
+#endif
 }
 
 TcpSocket::TcpSocket() :
@@ -76,9 +76,8 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& s
 
 	// We'll need to perform the send over a loop -- so that everything is sent correctly.
 	ssize_t delivered = 0;
-	sent = 0;
 
-	do {
+	for (sent = 0; sent < len; sent += delivered) {
 		delivered = ::send(handle(), static_cast<const char*>(data) + sent, 
 		static_cast<size_t>(len - sent), get_flags());
 
@@ -87,8 +86,7 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& s
 			return status;
 		}
 	
-		sent += delivered;
-	} while (sent < len);
+	}
 	
 	return Success;
 }
@@ -105,17 +103,15 @@ Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& rece
 	if (!data)
 		return Error;
 
-	ssize_t recvd = recv(handle(), data, len, get_flags());
+	int bytesReceived = recv(handle(), data, len, get_flags());
 	received = 0;
 
-	if (recvd > 0) {
-		received = static_cast<std::size_t>(recvd);
+	if (bytesReceived > 0) {
+		received = static_cast<std::size_t>(bytesReceived);
 		return Success;
-	} else if (recvd == 0) {
-		return get_error_status();
 	}
 
-	return Success;
+	return get_error_status();
 }
 
 } // namespace og

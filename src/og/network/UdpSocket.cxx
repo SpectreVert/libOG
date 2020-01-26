@@ -76,7 +76,7 @@ Socket::Status UdpSocket::receive(void* buffer, std::size_t len, std::size_t& re
 		return Error;
 
 	sockaddr_in src_addr = impl::SocketHelper::fill_ipv4_sockaddr(INADDR_ANY, 0);
-	Addrlen addrlen = sizeof(src_addr);
+	impl::Addrlen addrlen = sizeof(src_addr);
 
 	int received = recvfrom(handle(), buffer, len, 0, reinterpret_cast<sockaddr*>(&src_addr), &addrlen);
 	if (received < 0)

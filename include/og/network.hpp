@@ -13,4 +13,8 @@
 
 #include <og/network/UdpSocket.hpp>
 
-#include <og/network/ip/Ipv4.hpp>
+#include <og/network/TcpSocket.hpp>
+
+#include <og/network/TcpListener.hpp>
+
+#include <og/network/Ipv4.hpp>

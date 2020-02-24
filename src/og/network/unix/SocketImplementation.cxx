@@ -8,7 +8,7 @@
 */
 
 #include <og/network/unix/SocketImplementation.hpp>
-#include <og/network/ip/Ipv4.hpp>
+#include <og/network/Ipv4.hpp>
 #include <og/base/SystemException.hpp>
 
 #include <cstring>

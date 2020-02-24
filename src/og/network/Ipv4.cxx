@@ -7,7 +7,7 @@
  * Class for manipulating IPv4 addresses.
 */
 
-#include <og/network/ip/Ipv4.hpp>
+#include <og/network/Ipv4.hpp>
 #include <og/network/SocketHandle.hpp>
 #include <og/network/SocketImplementation.hpp>
 #include <og/base/SystemException.hpp>
@@ -17,9 +17,9 @@
 
 namespace og {
 
-const Ipv4 Ipv4::Localhost = Ipv4(127, 0, 0, 1);
-const Ipv4 Ipv4::Broadcast = Ipv4(255, 255, 255, 255);
-const Ipv4 Ipv4::Any       = Ipv4(0, 0, 0, 0);
+const Ipv4 Ipv4::Loopback(127, 0, 0, 1);
+const Ipv4 Ipv4::Broadcast(255, 255, 255, 255);
+const Ipv4 Ipv4::Any(0, 0, 0, 0);
 
 Ipv4::Ipv4() :
 	m_good(false),

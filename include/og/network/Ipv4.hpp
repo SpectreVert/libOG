@@ -15,7 +15,7 @@ namespace og {
 
 class Ipv4 {
 public:
-	static const Ipv4 Localhost; // 127.0.0.1
+	static const Ipv4 Loopback; // 127.0.0.1
 	static const Ipv4 Broadcast; // 255.255.255.255
 	static const Ipv4 Any;       // 0.0.0.0
 
@@ -33,6 +33,7 @@ public:
 private:
 	bool m_good;
 	uint32_t m_address;
+
 }; // class Ipv4
 
 } // namespace og

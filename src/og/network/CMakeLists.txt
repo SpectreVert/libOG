@@ -15,8 +15,8 @@ set(SRC
 	${SRCDIR}/TcpListener.cxx
 	${HEADIR}/TcpListener.hpp
 	${SRCDIR}/SocketImplementation.hpp
-	${HEADIR}/ip/Ipv4.hpp
-	${SRCDIR}/ip/Ipv4.cxx
+	${HEADIR}/Ipv4.hpp
+	${SRCDIR}/Ipv4.cxx
 )
 
 if(UNIX)

@@ -17,6 +17,9 @@ set(SRC
 	${SRCDIR}/SocketImplementation.hpp
 	${HEADIR}/Ipv4.hpp
 	${SRCDIR}/Ipv4.cxx
+	${HEADIR}/Http/Headers.hpp
+	${SRCDIR}/Http/Headers.cxx
+	${HEADIR}/Http/Message.hpp
 )
 
 if(UNIX)

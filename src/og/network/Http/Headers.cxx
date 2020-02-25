@@ -14,9 +14,9 @@ using namespace og::Http;
 Headers::Headers()
 {}
 
-Headers::Headers(HeadersUmap t_headers)
+Headers::Headers(const Headers& t_other)
 {
-	m_headers = t_headers;
+	m_headers = t_other.m_headers;
 }
 
 bool Headers::has(const std::string& t_name) const

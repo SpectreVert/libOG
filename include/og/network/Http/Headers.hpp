@@ -22,7 +22,7 @@ public:
 	typedef Umap<std::string, std::string> HeadersUmap;
 	
 	Headers();
-	Headers(HeadersUmap t_headers);
+	Headers(const Headers& t_other);
 
 	const std::string& operator[] (const std::string& t_name) const;
 	std::string& operator[] (const std::string& t_name);
@@ -35,7 +35,7 @@ public:
 private:
 	HeadersUmap m_headers;
 
-};
+}; // class Headers
 
 } // namespace Http
 

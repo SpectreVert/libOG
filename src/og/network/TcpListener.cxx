@@ -15,7 +15,7 @@ namespace og {
 class TcpSocket;
 
 TcpListener::TcpListener() :
-	Socket(TCP)
+	Socket(PF_INET, SOCK_STREAM, 0)
 {
 	
 }
@@ -32,10 +32,10 @@ Socket::Status TcpListener::listen(uint16_t lport, const Ipv4& laddress)
 
 	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(laddress, lport);
 
-	if (bind(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
 
-	if (::listen(handle(), 0) == -1) {
+	if (::listen(getHandle(), 0) == -1) {
 		return Error;
 	}
 
@@ -49,13 +49,13 @@ void TcpListener::disconnect()
 
 Socket::Status TcpListener::accept(TcpSocket& socket)
 {
-	if (handle() == impl::SocketHelper::bad_socket)
+	if (getHandle() == impl::SocketHelper::bad_socket)
 		return Error;
 
 	sockaddr_in addr;
 	impl::Addrlen addrlen = sizeof(addr);
-	SocketHandle accepted = ::accept(handle(), reinterpret_cast<sockaddr*>(&addr), &addrlen);
-	//SocketHandle accepted = ::accept(handle(), 0x0, 0x0);
+	SocketHandle accepted = ::accept(getHandle(), reinterpret_cast<sockaddr*>(&addr), &addrlen);
+	//SocketHandle accepted = ::accept(getHandle(), 0x0, 0x0);
 
 	// TODO Return a useful error status
 	if (accepted == impl::SocketHelper::bad_socket)

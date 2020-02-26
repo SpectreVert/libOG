@@ -32,7 +32,7 @@ const int UdpSocket::maximum_datagram_size = 65507;
 /* Therefore maximum size of UDP payload is 65535 - 28 = 65507 octets. */
 
 UdpSocket::UdpSocket() :
-	Socket(UDP)
+	Socket(PF_INET, SOCK_DGRAM, 0)
 {
 	
 }
@@ -44,7 +44,7 @@ Socket::Status UdpSocket::bind(uint16_t port, const Ipv4& address)
 	close();
 	open();
 
-	if (::bind(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (::bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
 	
 	return Success;
@@ -64,7 +64,7 @@ Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& ad
 
 	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(address, port);
 
-	if (sendto(handle(), static_cast<const char*>(data), len, 0, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (sendto(getHandle(), static_cast<const char*>(data), len, 0, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
 
 	return Success;
@@ -78,7 +78,7 @@ Socket::Status UdpSocket::receive(void* buffer, std::size_t len, std::size_t& re
 	sockaddr_in src_addr = impl::SocketHelper::fill_ipv4_sockaddr(INADDR_ANY, 0);
 	impl::Addrlen addrlen = sizeof(src_addr);
 
-	int received = recvfrom(handle(), buffer, len, 0, reinterpret_cast<sockaddr*>(&src_addr), &addrlen);
+	int received = recvfrom(getHandle(), buffer, len, 0, reinterpret_cast<sockaddr*>(&src_addr), &addrlen);
 	if (received < 0)
 		return Error;
 

@@ -10,19 +10,14 @@
 #pragma once
 
 #include <og/base/NonCopyable.hpp>
+#include <og/network/IBaseSocket.hpp>
 #include <og/network/SocketHandle.hpp>
 
 namespace og {
 
-/*
-	TODO: Add a BaseSocket abstract class with
-	open, close and blocking functions.
-
-	It gets inherited by a modified Socket class,
-	that can do UDP, TCP and raw data protocols.
-*/
-
-class Socket : NonCopyable {
+//! \brief User-oriented base class for all the socket types.
+//!
+class Socket : public IBaseSocket, private NonCopyable {
 public:
 	enum Status {
 		Success = 0,
@@ -33,26 +28,24 @@ public:
 
 	virtual ~Socket();
 
-	bool blocking() const;
-	void blocking(bool blocking);
+	bool isBlocking() const;
+	void setBlocking(bool blocking);
 
-	SocketHandle handle() const;
+	SocketHandle getHandle() const;
+
 protected:
 	void open();
 	void open(SocketHandle t_socket);
 	void close();
-
-	enum Type {
-		TCP = 1,
-		UDP
-	};
 	
-	Socket(Type t_type);
+	Socket(int t_domain, int t_type, int t_protocol);
 
 private:
 	SocketHandle m_socket;
 	bool m_blocking;
-	Type m_type;
+	int m_domain;
+	int m_type;
+	int m_protocol;
 
 }; // class Socket
 

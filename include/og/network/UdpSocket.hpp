@@ -20,11 +20,15 @@ public:
 
 	UdpSocket();
 
-	Status bind(uint16_t port, const Ipv4& address = Ipv4::Any);
-	void unbind();
+	virtual Status bind(uint16_t port, const Ipv4& address = Ipv4::Any);
+	
+	virtual void unbind();
 
-	Status send(const void* data, std::size_t len, const Ipv4& address, uint16_t port);
-	Status receive(void* buffer, std::size_t len, std::size_t& recvd, Ipv4& address, uint16_t& port);
+	virtual Status send(const void* data, std::size_t length,
+                        const Ipv4& address, uint16_t port);
+
+	virtual Status receive(void* buffer, std::size_t length,
+                           std::size_t& recveived, Ipv4& address, uint16_t& port);
 
 }; // class UdpSocket
 

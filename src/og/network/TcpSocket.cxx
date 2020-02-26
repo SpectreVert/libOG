@@ -39,7 +39,7 @@ static int get_flags()
 }
 
 TcpSocket::TcpSocket() :
-	Socket(TCP)
+	Socket(PF_INET, SOCK_STREAM, 0)
 {
 	
 }
@@ -51,7 +51,7 @@ Socket::Status TcpSocket::connect(const Ipv4& raddress, uint16_t rport)
 
 	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(raddress, rport);
 
-	if (::connect(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (::connect(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return get_error_status();
 
 	return Success;
@@ -78,7 +78,7 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& s
 	ssize_t delivered = 0;
 
 	for (sent = 0; sent < len; sent += delivered) {
-		delivered = ::send(handle(), static_cast<const char*>(data) + sent, 
+		delivered = ::send(getHandle(), static_cast<const char*>(data) + sent, 
 		static_cast<size_t>(len - sent), get_flags());
 
 		if (delivered < 0) {
@@ -103,7 +103,7 @@ Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& rece
 	if (!data)
 		return Error;
 
-	int bytesReceived = recv(handle(), data, len, get_flags());
+	int bytesReceived = recv(getHandle(), data, len, get_flags());
 	received = 0;
 
 	if (bytesReceived > 0) {

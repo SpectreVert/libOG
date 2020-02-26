@@ -21,7 +21,10 @@ public:
 
 	//! \brief Destructor
 	//!
-	virtual ~IBaseSocket() = 0; 
+	virtual ~IBaseSocket()
+	{
+
+	}
 
 	//! \brief Indicate if the socket is in blocking or
 	//!        non-blocking mode
@@ -73,7 +76,10 @@ protected:
 	//!        socket type in which caes protocol can be
 	//!        set to 0.
 	//!
-	IBaseSocket(int t_domain, int t_type, int t_protocol);
+	IBaseSocket(int t_domain, int t_type, int t_protocol)
+	{
+
+	}
 
 	//! \brief Create the internal handle of the socket
 	//!

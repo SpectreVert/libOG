@@ -19,10 +19,11 @@ class TcpListener : public Socket {
 public:
 	TcpListener();
 
-	Status listen(uint16_t lport, const Ipv4& laddress = Ipv4::Any);
-	void disconnect();
+	virtual Status listen(uint16_t lport, const Ipv4& laddress = Ipv4::Any);
+	virtual void disconnect();
 
-	Status accept(TcpSocket& socket);
+	virtual Status accept(TcpSocket& socket);
+
 }; // class TcpListener
 
 } // namespace og

@@ -13,10 +13,13 @@
 
 using namespace og;
 
-Socket::Socket(Type t_type) :
+Socket::Socket(int t_domain, int t_type, int t_protocol) :
+	IBaseSocket(t_domain, t_type, t_protocol),
 	m_socket(impl::SocketHelper::bad_socket),
 	m_blocking(true),
-	m_type(t_type)
+	m_domain(t_domain),
+	m_type(t_type),
+	m_protocol(t_protocol)
 {
 
 }
@@ -27,19 +30,20 @@ Socket::~Socket()
 	close();
 }
 
-bool Socket::blocking() const
+bool Socket::isBlocking() const
 {
 	return m_blocking;
 }
 
-void Socket::blocking(bool blocking)
+void Socket::setBlocking(bool blocking)
 {
 	if (m_socket != impl::SocketHelper::bad_socket)
-		impl::SocketHelper::blocking(m_socket, blocking);
+		impl::SocketHelper::setBlocking(m_socket, blocking);
+	
 	m_blocking = true;
 }
 
-SocketHandle Socket::handle() const
+SocketHandle Socket::getHandle() const
 {
 	return m_socket;
 }
@@ -49,9 +53,12 @@ void Socket::open()
 	if (m_socket != impl::SocketHelper::bad_socket)
 		return;
 	
-	SocketHandle t_socket = socket(PF_INET, m_type == UDP ? SOCK_DGRAM : SOCK_STREAM, 0);
+	SocketHandle t_socket = socket(m_domain, m_type, m_protocol);
+
 	if (t_socket == impl::SocketHelper::bad_socket)
 		throw SystemException("socket");
+	
+	// Assign the newly created socket as our own
 	open(t_socket);
 }
 
@@ -59,10 +66,12 @@ void Socket::open(SocketHandle t_socket)
 {
 	if (m_socket != impl::SocketHelper::bad_socket)
 		return;
-	/* Take note of the new handle */
+
+	// Take note of the new handle
 	m_socket = t_socket;
-	/* Set its blocking status to the current blocking status */
-	blocking(m_blocking);
+
+	// Set its blocking status to the current blocking status
+	setBlocking(m_blocking);
 }
 
 void Socket::close()

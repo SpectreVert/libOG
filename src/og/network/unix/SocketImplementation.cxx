@@ -19,12 +19,12 @@ namespace impl {
 
 SocketHandle SocketHelper::bad_socket = -1;
 
-void SocketHelper::blocking(SocketHandle socket, bool blocking)
+void SocketHelper::setBlocking(SocketHandle socket, bool blocking)
 {
 	int socket_status = fcntl(socket, F_GETFL);
 
 	if (blocking) {
-		/* Negate non-blocking bits (so do block) */
+		// Negate non-blocking bits (so do block)
 		if (fcntl(socket, socket_status &~ O_NONBLOCK) == -1)
 			throw SystemException("fcntl");
 	} else {

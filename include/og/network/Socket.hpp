@@ -14,6 +14,14 @@
 
 namespace og {
 
+/*
+	TODO: Add a BaseSocket abstract class with
+	open, close and blocking functions.
+
+	It gets inherited by a modified Socket class,
+	that can do UDP, TCP and raw data protocols.
+*/
+
 class Socket : NonCopyable {
 public:
 	enum Status {

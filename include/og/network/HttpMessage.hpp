@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "og/network/Http/Headers.hpp"
+
 namespace og {
 
 namespace Http {
@@ -16,8 +18,10 @@ namespace Http {
 class Message {
 public:
 
+private:
+	Headers m_headers;
 
-};
+}; // class Message
 
 }; // namespace Http
 

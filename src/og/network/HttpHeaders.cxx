@@ -7,7 +7,7 @@
  * Encapsulation of HTTP-style headers.
 */
 
-#include "og/network/Http/Headers.hpp"
+#include "og/network/HttpHeaders.hpp"
 
 using namespace og::Http;
 

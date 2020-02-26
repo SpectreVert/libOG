@@ -16,7 +16,7 @@
 
 namespace og {
 
-template <class Key, class T, class Container = std::vector<std::pair<Key, T>>>
+template <class Key, class T, class Container = std::vector<std::pair<Key, T> > > 
 
 class Umap {
 public:

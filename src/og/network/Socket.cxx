@@ -81,3 +81,19 @@ void Socket::close()
 		m_socket = impl::SocketHelper::bad_socket;
 	}
 }
+
+Socket::Status Socket::getErrorStatus()
+{
+	switch (errno) {
+		case EAGAIN:
+		case EINPROGRESS:
+		case EALREADY:
+			return Socket::Status::Again;
+		case ECONNREFUSED:
+		case ECONNRESET:
+		case ETIMEDOUT:
+			return Socket::Status::Disconnect;
+		default:
+			return Socket::Status::Error;
+	}
+}

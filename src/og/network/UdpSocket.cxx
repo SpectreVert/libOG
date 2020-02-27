@@ -39,7 +39,7 @@ UdpSocket::UdpSocket() :
 
 Socket::Status UdpSocket::bind(uint16_t port, const Ipv4& address)
 {
-	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(address, port);
+	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(address, port);
 	// Reset the socket
 	close();
 	open();
@@ -62,7 +62,7 @@ Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& ad
 	if (len > maximum_datagram_size)
 		return Error;
 
-	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(address, port);
+	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(address, port);
 
 	if (sendto(getHandle(), static_cast<const char*>(data), len, 0, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
@@ -75,7 +75,7 @@ Socket::Status UdpSocket::receive(void* buffer, std::size_t len, std::size_t& re
 	if (!buffer)
 		return Error;
 
-	sockaddr_in src_addr = impl::SocketHelper::fill_ipv4_sockaddr(INADDR_ANY, 0);
+	sockaddr_in src_addr = impl::SocketHelper::buildIpv4Sockaddr(INADDR_ANY, 0);
 	impl::Addrlen addrlen = sizeof(src_addr);
 
 	int received = recvfrom(getHandle(), buffer, len, 0, reinterpret_cast<sockaddr*>(&src_addr), &addrlen);

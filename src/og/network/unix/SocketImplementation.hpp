@@ -32,7 +32,7 @@ public:
 	static void setBlocking(SocketHandle socket, bool blocking);
 	static void close(SocketHandle socket);
 
-	static sockaddr_in fill_ipv4_sockaddr(const Ipv4& address, uint16_t port);
+	static sockaddr_in buildIpv4Sockaddr(const Ipv4& address, uint16_t port);
 
 }; // class SocketHelper
 

@@ -30,7 +30,7 @@ Socket::Status TcpListener::listen(uint16_t lport, const Ipv4& laddress)
 	/* if ((laddress == Ipv4::Broadcast || laddress == Ipv4::Any))
 		return Error; */
 
-	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(laddress, lport);
+	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(laddress, lport);
 
 	if (bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;

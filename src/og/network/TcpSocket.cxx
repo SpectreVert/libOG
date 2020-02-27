@@ -13,22 +13,6 @@
 
 namespace og {
 
-static Socket::Status get_error_status()
-{
-	switch (errno) {
-		case EAGAIN:
-		case EINPROGRESS:
-		case EALREADY:
-			return Socket::Status::Again;
-		case ECONNREFUSED:
-		case ECONNRESET:
-		case ETIMEDOUT:
-			return Socket::Status::Disconnect;
-		default:
-			return Socket::Status::Error;
-	}
-}
-
 static int get_flags()
 {
 #ifdef _WIN_32
@@ -49,10 +33,10 @@ Socket::Status TcpSocket::connect(const Ipv4& raddress, uint16_t rport)
 	close();
 	open();
 
-	sockaddr_in addr = impl::SocketHelper::fill_ipv4_sockaddr(raddress, rport);
+	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(raddress, rport);
 
 	if (::connect(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
-		return get_error_status();
+		return getErrorStatus();
 
 	return Success;
 }
@@ -82,7 +66,7 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& s
 		static_cast<size_t>(len - sent), get_flags());
 
 		if (delivered < 0)
-			return get_error_status();
+			return getErrorStatus();
 	
 	}
 	
@@ -109,7 +93,7 @@ Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& rece
 		return Success;
 	}
 
-	return get_error_status();
+	return getErrorStatus();
 }
 
 } // namespace og

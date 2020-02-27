@@ -56,7 +56,7 @@ Ipv4::Ipv4(const std::string& address) :
 	
 }
 
-std::string Ipv4::to_string() const
+std::string Ipv4::toString() const
 {
 	char str[INET_ADDRSTRLEN];
 	in_addr address;
@@ -65,13 +65,13 @@ std::string Ipv4::to_string() const
 	return inet_ntop(AF_INET, reinterpret_cast<void*>(&address), str, INET_ADDRSTRLEN);
 }
 
-uint32_t Ipv4::to_int() const
+uint32_t Ipv4::toInt() const
 {
 	return m_address;
 }
 
 
-Ipv4 Ipv4::get_local_address()
+Ipv4 Ipv4::getLocalAddress()
 {
 	Ipv4 local;
 	SocketHandle sock = ::socket(PF_INET, SOCK_DGRAM, 0);
@@ -80,7 +80,7 @@ Ipv4 Ipv4::get_local_address()
 	if (sock == impl::SocketHelper::bad_socket)
 		throw SystemException("socket");
 
-	loopback = impl::SocketHelper::fill_ipv4_sockaddr(INADDR_LOOPBACK, 9);
+	loopback = impl::SocketHelper::buildIpv4Sockaddr(INADDR_LOOPBACK, 9);
 
 	/* Not sure if connect returns -1 on failure on Windows... */
 	if (connect(sock, reinterpret_cast<sockaddr*>(&loopback), sizeof(loopback)) == -1) {

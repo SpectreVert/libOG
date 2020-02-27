@@ -15,7 +15,7 @@ namespace og {
 
 class Ipv4 {
 public:
-	static const Ipv4 Loopback; // 127.0.0.1
+	static const Ipv4 Loopback;  // 127.0.0.1
 	static const Ipv4 Broadcast; // 255.255.255.255
 	static const Ipv4 Any;       // 0.0.0.0
 
@@ -25,10 +25,10 @@ public:
 	Ipv4(const char* address);
 	Ipv4(const std::string& address);
 
-	std::string to_string() const;
-	uint32_t to_int() const;
+	std::string toString() const;
+	uint32_t toInt() const;
 
-	static Ipv4 get_local_address();
+	static Ipv4 getLocalAddress();
 	
 private:
 	bool m_good;

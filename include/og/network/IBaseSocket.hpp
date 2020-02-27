@@ -52,7 +52,7 @@ public:
 	//! \brief Return the internal handle of the socket
 	//!
 	//! \return The internal handle of the socket
-	//! 
+	//!
 	virtual SocketHandle getHandle() const = 0;
 
 protected:

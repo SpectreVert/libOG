@@ -99,6 +99,10 @@ protected:
 	//! \brief Close properly the socket
 	//!
 	void close();
+
+	//! \brief Get a suitable error code to return
+	//!        to the user in case of operational failure.
+	Status getErrorStatus();
 	
 private:
 	SocketHandle m_socket; //!< Internal socket handle

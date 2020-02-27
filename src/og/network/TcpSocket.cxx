@@ -81,10 +81,8 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& s
 		delivered = ::send(getHandle(), static_cast<const char*>(data) + sent, 
 		static_cast<size_t>(len - sent), get_flags());
 
-		if (delivered < 0) {
-			Status status = get_error_status();
-			return status;
-		}
+		if (delivered < 0)
+			return get_error_status();
 	
 	}
 	

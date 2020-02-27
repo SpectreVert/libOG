@@ -25,7 +25,7 @@ So min value for header is 160 bits or 20 octets.
 An UDP header consists of four 16 bits fields; so a total
 length of 8 octets. */
 
-const int UdpSocket::maximum_datagram_size = 65507;
+const int UdpSocket::MAXIMUM_DATAGRAM_SIZE = 65507;
 
 /* Therefore maximum size of UDP payload is 65535 - 28 = 65507 octets. */
 
@@ -39,7 +39,7 @@ Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& ad
 {
 	open();
 
-	if (len > maximum_datagram_size)
+	if (len > MAXIMUM_DATAGRAM_SIZE)
 		return Error;
 
 	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(address, port);

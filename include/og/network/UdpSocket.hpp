@@ -18,7 +18,7 @@ class Ipv4;
 class UdpSocket : public Socket {
 public:
 
-	static const int maximum_datagram_size; //<! Maximum payload size
+	static const int MAXIMUM_DATAGRAM_SIZE; //<! Maximum payload size
 
 	//! \brief Constructor
 	//!

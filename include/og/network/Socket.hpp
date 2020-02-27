@@ -111,7 +111,7 @@ public:
 
 protected:
 
-	//! \brief Constructor
+	//! \brief Default constructor
 	//!
 	//! Construct the socket and store its
 	//! internal parameters.

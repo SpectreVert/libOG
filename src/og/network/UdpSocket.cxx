@@ -3,13 +3,11 @@
  *
  * Name: UdpSocket.cxx
  *
- * Description:
- * Socket using the connectionless UDP protocol.
 */
 
-#include <og/network/UdpSocket.hpp>
-#include <og/network/SocketImplementation.hpp>
-#include <og/base/SystemException.hpp>
+#include "og/base/SystemException.hpp"
+#include "og/network/UdpSocket.hpp"
+#include "og/network/SocketImplementation.hpp"
 
 #include <netinet/ip.h>
 
@@ -35,24 +33,6 @@ UdpSocket::UdpSocket() :
 	Socket(PF_INET, SOCK_DGRAM, 0)
 {
 	
-}
-
-Socket::Status UdpSocket::bind(uint16_t port, const Ipv4& address)
-{
-	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(address, port);
-	// Reset the socket
-	close();
-	open();
-
-	if (::bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
-		return Error;
-	
-	return Success;
-}
-
-void UdpSocket::unbind()
-{
-	close();
 }
 
 Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& address, uint16_t port)

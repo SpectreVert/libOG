@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <og/network/Socket.hpp>
-#include <og/network/TcpSocket.hpp>
-#include <og/network/Ipv4.hpp>
+#include "og/network/Socket.hpp"
+#include "og/network/TcpSocket.hpp"
+#include "og/network/Ipv4.hpp"
 
 namespace og {
 

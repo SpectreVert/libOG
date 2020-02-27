@@ -7,9 +7,9 @@
  * 
 */
 
-#include <og/base/SystemException.hpp>
-#include <og/network/Socket.hpp>
-#include <og/network/SocketImplementation.hpp>
+#include "og/base/SystemException.hpp"
+#include "og/network/Socket.hpp"
+#include "og/network/SocketImplementation.hpp"
 
 using namespace og;
 
@@ -35,12 +35,30 @@ bool Socket::isBlocking() const
 	return m_blocking;
 }
 
-void Socket::setBlocking(bool blocking)
+void Socket::setBlocking(bool block)
 {
 	if (m_socket != impl::SocketHelper::bad_socket)
-		impl::SocketHelper::setBlocking(m_socket, blocking);
+		impl::SocketHelper::setBlocking(m_socket, block);
 	
-	m_blocking = true;
+	m_blocking = block;
+}
+
+Socket::Status Socket::bind(uint16_t port, const Ipv4& address)
+{
+	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(address, port);
+
+	close(); // Reset the socket in case it was already bound
+	open();
+
+	if (::bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+		return Error;
+	
+	return Success;
+}
+
+void Socket::unbind()
+{
+	close();
 }
 
 SocketHandle Socket::getHandle() const
@@ -53,13 +71,13 @@ void Socket::open()
 	if (m_socket != impl::SocketHelper::bad_socket)
 		return;
 	
-	SocketHandle t_socket = socket(m_domain, m_type, m_protocol);
+	SocketHandle newSocket = socket(m_domain, m_type, m_protocol);
 
-	if (t_socket == impl::SocketHelper::bad_socket)
+	if (newSocket == impl::SocketHelper::bad_socket)
 		throw SystemException("socket");
 	
 	// Assign the newly created socket as our own
-	open(t_socket);
+	open(newSocket);
 }
 
 void Socket::open(SocketHandle t_socket)

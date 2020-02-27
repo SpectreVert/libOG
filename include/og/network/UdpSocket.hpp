@@ -3,26 +3,26 @@
  *
  * Name: UdpSocket.hpp
  *
- * Description:
- * Socket using the connectionless UDP protocol. 
 */
 
 #pragma once
 
-#include <og/network/Socket.hpp>
-#include <og/network/Ipv4.hpp>
+#include "og/network/Socket.hpp"
 
 namespace og {
 
+class Ipv4;
+
+//! \brief Socket using the UDP protocol
+//!
 class UdpSocket : public Socket {
 public:
-	static const int maximum_datagram_size;
 
+	static const int maximum_datagram_size; //<! Maximum payload size
+
+	//! \brief Constructor
+	//!
 	UdpSocket();
-
-	virtual Status bind(uint16_t port, const Ipv4& address = Ipv4::Any);
-	
-	virtual void unbind();
 
 	virtual Status send(const void* data, std::size_t length,
                         const Ipv4& address, uint16_t port);

@@ -7,8 +7,8 @@
  * 
 */
 
-#include <og/network/TcpListener.hpp>
-#include <og/network/SocketImplementation.hpp>
+#include "og/network/TcpListener.hpp"
+#include "og/network/SocketImplementation.hpp"
 
 namespace og {
 
@@ -32,7 +32,7 @@ Socket::Status TcpListener::listen(uint16_t lport, const Ipv4& laddress)
 
 	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(laddress, lport);
 
-	if (bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (::bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
 
 	if (::listen(getHandle(), 0) == -1) {

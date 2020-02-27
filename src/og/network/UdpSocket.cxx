@@ -35,7 +35,7 @@ UdpSocket::UdpSocket() :
 	
 }
 
-Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& address, uint16_t port)
+Socket::Status UdpSocket::sendTo(const void* data, std::size_t len, const Ipv4& address, uint16_t port)
 {
 	open();
 
@@ -50,7 +50,7 @@ Socket::Status UdpSocket::send(const void* data, std::size_t len, const Ipv4& ad
 	return Success;
 }
 
-Socket::Status UdpSocket::receive(void* buffer, std::size_t len, std::size_t& recvd, Ipv4& address, uint16_t& port)
+Socket::Status UdpSocket::receiveFrom(void* buffer, std::size_t len, std::size_t& recvd, Ipv4& address, uint16_t& port)
 {
 	if (!buffer)
 		return Error;

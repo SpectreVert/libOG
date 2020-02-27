@@ -25,9 +25,9 @@ int main()
 	uint16_t port;
 
 	server.receive(buffer, sizeof(buffer), recvd, sender, port);
-	std::cout << sender.to_string() << " sent: " << buffer << std::endl;
+	std::cout << sender.toString() << " sent: " << buffer << std::endl;
 
-	std::string msg = "Welcome on the server " + sender.to_string();
+	std::string msg = "Welcome on the server " + sender.toString();
 	server.send(msg.c_str(), msg.size() + 1, sender, port);
 
 	return 0;

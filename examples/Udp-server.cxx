@@ -24,11 +24,11 @@ int main()
 	og::Ipv4 sender;
 	uint16_t port;
 
-	server.receive(buffer, sizeof(buffer), recvd, sender, port);
+	server.receiveFrom(buffer, sizeof(buffer), recvd, sender, port);
 	std::cout << sender.toString() << " sent: " << buffer << std::endl;
 
 	std::string msg = "Welcome on the server " + sender.toString();
-	server.send(msg.c_str(), msg.size() + 1, sender, port);
+	server.sendTo(msg.c_str(), msg.size() + 1, sender, port);
 
 	return 0;
 }

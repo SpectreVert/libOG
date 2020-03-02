@@ -45,7 +45,7 @@ sockaddr_in SocketHelper::buildIpv4Sockaddr(const Ipv4& address, uint16_t port)
 
 	std::memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
-	addr.sin_port = port;
+	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = address.toInt();
 	return addr;
 }

@@ -1,5 +1,5 @@
 /*
- * libOG, 2019
+ * libOG, 2020
  *
  * Name: Socket.hpp
  *

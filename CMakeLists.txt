@@ -12,5 +12,6 @@ set(INCDIRS
 # Add all libraries to build
 # TODO: add a method to chose what to build
 add_subdirectory(src/og)
+
 # Add examples to build
 add_subdirectory(examples)

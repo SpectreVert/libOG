@@ -16,11 +16,13 @@ set(SRC
 
 add_library(og_base ${SRC})
 target_include_directories(og_base PUBLIC ${INCDIRS})
+
 install(TARGETS og_base
 		ARCHIVE
 			DESTINATION lib
 			COMPONENT Libraries
-		PUBLIC_HEADER
-			DESTINATION include
-			COMPONENT Development
+)
+install(DIRECTORY ${HEADIR}
+	DESTINATION include/og
+	COMPONENT Development
 )

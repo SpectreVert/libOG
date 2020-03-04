@@ -47,7 +47,8 @@ install(TARGETS og_network
 				ARCHIVE
 					DESTINATION lib
 					COMPONENT Libraries
-				PUBLIC_HEADER
-					DESTINATION include
-					COMPONENT Development
+)
+install(DIRECTORY ${HEADIR}
+	DESTINATION include/og
+	COMPONENT Development
 )

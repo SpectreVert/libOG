@@ -12,6 +12,13 @@ set(SRC
 	${HEADIR}/UdpSocket.hpp
 	${SRCDIR}/TcpSocket.cxx
 	${HEADIR}/TcpSocket.hpp
+	${SRCDIR}/TcpStream.cxx
+	${HEADIR}/TcpStream.hpp
+	${SRCDIR}/Event.cxx
+	${HEADIR}/Event.hpp
+	${SRCDIR}/Poll.cxx
+	${HEADIR}/Poll.hpp
+	${HEADIR}/Registry.hpp
 	${SRCDIR}/TcpListener.cxx
 	${HEADIR}/TcpListener.hpp
 	${SRCDIR}/SocketImplementation.hpp
@@ -27,6 +34,8 @@ if(UNIX)
 		${SRC}
 		${SRCDIR}/unix/SocketImplementation.cxx
 		${SRCDIR}/unix/SocketImplementation.hpp
+		${SRCDIR}/unix/Selector.cxx
+		${SRCDIR}/unix/Selector.hpp
 	)
 elseif(WIN32)
 	set(SRC

@@ -1,15 +1,13 @@
 /*
- * libOG, 2019
+ * libOG, 2020
  *
  * Name: SocketImplementation.cxx
  *
- * Description:
- * Unix-specific class for Socket operations
 */
 
-#include <og/network/unix/SocketImplementation.hpp>
-#include <og/network/Ipv4.hpp>
-#include <og/base/SystemException.hpp>
+#include "og/network/unix/SocketImplementation.hpp"
+#include "og/network/Ipv4.hpp"
+#include "og/base/SystemException.hpp"
 
 #include <cstring>
 
@@ -19,7 +17,7 @@ namespace impl {
 
 SocketHandle SocketHelper::bad_socket = -1;
 
-void SocketHelper::setBlocking(SocketHandle socket, bool blocking)
+void SocketHelper::set_blocking(SocketHandle socket, bool blocking)
 {
 	int socket_status = fcntl(socket, F_GETFL);
 
@@ -39,7 +37,7 @@ void SocketHelper::close(SocketHandle socket)
 		throw SystemException("close");
 }
 
-sockaddr_in SocketHelper::buildIpv4Sockaddr(const Ipv4& address, uint16_t port)
+sockaddr_in SocketHelper::build_ipv4_sockaddr(const Ipv4& address, uint16_t port)
 {
 	sockaddr_in addr;
 

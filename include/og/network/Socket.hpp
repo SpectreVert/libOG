@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "og/base/NonCopyable.hpp"
 #include "og/network/IBaseSocket.hpp"
+#include "og/base/NonCopyable.hpp"
 #include "og/network/SocketHandle.hpp"
 #include "og/network/Ipv4.hpp"
 
@@ -16,21 +16,22 @@
 
 namespace og {
 
-//! \brief User-oriented base class for all the socket types.
+//! \brief Base class for all socket types
 //!
-class Socket : public IBaseSocket, private NonCopyable {
+class Socket : public IBaseSocket {
 public:
 
-	//! \brief Status codes which should be returned by
-	//!        the socket functions.
+	//! \brief Status codes returned by Socket functions
+	//!
 	enum Status {
-		Success = 0,    //!< Operation has succeeded
-		Again = 1,      //!< Operation could not complete at the moment
-		Disconnect = 2, //!< Socket was disconnected
-		Error = 42      //!< An error occured while preforming the operation
+		Success = 1,    //!< Operation has succeeded
+		Partial = 2,    //!< Operation could not complete at the moment
+		Disconnect = 3, //!< Socket was disconnected
+		Error = 4       //!< An error occured
 	};
 
     //! \brief Special port values
+	//!
 	enum Port {
 		Any = 0         //!< Let the system pick any available port
 	};
@@ -39,28 +40,9 @@ public:
 	//!
 	virtual ~Socket();
 
-	//! \brief Indicate if the socket is in blocking or
-	//!        non-blocking mode
-	//!
-	//! \return True if the socket is blocking, false
-	//!         if the socket is not blocking
-	//!
-	bool isBlocking() const;
+	bool is_blocking() const;
 
-	//! \brief Set the blocking state of the socket 
-	//!
-	//! In non-blocking mode I/O operations will 
-	//! return immediately. Return code indicates 
-	//! if data was available
-	//!
-	//! In blocking mode system calls do not return
-	//! until they receive/send the data.
-	//!
-	//! \param t_block True to set the socket in 
-	//!        blocking mode, false to set it in
-	//!        non-blocking mode.
-	//!
-	void setBlocking(bool blocking);
+	void set_blocking(bool block);
 
 	//! \brief Bind the socket to a port / address pair
 	//!
@@ -107,7 +89,7 @@ public:
 	//!
 	//! \return The internal handle of the socket
 	//!
-	SocketHandle getHandle() const;
+	SocketHandle handle() const;
 
 protected:
 
@@ -130,7 +112,7 @@ protected:
 	//!        socket type in which caes protocol can be
 	//!        set to 0.
 	//!
-	Socket(int domain, int type, int protocol);
+	Socket(int domain, int type, int protocol = 0, bool blocking = true);
 
 	//! \brief Create the internal handle of the socket
 	//!
@@ -147,13 +129,18 @@ protected:
 	//!
 	void close();
 
-	//! \brief Get a suitable error code to return
-	//!        to the user in case of operational failure.
-	Status getErrorStatus();
+	//! \brief Generate an appropriate error code in case of failure
+	//!
+	//! The return value is a simplified error code. The user can
+	//! still fetch the precise system error using errno.
+	//!
+	//! \see Status
+	//!
+	Status get_error_status();
 	
 private:
 	SocketHandle m_socket; //!< Internal socket handle
-	bool m_blocking;       //!< Blocking mode of the socket
+	bool m_blocking;       //!< Is the socket blocking
 	int m_domain;          //!< Domain used by the socket
 	int m_type;            //!< Communication semantics used by the socket
 	int m_protocol;        //!< Protocol used by the socket

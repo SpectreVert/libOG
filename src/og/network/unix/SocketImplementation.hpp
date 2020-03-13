@@ -1,15 +1,13 @@
 /*
- * libOG, 2019
+ * libOG, 2020
  *
  * Name: SocketImplementation.hpp
  *
- * Description:
- * Unix-specific class for Socket operations
 */
 
 #pragma once
 
-#include <og/network/Socket.hpp>
+#include "og/network/Socket.hpp"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -24,15 +22,17 @@ namespace impl {
 
 typedef socklen_t Addrlen;
 
+//! \brief Unix-specific class for Socket operations
+//!
 class SocketHelper {
 public:
 	
 	static SocketHandle bad_socket;
 
-	static void setBlocking(SocketHandle socket, bool blocking);
+	static void set_blocking(SocketHandle socket, bool blocking);
 	static void close(SocketHandle socket);
 
-	static sockaddr_in buildIpv4Sockaddr(const Ipv4& address, uint16_t port);
+	static sockaddr_in build_ipv4_sockaddr(const Ipv4& address, uint16_t port);
 
 }; // class SocketHelper
 

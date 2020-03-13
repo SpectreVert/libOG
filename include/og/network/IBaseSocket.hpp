@@ -26,34 +26,11 @@ public:
 
 	}
 
-	//! \brief Indicate if the socket is in blocking or
-	//!        non-blocking mode
-	//!
-	//! \return True if the socket is blocking, false
-	//!         if the socket is not blocking
-	//!
-	virtual bool isBlocking() const = 0;
-
-	//! \brief Set the blocking state of the socket 
-	//!
-	//! In non-blocking mode I/O operations will 
-	//! return immediately. Return code indicates 
-	//! if data was available
-	//!
-	//! In blocking mode system calls do not return
-	//! until they receive/send the data.
-	//!
-	//! \param block True to set the socket in 
-	//!        blocking mode, false to set it in
-	//!        non-blocking mode.
-	//!
-	virtual void setBlocking(bool block) = 0;
-
 	//! \brief Return the internal handle of the socket
 	//!
 	//! \return The internal handle of the socket
 	//!
-	virtual SocketHandle getHandle() const = 0;
+	virtual SocketHandle handle() const = 0;
 
 protected:
 

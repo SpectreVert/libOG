@@ -10,7 +10,7 @@
 #pragma once
 
 #include "og/network/Socket.hpp"
-#include "og/network/TcpSocket.hpp"
+#include "og/network/TcpStream.hpp"
 #include "og/network/Ipv4.hpp"
 
 namespace og {
@@ -22,7 +22,7 @@ public:
 	virtual Status listen(uint16_t lport, const Ipv4& laddress = Ipv4::Any);
 	virtual void disconnect();
 
-	virtual Status accept(TcpSocket& socket);
+	virtual Status accept(TcpStream& stream);
 
 }; // class TcpListener
 

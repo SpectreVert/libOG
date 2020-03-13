@@ -26,9 +26,9 @@ Socket::Status UdpSocket::sendTo(const void* data, std::size_t len, const Ipv4& 
 	if (len > MAX_DATAGRAM_SIZE)
 		return Error;
 
-	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(address, port);
+	sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(address, port);
 
-	if (sendto(getHandle(), static_cast<const char*>(data), len, 0, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (sendto(handle(), static_cast<const char*>(data), len, 0, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
 
 	return Success;
@@ -39,10 +39,10 @@ Socket::Status UdpSocket::receiveFrom(void* buffer, std::size_t len, std::size_t
 	if (!buffer)
 		return Error;
 
-	sockaddr_in src_addr = impl::SocketHelper::buildIpv4Sockaddr(INADDR_ANY, 0);
+	sockaddr_in src_addr = impl::SocketHelper::build_ipv4_sockaddr(INADDR_ANY, 0);
 	impl::Addrlen addrlen = sizeof(src_addr);
 
-	int received = recvfrom(getHandle(), buffer, len, 0, reinterpret_cast<sockaddr*>(&src_addr), &addrlen);
+	int received = recvfrom(handle(), buffer, len, 0, reinterpret_cast<sockaddr*>(&src_addr), &addrlen);
 	if (received < 0)
 		return Error;
 

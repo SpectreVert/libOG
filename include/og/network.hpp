@@ -17,4 +17,14 @@
 
 #include <og/network/TcpListener.hpp>
 
+#include <og/network/TcpStream.hpp>
+
+#include <og/network/Poll.hpp>
+
+#include <og/network/Concern.hpp>
+
+#include <og/network/Event.hpp>
+
+#include <og/network/Token.hpp>
+
 #include <og/network/Ipv4.hpp>

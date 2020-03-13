@@ -1,10 +1,10 @@
 /*
- * libOG, 2019
+ * libOG, 2020
  *
  * Name: Tcp-server.cxx
  *
  * Description:
- * Tcp example server.
+ * Tcp example server
 */
 
 #include <og/network.hpp>
@@ -16,7 +16,7 @@
 int main()
 {
 	og::TcpListener listener;
-	og::TcpSocket conn;
+	og::TcpStream conn;
 	
 	listener.listen(6970);
 	listener.accept(conn);

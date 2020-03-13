@@ -15,7 +15,7 @@
 
 int main()
 {
-	og::TcpSocket client;
+	og::TcpStream client;
 
 	client.connect("192.168.1.66", 6970);
 

@@ -30,12 +30,12 @@ Socket::Status TcpListener::listen(uint16_t lport, const Ipv4& laddress)
 	/* if ((laddress == Ipv4::Broadcast || laddress == Ipv4::Any))
 		return Error; */
 
-	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(laddress, lport);
+	sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(laddress, lport);
 
-	if (::bind(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+	if (::bind(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Error;
 
-	if (::listen(getHandle(), 0) == -1) {
+	if (::listen(handle(), 0) == -1) {
 		return Error;
 	}
 
@@ -47,22 +47,20 @@ void TcpListener::disconnect()
 	close();
 }
 
-Socket::Status TcpListener::accept(TcpSocket& socket)
+Socket::Status TcpListener::accept(TcpStream& stream)
 {
-	if (getHandle() == impl::SocketHelper::bad_socket)
+	if (handle() == impl::SocketHelper::bad_socket)
 		return Error;
 
 	sockaddr_in addr;
 	impl::Addrlen addrlen = sizeof(addr);
-	SocketHandle accepted = ::accept(getHandle(), reinterpret_cast<sockaddr*>(&addr), &addrlen);
-	//SocketHandle accepted = ::accept(getHandle(), 0x0, 0x0);
+	SocketHandle accepted = ::accept(handle(), reinterpret_cast<sockaddr*>(&addr), &addrlen);
 
-	// TODO Return a useful error status
 	if (accepted == impl::SocketHelper::bad_socket)
 		return Error;
 
-	socket.disconnect();
-	socket.open(accepted);
+	stream.disconnect();
+	stream.open(accepted);
 
 	return Success;
 }

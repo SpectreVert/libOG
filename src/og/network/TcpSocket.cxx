@@ -7,8 +7,9 @@
  * 
 */
 
-#include <og/network/TcpSocket.hpp>
-#include <og/network/SocketImplementation.hpp>
+#include "og/network/TcpSocket.hpp"
+#include "og/network/SocketImplementation.hpp"
+
 #include <errno.h>
 
 namespace og {
@@ -33,10 +34,10 @@ Socket::Status TcpSocket::connect(const Ipv4& raddress, uint16_t rport)
 	close();
 	open();
 
-	sockaddr_in addr = impl::SocketHelper::buildIpv4Sockaddr(raddress, rport);
+	sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(raddress, rport);
 
-	if (::connect(getHandle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
-		return getErrorStatus();
+	if (::connect(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
+		return get_error_status();
 
 	return Success;
 }
@@ -62,11 +63,11 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& s
 	ssize_t delivered = 0;
 
 	for (sent = 0; sent < len; sent += delivered) {
-		delivered = ::send(getHandle(), static_cast<const char*>(data) + sent, 
+		delivered = ::send(handle(), static_cast<const char*>(data) + sent, 
 		static_cast<size_t>(len - sent), get_flags());
 
 		if (delivered < 0)
-			return getErrorStatus();
+			return get_error_status();
 	
 	}
 	
@@ -85,7 +86,7 @@ Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& rece
 	if (!data)
 		return Error;
 
-	int bytesReceived = recv(getHandle(), data, len, get_flags());
+	int bytesReceived = recv(handle(), data, len, get_flags());
 	received = 0;
 
 	if (bytesReceived > 0) {
@@ -93,7 +94,7 @@ Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& rece
 		return Success;
 	}
 
-	return getErrorStatus();
+	return get_error_status();
 }
 
 } // namespace og

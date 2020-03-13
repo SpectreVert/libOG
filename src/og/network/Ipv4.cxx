@@ -80,7 +80,7 @@ Ipv4 Ipv4::getLocalAddress()
 	if (sock == impl::SocketHelper::bad_socket)
 		throw SystemException("socket");
 
-	loopback = impl::SocketHelper::buildIpv4Sockaddr(INADDR_LOOPBACK, 9);
+	loopback = impl::SocketHelper::build_ipv4_sockaddr(INADDR_LOOPBACK, 9);
 
 	/* Not sure if connect returns -1 on failure on Windows... */
 	if (connect(sock, reinterpret_cast<sockaddr*>(&loopback), sizeof(loopback)) == -1) {

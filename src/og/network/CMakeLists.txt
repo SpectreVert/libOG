@@ -6,6 +6,7 @@ set(SRCDIR ${PROJECT_SOURCE_DIR}/src/og/network)
 set(HEADIR ${PROJECT_SOURCE_DIR}/include/og/network)
 
 set(SRC
+	${HEADIR}/network.hpp	
 	${SRCDIR}/Socket.cxx
 	${HEADIR}/Socket.hpp
 	${SRCDIR}/UdpSocket.cxx

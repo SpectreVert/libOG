@@ -7,7 +7,7 @@
  * Tcp example client.
 */
 
-#include <og/network.hpp>
+#include <og/network/network.hpp>
 
 #include <string>
 #include <iostream>

@@ -30,7 +30,7 @@ int main()
 
 	while (1) {
 
-		poll.poll(events, og::Poll::Timeout::None);
+		poll.poll(events, og::PollTimeout::None);
 
 		for (auto event : events.events())
 		{

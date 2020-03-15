@@ -15,7 +15,7 @@ enum Concern {
 	
 	WRITABLE = 1,
 	READABLE = 2,
-	BOTH = 4
+	BOTH = WRITABLE | READABLE
 
 }; // enum Concern
 

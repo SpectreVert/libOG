@@ -6,7 +6,7 @@ set(SRCDIR ${PROJECT_SOURCE_DIR}/src/og/network)
 set(HEADIR ${PROJECT_SOURCE_DIR}/include/og/network)
 
 set(SRC
-	${HEADIR}/network.hpp	
+	${HEADIR}/../network.hpp	
 	${SRCDIR}/Socket.cxx
 	${HEADIR}/Socket.hpp
 	${SRCDIR}/UdpSocket.cxx
@@ -20,9 +20,10 @@ set(SRC
 	${SRCDIR}/Poll.cxx
 	${HEADIR}/Poll.hpp
 	${HEADIR}/Registry.hpp
+	${HEADIR}/Selector.hpp
 	${SRCDIR}/TcpListener.cxx
 	${HEADIR}/TcpListener.hpp
-	${SRCDIR}/SocketImplementation.hpp
+	${HEADIR}/SocketImplementation.hpp
 	${HEADIR}/Ipv4.hpp
 	${SRCDIR}/Ipv4.cxx
 	${HEADIR}/HttpHeaders.hpp
@@ -34,9 +35,9 @@ if(UNIX)
 	set(SRC
 		${SRC}
 		${SRCDIR}/unix/SocketImplementation.cxx
-		${SRCDIR}/unix/SocketImplementation.hpp
+		${HEADIR}/unix/SocketImplementation.hpp
 		${SRCDIR}/unix/Selector.cxx
-		${SRCDIR}/unix/Selector.hpp
+		${HEADIR}/unix/Selector.hpp
 	)
 elseif(WIN32)
 	set(SRC
@@ -55,8 +56,8 @@ endif()
 
 install(TARGETS og_network
 				ARCHIVE
-					DESTINATION lib
-					COMPONENT Libraries
+				DESTINATION lib
+				COMPONENT Libraries
 )
 install(DIRECTORY ${HEADIR}
 	DESTINATION include/og

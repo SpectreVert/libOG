@@ -17,6 +17,12 @@
 
 namespace og {
 
+//! \brief Special values for poll timeout
+//!
+enum PollTimeout {
+	None = -1,
+};
+
 //! \brief Unix-specific selector using epoll
 //!
 class Selector : public NonCopyable {

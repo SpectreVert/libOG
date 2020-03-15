@@ -20,12 +20,6 @@ namespace og {
 class Poll : public NonCopyable {
 public:
 
-	//! \brief Special timeout values
-	//!
-	enum Timeout {
-		None = 0
-	};
-
 	//! \brief Default constructor
 	//!
 	Poll();

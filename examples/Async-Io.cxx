@@ -7,7 +7,7 @@
  * Asynchronous I/O example
 */
 
-#include <og/network/network.hpp>
+#include <og/network.hpp>
 
 #include <string>
 #include <iostream>

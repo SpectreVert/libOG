@@ -6,7 +6,6 @@ set(SRCDIR ${PROJECT_SOURCE_DIR}/src/og/network)
 set(HEADIR ${PROJECT_SOURCE_DIR}/include/og/network)
 
 set(SRC
-	${HEADIR}/../network.hpp	
 	${SRCDIR}/Socket.cxx
 	${HEADIR}/Socket.hpp
 	${SRCDIR}/UdpSocket.cxx
@@ -60,6 +59,10 @@ install(TARGETS og_network
 				COMPONENT Libraries
 )
 install(DIRECTORY ${HEADIR}
+	DESTINATION include/og
+	COMPONENT Development
+)
+install(FILES ${HEADIR}/../network.hpp
 	DESTINATION include/og
 	COMPONENT Development
 )

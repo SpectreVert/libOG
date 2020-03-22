@@ -48,7 +48,7 @@ Socket::Status UdpSocket::receiveFrom(void* buffer, std::size_t len, std::size_t
 
 	recvd = static_cast<std::size_t>(received);
 	address = ntohl(src_addr.sin_addr.s_addr);
-	port = src_addr.sin_port;
+	port = ntohs(src_addr.sin_port);
 
 	return Success;
 }

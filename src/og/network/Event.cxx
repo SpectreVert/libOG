@@ -28,13 +28,13 @@ uint32_t Event::token() const
 
 bool Event::is_readable() const
 {
-	return (m_event.events & EPOLLIN != 0) ||
+	return (m_event.events & EPOLLIN) ||
 			(m_event.events & EPOLLPRI != 0);
 }
 
 bool Event::is_writable() const
 {
-	return m_event.events & EPOLLOUT != 0;
+	return m_event.events & EPOLLOUT;
 }
 
 bool Event::is_read_closed() const

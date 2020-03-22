@@ -20,12 +20,13 @@ Selector::Selector()
 
 int Selector::add(SocketHandle socket, Token token, Concern concern)
 {
-	uint32_t events = EPOLLET;
+	// uint32_t event = EPOLLET;
+	uint32_t events = 0;
 	epoll_event event { 0 };
 
-	if (concern & READABLE)
+	if (concern & Readable)
 		events = events | EPOLLRDHUP | EPOLLIN;
-	if (concern & WRITABLE)
+	if (concern & Writable)
 		events |= EPOLLOUT;
 
 	event.events = events;

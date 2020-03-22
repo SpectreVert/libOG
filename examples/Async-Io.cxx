@@ -23,7 +23,7 @@ int main()
 
 	listener.listen(6970, og::Ipv4(127, 0, 0, 1));
 
-	poll.add(listener.handle(), 0, og::Concern::READABLE);
+	poll.add(listener.handle(), 0, og::Concern::Readable);
 
 	og::Events events(1024);
 	std::vector<std::shared_ptr<og::TcpStream>> sockets;
@@ -42,7 +42,7 @@ int main()
 
 				sockets.push_back(sock);
 
-				poll.add(sock->handle(), sid, og::Concern::READABLE);
+				poll.add(sock->handle(), sid, og::Concern::Writable);
 
 				sid++;
 

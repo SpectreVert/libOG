@@ -13,9 +13,9 @@ namespace og {
 //!
 enum Concern {
 	
-	WRITABLE = 1,
-	READABLE = 2,
-	BOTH = WRITABLE | READABLE
+	Writable = 1,
+	Readable = 2,
+	Both = Writable | Readable
 
 }; // enum Concern
 

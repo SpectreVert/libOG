@@ -10,8 +10,6 @@ set(SRC
 	${HEADIR}/Socket.hpp
 	${SRCDIR}/UdpSocket.cxx
 	${HEADIR}/UdpSocket.hpp
-	${SRCDIR}/TcpSocket.cxx
-	${HEADIR}/TcpSocket.hpp
 	${SRCDIR}/TcpStream.cxx
 	${HEADIR}/TcpStream.hpp
 	${SRCDIR}/Event.cxx

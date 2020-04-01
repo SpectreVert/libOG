@@ -24,9 +24,10 @@ typedef int Addrlen;
 class SocketHelper {
 public:
 
+    static constexpr int MSG_FLAG = 0;
+
 	static SocketHandle bad_socket;
 
-    static void blocking(SocketHandle socket, bool blocking);
     static void close(SocketHandle socket);
 
 } // class SocketHelper

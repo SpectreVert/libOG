@@ -8,41 +8,47 @@
 #pragma once
 
 #include "og/network/IBaseSocket.hpp"
-#include "og/base/NonCopyable.hpp"
 #include "og/network/SocketHandle.hpp"
 #include "og/network/Ipv4.hpp"
+#include "og/base/NonCopyable.hpp"
 
 #include <stdint.h>
 
 namespace og {
 
-//! \brief Base class for all socket types
+//! \brief Base class for non-blocking socket
 //!
 class Socket : public IBaseSocket {
 public:
 
+	//! \brief Warper for port values
+	//!
+	typedef uint16_t Port;
+
+    //! \brief Port value to let system chose port
+	//!
+	static constexpr Port any_port = 0;
+
 	//! \brief Status codes returned by Socket functions
 	//!
-	enum Status {
-		Success = 1,    //!< Operation has succeeded
-		Partial = 2,    //!< Operation could not complete at the moment
-		Disconnect = 3, //!< Socket was disconnected
-		Error = 4       //!< An error occured
-	};
+	enum class Status
+	{
+		Success = 0,	//!< Operation has succeeeded
+		Error,			//!< Operation has failed
 
-    //! \brief Special port values
-	//!
-	enum Port {
-		Any = 0         //!< Let the system pick any available port
+		Connecting,		//!< The connect operation is not done yet
+		
+		RetrySend,		//!< Socket unavailable for writing data
+		PartialSend,	//!< Data was partially sent (TCP only)
+
+		RetryReceive,	//!< No data to be read from the socket
+
+		RetryAccept		//!< No connections are currently pending
 	};
 
 	//! \brief Destructor
 	//!
 	virtual ~Socket();
-
-	bool is_blocking() const;
-
-	void set_blocking(bool block);
 
 	//! \brief Bind the socket to a port / address pair
 	//!
@@ -75,7 +81,7 @@ public:
 	//!
 	//! \see unbind
 	//!
-	virtual Status bind(uint16_t port, const Ipv4& address = Ipv4::Any);
+	virtual Status bind(Port port, const Ipv4& address = Ipv4::Any);
 	
 	//! \brief Unbind the socket from the port to which it is boud to
 	//!
@@ -112,7 +118,7 @@ protected:
 	//!        socket type in which caes protocol can be
 	//!        set to 0.
 	//!
-	Socket(int domain, int type, int protocol = 0, bool blocking = true);
+	Socket(int domain, int type, int protocol = 0);
 
 	//! \brief Create the internal handle of the socket
 	//!
@@ -129,18 +135,8 @@ protected:
 	//!
 	void close();
 
-	//! \brief Generate an appropriate error code in case of failure
-	//!
-	//! The return value is a simplified error code. The user can
-	//! still fetch the precise system error using errno.
-	//!
-	//! \see Status
-	//!
-	Status get_error_status();
-	
 private:
 	SocketHandle m_socket; //!< Internal socket handle
-	bool m_blocking;       //!< Is the socket blocking
 	int m_domain;          //!< Domain used by the socket
 	int m_type;            //!< Communication semantics used by the socket
 	int m_protocol;        //!< Protocol used by the socket

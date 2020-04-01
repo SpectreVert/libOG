@@ -13,10 +13,9 @@
 
 using namespace og;
 
-Socket::Socket(int t_domain, int t_type, int t_protocol, bool t_blocking) :
+Socket::Socket(int t_domain, int t_type, int t_protocol) :
 	IBaseSocket(t_domain, t_type, t_protocol),
 	m_socket(impl::SocketHelper::bad_socket),
-	m_blocking(t_blocking),
 	m_domain(t_domain),
 	m_type(t_type),
 	m_protocol(t_protocol)
@@ -30,21 +29,7 @@ Socket::~Socket()
 	close();
 }
 
-
-bool Socket::is_blocking() const
-{
-	return m_blocking;
-}
-
-void Socket::set_blocking(bool block)
-{
-	if (m_socket != impl::SocketHelper::bad_socket)
-		impl::SocketHelper::set_blocking(m_socket, block);
-	
-	m_blocking = block;
-}
-
-Socket::Status Socket::bind(uint16_t port, const Ipv4& address)
+Socket::Status Socket::bind(Port port, const Ipv4& address)
 {
 	sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(address, port);
 
@@ -53,9 +38,9 @@ Socket::Status Socket::bind(uint16_t port, const Ipv4& address)
 	open();
 
 	if (::bind(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
-		return Error;
+		return Socket::Status::Error;
 	
-	return Success;
+	return Socket::Status::Success;
 }
 
 void Socket::unbind()
@@ -70,6 +55,7 @@ SocketHandle Socket::handle() const
 
 void Socket::open()
 {
+	// Return immediately if the socket is already open & good
 	if (m_socket != impl::SocketHelper::bad_socket)
 		return;
 	
@@ -84,36 +70,22 @@ void Socket::open()
 
 void Socket::open(SocketHandle t_socket)
 {
+	// Return immediately if the socket is already open & good
 	if (m_socket != impl::SocketHelper::bad_socket)
 		return;
 
 	// Take note of the new handle
 	m_socket = t_socket;
 
-	// Set the socket's blocking state
-	impl::SocketHelper::set_blocking(m_socket, m_blocking);	
+	// Set the socket as non-blocking if it wasn't previously done
+	impl::SocketHelper::set_non_blocking(m_socket);
 }
 
 void Socket::close()
 {
-	if (m_socket != impl::SocketHelper::bad_socket) {
+	if (m_socket != impl::SocketHelper::bad_socket)
+	{
 		impl::SocketHelper::close(m_socket);
 		m_socket = impl::SocketHelper::bad_socket;
-	}
-}
-
-Socket::Status Socket::get_error_status()
-{
-	switch (errno) {
-		case EAGAIN:
-		case EINPROGRESS:
-		case EALREADY:
-			return Socket::Status::Partial;
-		case ECONNREFUSED:
-		case ECONNRESET:
-		case ETIMEDOUT:
-			return Socket::Status::Disconnect;
-		default:
-			return Socket::Status::Error;
 	}
 }

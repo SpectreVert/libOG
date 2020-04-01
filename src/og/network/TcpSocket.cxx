@@ -54,11 +54,8 @@ Socket::Status TcpSocket::send(const void* data, std::size_t len)
 	return send(data, len, sent);
 }
 
-Socket::Status TcpSocket::send(const void* data, std::size_t len, std::size_t& sent)
+Socket::Status TcpSocket::send(const void* data, std::size_t len, ssize_t& sent)
 {
-	if (!len || !data)
-		return Error;
-
 	// We'll need to perform the send over a loop -- so that everything is sent correctly.
 	ssize_t delivered = 0;
 
@@ -83,9 +80,6 @@ Socket::Status TcpSocket::receive(void* data, std::size_t len)
 
 Socket::Status TcpSocket::receive(void* data, std::size_t len, std::size_t& received)
 {
-	if (!data)
-		return Error;
-
 	int bytesReceived = recv(handle(), data, len, get_flags());
 	received = 0;
 

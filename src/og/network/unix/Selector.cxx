@@ -20,8 +20,8 @@ Selector::Selector()
 
 int Selector::add(SocketHandle socket, Token token, Concern concern)
 {
-	// uint32_t event = EPOLLET;
-	uint32_t events = 0;
+	uint32_t events = EPOLLET;
+	//uint32_t events = 0;
 	epoll_event event { 0 };
 
 	if (concern & Readable)
@@ -34,8 +34,6 @@ int Selector::add(SocketHandle socket, Token token, Concern concern)
 
 	return epoll_ctl(m_poll_fd, EPOLL_CTL_ADD, socket, &event);
 }
-
-#include <iostream>
 
 int Selector::select(Events& events, int timeout)
 {

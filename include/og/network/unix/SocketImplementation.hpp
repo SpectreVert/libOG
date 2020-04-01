@@ -18,8 +18,11 @@ namespace og {
 
 class Ipv4;
 
+//! \brief A namespace for OS-specific implementations
+//!
 namespace impl {
 
+//! \brief 
 typedef socklen_t Addrlen;
 
 //! \brief Unix-specific class for Socket operations
@@ -29,7 +32,9 @@ public:
 	
 	static SocketHandle bad_socket;
 
-	static void set_blocking(SocketHandle socket, bool blocking);
+	static constexpr int MSG_FLAG = MSG_NOSIGNAL;
+
+	static void set_non_blocking(SocketHandle socket);
 	static void close(SocketHandle socket);
 
 	static sockaddr_in build_ipv4_sockaddr(const Ipv4& address, uint16_t port);

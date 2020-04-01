@@ -37,35 +37,64 @@ public:
 	//!
 	UdpSocket();
 
-	//! \brief Send raw data to a remote peer
+	//! \brief Transmit raw data message to another socket
 	//!
-	//! \param data Pointer to an array of bytes to send
+	//! \param data The contents of the message
 	//!
-	//! \param length Number of bytes to send
+	//! \param length The length of the message
 	//!
-	//! \param address Address of the remote peer
+	//! \param address Address of the target
 	//!
-	//! \param port Port of the remote peer
+	//! \param port Port of the target
 	//!
 	//! \see receive_from
 	//!
-	virtual Status sendTo(const void* data, std::size_t length,
-                          const Ipv4& address, uint16_t port);
+	virtual Status send_to(const void* data,
+						   std::size_t length,
+                           const Ipv4& address,
+						   Port port);
 
-	//! \brief Receive raw data from a remote peer
+	//! \brief Receive a raw data message from a socket
 	//!
-	//! \param data Pointer to an array of bytes to fill
+	//! \param data An buffer to fill with the received data
 	//!
 	//! \param length Maximum number of bytes that can be received
 	//!
-	//! \param address Address of the remote peer
+	//! \param address Provides the address of the source socket
 	//!
-	//! \param port Port of the remote peer
+	//! \param port Provides the port of the source socket
 	//!
 	//! \see send_to
 	//!
-	virtual Status receiveFrom(void* buffer, std::size_t length,
-                               std::size_t& recveived, Ipv4& address, uint16_t& port);
+	virtual Status receive_from(void* buffer,
+							    std::size_t length,
+								Ipv4& address,
+								Port& port
+								);
+
+	//! \brief Receive a raw data message from a sockets
+	//!
+	//! The received argument is filled with the number of
+	//! received bytes.
+	//!
+	//! \param data An buffer to fill with the received data
+	//!
+	//! \param length Maximum number of bytes that can be received
+	//!
+	//! \param address Provides the address of the source socket
+	//!
+	//! \param port Provides the port of the source socket
+	//!
+	//! \param received The number of received bytes
+	//!
+	//! \see send_to
+	//!
+	virtual Status receive_from(void* buffer,
+							    std::size_t length,
+								Ipv4& address,
+								Port& port,
+                                ssize_t& received
+								);
 
 }; // class UdpSocket
 

@@ -17,16 +17,15 @@
 
 int main()
 {
-	og::TcpListener listener;
+	og::UdpSocket listener;
 	og::Poll poll;
 	int sid = 1;
 
-	listener.listen(6970, og::Ipv4(127, 0, 0, 1));
+	listener.bind(6970, og::Ipv4(127, 0, 0, 1));
 
 	poll.add(listener.handle(), 0, og::Concern::Readable);
 
 	og::Events events(1024);
-	std::vector<std::shared_ptr<og::TcpStream>> sockets;
 
 	while (1) {
 
@@ -34,42 +33,27 @@ int main()
 
 		for (auto event : events.events())
 		{
-			if (event.token() == 0)
+			if (event.is_read_closed())
 			{
-				std::shared_ptr<og::TcpStream> sock(new og::TcpStream);
+				(void) event;
+			}
 
-				listener.accept(*sock);
-
-				sockets.push_back(sock);
-
-				poll.add(sock->handle(), sid, og::Concern::Writable);
-
-				sid++;
-
-			} else
+			if (event.is_write_closed())
 			{
-				if (event.is_read_closed())
-				{
-					(void) event;
-				}
+				(void) event;
+			}
 
-				if (event.is_write_closed())
-				{
-					(void) event;
-				}
+			if (event.is_readable()) 
+			{
+				char buffer[1024];
+				ssize_t recvd = 0;
+				og::Ipv4 addr;
+				og::Socket::Port port;  
 
-				if (event.is_readable()) 
-				{
-					std::shared_ptr<og::TcpStream> sock = sockets[event.token() - 1];
+				listener.receive_from(buffer, sizeof(buffer), addr, port, recvd);
 
-					char buffer[1024];
-					std::size_t recvd = 0;
-
-					sock->receive(buffer, sizeof(buffer), recvd);
-
-					buffer[recvd < 1023 ? recvd : 1023] = '\0';
-					std::cout << "bytes: " << recvd << " ; text: " << buffer;
-				}
+				buffer[recvd < 1023 ? recvd : 1023] = '\0';
+				std::cout << "bytes: " << recvd << " ; text: " << buffer;
 			}
 			std::cerr << std::endl;
 		}

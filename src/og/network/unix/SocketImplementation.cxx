@@ -17,15 +17,13 @@ namespace impl {
 
 SocketHandle SocketHelper::bad_socket = -1;
 
-void SocketHelper::set_blocking(SocketHandle socket, bool blocking)
+void SocketHelper::set_non_blocking(SocketHandle socket)
 {
 	int socket_status = fcntl(socket, F_GETFL);
 
-	if (blocking) {
-		// Negate non-blocking bits (so do block)
-		if (fcntl(socket, socket_status &~ O_NONBLOCK) == -1)
-			throw SystemException("fcntl");
-	} else {
+	// Socket is non-blocking
+	if (!(socket_status & O_NONBLOCK))
+	{
 		if (fcntl(socket, socket_status | O_NONBLOCK) == -1)
 			throw SystemException("fcntl");
 	}

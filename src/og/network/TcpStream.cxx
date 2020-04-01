@@ -11,12 +11,6 @@
 
 using namespace og;
 
-#ifdef _WIN_32
-constexpr int MSG_FLAG = 0;
-#else
-constexpr int MSG_FLAG = MSG_NOSIGNAL;
-#endif
-
 TcpStream::TcpStream() :
     Socket(PF_INET, SOCK_STREAM, false)
 {
@@ -27,15 +21,18 @@ Socket::Status TcpStream::connect(const Ipv4& raddress, uint16_t rport)
 {
     sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(raddress, rport);
 
-    if (::connect(handle(), reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1) {
-        // If connect hasn't finished ; that's alright
-        if (errno == EINPROGRESS) return Status::Partial;
-		// Else it should have failed
-        return Status::Error;
+    if (::connect(handle(),
+                  reinterpret_cast<sockaddr*>(&addr),
+                  sizeof(addr)) == -1)
+    {
+        // If socket hasn't finished connecting ; that's alright
+        if (errno == EINPROGRESS)
+            return Socket::Status::Connecting;
+
+        return Socket::Status::Error;
     }
 
-	// Everything is alright
-    return Status::Success;
+    return Socket::Status::Success;
 }
 
 void TcpStream::disconnect()
@@ -45,50 +42,65 @@ void TcpStream::disconnect()
 
 Socket::Status TcpStream::send(const void* data, std::size_t len)
 {
-    std::size_t sent;
+    ssize_t sent;
 
     return send(data, len, sent);
 }
 
-Socket::Status TcpStream::send(const void* data, std::size_t len, std::size_t& sent)
+Socket::Status TcpStream::send(const void* data, std::size_t len, ssize_t& sent)
 {
-    if (!len || !data)
-        return Error;
-
-    // We'll need to perform the send over a loop -- so that everything is sent correctly.
     ssize_t delivered = 0;
 
-    for (sent = 0; sent < len; sent += delivered) {
-        delivered = ::send(handle(), static_cast<const char*>(data) + sent,
-        static_cast<size_t>(len - sent), MSG_FLAG);
+    // We'll try to send all of the data
+    for (sent = 0; sent < len; sent += delivered)
+    {
+        delivered = ::send(handle(),
+                           static_cast<const char*>(data) + sent,
+                           static_cast<size_t>(len - sent),
+                           impl::SocketHelper::MSG_FLAG);
 
         if (delivered < 0)
-            return get_error_status();
+        {
+            // We already sent data but the socket can't send more for now
+            if ((errno == EAGAIN || errno == EWOULDBLOCK) && sent)
+            {
+                return Socket::Status::PartialSend;
+            }
+            else if (!sent) // No data was sent ; the socket is not ready
+            {
+                return Socket::Status::RetrySend;
+            }
 
+            return Socket::Status::Error;
+        }
     }
 
-    return Success;
+    return Socket::Status::Success;
 }
 
 Socket::Status TcpStream::receive(void* data, std::size_t len)
 {
-    size_t received = 0;
+    ssize_t received = 0;
 
     return receive(data, len, received);
 }
 
-Socket::Status TcpStream::receive(void* data, std::size_t len, std::size_t& received)
+Socket::Status TcpStream::receive(void* data, std::size_t len, ssize_t& received)
 {
-    if (!data)
-        return Error;
+    received = ::recv(handle(),
+                                    data,
+                                    len,
+                                    impl::SocketHelper::MSG_FLAG);
 
-    int bytes_received = recv(handle(), data, len, MSG_FLAG);
-    received = 0;
+    if (received < 0)
+    {
+        received = 0;
 
-    if (bytes_received > 0) {
-        received = static_cast<std::size_t>(bytes_received);
-        return Success;
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+            return Socket::Status::RetryReceive;
+
+        return Socket::Status::Error;
     }
 
-    return get_error_status();
+    return Socket::Status::Success;
 }

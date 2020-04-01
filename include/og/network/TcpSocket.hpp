@@ -22,9 +22,9 @@ public:
 	virtual void disconnect();
 
 	virtual Status send(const void* data, std::size_t len);
-	virtual Status send(const void* data, std::size_t len, std::size_t& sent);
+	virtual Status send(const void* data, std::size_t len, ssize_t& sent);
 	virtual Status receive(void* data, std::size_t len);
-	virtual Status receive(void* data, std::size_t len, std::size_t& received);
+	virtual Status receive(void* data, std::size_t len, ssize_t& received);
 
 private:
 

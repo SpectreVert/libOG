@@ -19,7 +19,11 @@ UdpSocket::UdpSocket() :
 	
 }
 
-Socket::Status UdpSocket::send_to(const void* data, std::size_t len, const Ipv4& address, Port port)
+Socket::Status UdpSocket::send_to(
+		const void* data,
+		std::size_t len,
+		const Ipv4& address,
+		Port port)
 {
 	open();
 
@@ -46,14 +50,23 @@ Socket::Status UdpSocket::send_to(const void* data, std::size_t len, const Ipv4&
 	return Socket::Status::Success;
 }
 
-Socket::Status UdpSocket::receive_from(void* buffer, std::size_t len, Ipv4& address, Port& port)
+Socket::Status UdpSocket::receive_from(
+		void* buffer,
+		std::size_t len,
+		Ipv4& address,
+		Port& port)
 {
 	ssize_t received;
 
 	return receive_from(buffer, len, address, port, received);
 }
 
-Socket::Status UdpSocket::receive_from(void* buffer, std::size_t len, Ipv4& address, Port& port, ssize_t& received)
+Socket::Status UdpSocket::receive_from(
+		void* buffer,
+		std::size_t len,
+		Ipv4& address,
+		Port& port,
+		ssize_t& received)
 {
 	sockaddr_in src_addr = impl::SocketHelper::build_ipv4_sockaddr(INADDR_ANY, 0);
 	impl::Addrlen addrlen = sizeof(src_addr);

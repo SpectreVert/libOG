@@ -29,7 +29,7 @@ Socket::~Socket()
 	close();
 }
 
-Socket::Status Socket::bind(Port port, const Ipv4& address)
+Socket::Status Socket::bind(const Ipv4& address, Port port)
 {
 	sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(address, port);
 

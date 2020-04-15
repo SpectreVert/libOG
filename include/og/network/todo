@@ -1,0 +1,7 @@
+TODO:
+
+IBoss template for making Boss instance (executors)
+
+IWaitable object for making objects that can be waited on and get dispatched
+
+IWorker objects to execute the tasks

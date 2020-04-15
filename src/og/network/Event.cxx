@@ -6,6 +6,7 @@
 */
 
 #include "og/network/Event.hpp"
+
 #include <iostream>
 #include <cstring>
 
@@ -60,10 +61,17 @@ bool Event::is_error() const
 /// Events
 ///////////////////////////////////////
 
+// TODO: free up the events storage during destruction
+
 Events::Events(std::size_t t_capacity)
 {
 	m_capacity = t_capacity;
 	m_epoll_events = new epoll_event[t_capacity];
+}
+
+Events::~Events()
+{
+	delete m_epoll_events;
 }
 
 std::vector<Event> Events::events() const

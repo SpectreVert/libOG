@@ -73,15 +73,15 @@ public:
 	//! to ALL local interfaces by providing Ipv4::Any
 	//! as the address.
 	//!
-	//! \param port Port to bind the socket to
-	//!
 	//! \param address Address of the interface to bind to
+	//!
+	//! \param port Port to bind the socket to
 	//!
 	//! \return Status code
 	//!
 	//! \see unbind
 	//!
-	virtual Status bind(Port port, const Ipv4& address = Ipv4::Any);
+	virtual Status bind(const Ipv4& address, Port port);
 	
 	//! \brief Unbind the socket from the port to which it is boud to
 	//!

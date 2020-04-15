@@ -21,8 +21,8 @@ void SocketHelper::set_non_blocking(SocketHandle socket)
 {
 	int socket_status = fcntl(socket, F_GETFL);
 
-	// Socket is non-blocking
-	if (!(socket_status & O_NONBLOCK))
+	// Socket is blocking
+	if (socket_status & O_NONBLOCK)
 	{
 		if (fcntl(socket, socket_status | O_NONBLOCK) == -1)
 			throw SystemException("fcntl");

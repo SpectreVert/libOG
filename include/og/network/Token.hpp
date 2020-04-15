@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <unordered_map>
-
 namespace og {
 
 //! \brief Wrapper around size_t for Selector::register call

@@ -7,22 +7,30 @@
 
 #pragma once
 
-#include "og/network/IBaseSelector.hpp"
+#include "og/base/NonCopyable.hpp"
+#include "og/network/SocketHandle.hpp"
+#include "og/network/Event.hpp"
+#include "og/network/Token.hpp"
+#include "og/network/Concern.hpp"
+
+
 
 namespace og {
 
-//! \brief The epoll specialized version of the selector
+//! \brief A base template for all selector types.
 //!
-class Selector : public IBaseSelector {
+class IBaseSelector : public NonCopyable {
 public:
-
-	//! \brief Default constructor
-	//!
-	Selector();
 
 	//! \brief Destructor
 	//!
-	~Selector();
+	virtual ~IBaseSelector() = default;
+
+protected:
+
+	//! \brief Default constructor
+	//!
+	IBaseSelector() = default;
 
 	//! \brief Add a new socket to the poll list
 	//!
@@ -34,10 +42,9 @@ public:
 	//! \param concern The readiness that should be monitored
 	//!
 	//! \return zero if the socket handle was registered ;
-	//!         -1 if an occured. Errno is set accordingly if a
-	//!         system error occured
+	//!         -1 if an occured
 	//!
-	int add(SocketHandle socket, Token token, Concern concern);
+	virtual int add(SocketHandle handle, Token token, Concern concern) = 0;
 
 	//! \brief Remove a socket from the poll list
 	//!
@@ -46,8 +53,8 @@ public:
 	//! \return zero if the socket handle was deregistered ;
 	//!         -1 if an error occured
 	//!
-	int remove(SocketHandle handle);
-	
+	virtual int remove(SocketHandle handle) = 0;
+
 	//! \brief Poll pending events
 	//!
 	//! \param events The events container
@@ -57,14 +64,9 @@ public:
 	//!
 	//! \return The number of file descriptors ready for I/O ; zero if
 	//!         no file descriptors became ready during before timeout ; 
-	//!         -1 if an error occured. Errno is set accordingly if a
-	//!         system error occured
+	//!         -1 if an error occured
 	//!         
-	int select(Events& events, int64_t timeout);
-
-private:
-
-	int m_poll_fd; //!< The epoll file descriptor
+	virtual int select(Events& events, int64_t timeout) = 0;
 
 }; // class Selector
 

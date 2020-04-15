@@ -21,10 +21,7 @@ public:
 
 	//! \brief Destructor
 	//!
-	virtual ~IBaseSocket()
-	{
-
-	}
+	virtual ~IBaseSocket() = default;
 
 	//! \brief Return the internal handle of the socket
 	//!

@@ -47,6 +47,8 @@ public:
 	//!
 	//! \param port Port of the target
 	//!
+	//! \return The Status code
+	//!
 	//! \see receive_from
 	//!
 	virtual Status send_to(const void* data,
@@ -63,6 +65,8 @@ public:
 	//! \param address Provides the address of the source socket
 	//!
 	//! \param port Provides the port of the source socket
+	//!
+	//! \return The Status code
 	//!
 	//! \see send_to
 	//!
@@ -86,6 +90,8 @@ public:
 	//! \param port Provides the port of the source socket
 	//!
 	//! \param received The number of received bytes
+	//!
+	//! \return The Status code
 	//!
 	//! \see send_to
 	//!

@@ -8,6 +8,8 @@
 #include "og/network/unix/Selector.hpp"
 #include "og/base/SystemException.hpp"
 
+#include <unistd.h> // close
+
 using namespace og;
 
 Selector::Selector()
@@ -18,11 +20,16 @@ Selector::Selector()
 		throw SystemException("epoll_create1");
 }
 
-int Selector::add(SocketHandle socket, Token token, Concern concern)
+Selector::~Selector()
+{
+	if (m_poll_fd != -1)
+		close(m_poll_fd);
+}
+
+int Selector::add(SocketHandle handle, Token token, Concern concern)
 {
 	uint32_t events = EPOLLET;
-	//uint32_t events = 0;
-	epoll_event event { 0 };
+	epoll_event event = { 0 };
 
 	if (concern & Readable)
 		events = events | EPOLLRDHUP | EPOLLIN;
@@ -32,10 +39,17 @@ int Selector::add(SocketHandle socket, Token token, Concern concern)
 	event.events = events;
 	event.data.u32 = token;
 
-	return epoll_ctl(m_poll_fd, EPOLL_CTL_ADD, socket, &event);
+	return epoll_ctl(m_poll_fd, EPOLL_CTL_ADD, handle, &event);
 }
 
-int Selector::select(Events& events, int timeout)
+int Selector::remove(SocketHandle handle)
+{
+	epoll_event event = { 0 }; // for portability reasons
+	
+	return epoll_ctl(m_poll_fd, EPOLL_CTL_DEL, handle, &event);
+}
+
+int Selector::select(Events& events, int64_t timeout)
 {
 	events.clear();
 
@@ -47,12 +61,5 @@ int Selector::select(Events& events, int timeout)
 	else
 		throw SystemException("epoll_wait");
 
-	// Need to push each events on the queue
-
 	return n;
-}
-
-inline bool Selector::is_valid() const
-{
-	return m_poll_fd;
 }

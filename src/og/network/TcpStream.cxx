@@ -17,7 +17,7 @@ TcpStream::TcpStream() :
 
 }
 
-Socket::Status TcpStream::connect(const Ipv4& raddress, uint16_t rport)
+Socket::Status TcpStream::connect(const Ipv4& raddress, Port rport)
 {
     sockaddr_in addr = impl::SocketHelper::build_ipv4_sockaddr(raddress, rport);
 

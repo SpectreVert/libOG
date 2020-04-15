@@ -17,15 +17,15 @@ set(SRC
 	${SRCDIR}/Poll.cxx
 	${HEADIR}/Poll.hpp
 	${HEADIR}/Registry.hpp
-	${HEADIR}/Selector.hpp
+	${HEADIR}/IBaseSelector.hpp
 	${SRCDIR}/TcpListener.cxx
 	${HEADIR}/TcpListener.hpp
 	${HEADIR}/SocketImplementation.hpp
 	${HEADIR}/Ipv4.hpp
 	${SRCDIR}/Ipv4.cxx
-	${HEADIR}/HttpHeaders.hpp
-	${SRCDIR}/HttpHeaders.cxx
-	${HEADIR}/HttpMessage.hpp
+	${HEADIR}/http/Headers.hpp
+	${SRCDIR}/http/Headers.cxx
+	${HEADIR}/http/Message.hpp
 )
 
 if(UNIX)
@@ -48,7 +48,7 @@ target_link_libraries(og_network PUBLIC og_base)
 target_include_directories(og_network PUBLIC ${INCDIRS})
 
 if(WIN32)
-	target_link_libraries(og_base PRIVATE ws2_32)
+	target_link_libraries(og_network PRIVATE ws2_32)
 endif()
 
 install(TARGETS og_network

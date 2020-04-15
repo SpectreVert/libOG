@@ -1,0 +1,41 @@
+include/og/network/:
+
+http:
+	Headers.hpp
+	Message.hpp
+	Request.hpp
+	Response.hpp
+
+poll:
+	IEvent.hpp
+	IEvents.hpp
+	ISelector.hpp
+	Poll.hpp
+	Selector.hpp
+	Registry.hpp
+	unix/
+		Event.hpp
+		Events.hpp
+		Selector.hpp
+	windows/
+		...
+	bsd/
+		...
+
+sockets:
+	ISocket.hpp
+	Socket.hpp
+	SocketHandle.hpp
+	SocketImplementation.hpp
+	TcpListener.hpp
+	TcpStream.hpp
+	UdpSocket.hpp
+	unix/
+		SocketHandle.hpp
+		SocketImplementation.hpp
+	windows/
+		...
+	bsd/
+		...
+
+Ipv4.hpp

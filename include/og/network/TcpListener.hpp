@@ -19,7 +19,7 @@ class TcpListener : public Socket {
 public:
 	TcpListener();
 
-	virtual Status listen(uint16_t lport, const Ipv4& laddress = Ipv4::Any);
+	virtual Status listen(Port port, const Ipv4& address = Ipv4::Any);
 	virtual void disconnect();
 
 	virtual Status accept(TcpStream& stream);

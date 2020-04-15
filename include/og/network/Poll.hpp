@@ -24,19 +24,12 @@ public:
 	//!
 	Poll();
 
-	//! \brief Wait and poll readiness events
+	//! \brief Special timeout value
 	//!
-	//! The function will block until at least one
-	//! readiness event has been received or timeout
-	//! has ellapsed.
-	//!
-	//! \param events The events holder
-	//!
-	//! \param timeout The maximum time to wait for an event
-	//!
-	//! \return The number of events polled
-	//!
-	int poll(Events& events, int timeout);
+	enum Timeout
+	{
+		None = -1,
+	};
 
 	//! \brief Add a new socket to the poll list
 	//!
@@ -52,6 +45,29 @@ public:
 	//!         system
 	//!
 	int add(SocketHandle socket, Token token, Concern concern);
+
+	//! \brief Remove a socket from the poll list
+	//!
+	//! \param The raw socket handle to deregister
+	//!
+	//! \return zero if the socket handle was deregistered ;
+	//!         -1 if an error occured
+	//!
+	int remove(SocketHandle handle);
+
+	//! \brief Wait and poll readiness events
+	//!
+	//! The function will block until at least one
+	//! readiness event has been received or timeout
+	//! has ellapsed.
+	//!
+	//! \param events The events holder
+	//!
+	//! \param timeout The maximum time to wait for an event
+	//!
+	//! \return The number of events polled
+	//!
+	int poll(Events& events, int64_t timeout);
 
 private:
 

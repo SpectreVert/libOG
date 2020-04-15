@@ -51,6 +51,8 @@ public:
 	//!
 	Events(std::size_t capacity);
 	
+	~Events();
+
 	//! \brief Return an std::vector containing the Event objects
 	//!        provided by poll
 	//!

@@ -23,15 +23,15 @@ public:
 
     //! \brief Connect the Tcp socket to another Tcp socket
     //!
-    //! \param raddress Address of the socket to connect to
+    //! \param address Address of the socket to connect to
     //!
-    //! \param rport Port of the socket to connect to
+    //! \param port Port of the socket to connect to
     //!
-    //! \return The status code
+    //! \return The Status code
     //!
     //! \see disconnect
     //! 
-    virtual Socket::Status connect(const Ipv4& raddress, Port rport);
+    virtual Socket::Status connect(const Ipv4& address, Port port);
 
     //! \brief Disconnect the Tcp socket
     //!

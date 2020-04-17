@@ -11,6 +11,8 @@
 
 #include <netinet/ip.h>
 
+#include <iostream>
+
 namespace og {
 
 UdpSocket::UdpSocket() :
@@ -41,11 +43,13 @@ Socket::Status UdpSocket::send_to(
 		impl::SocketHelper::MSG_FLAG,
 		reinterpret_cast<sockaddr*>(&addr),
 		sizeof(addr)) == -1)
+	{
 		
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return Socket::Status::RetryReceive;
+			return Socket::Status::RetrySend;
 
 		return Socket::Status::Error;
+	}
 
 	return Socket::Status::Success;
 }

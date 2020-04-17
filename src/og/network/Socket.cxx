@@ -59,7 +59,11 @@ void Socket::open()
 	if (m_socket != impl::SocketHelper::bad_socket)
 		return;
 	
-	SocketHandle new_socket = socket(m_domain, m_type, m_protocol);
+	SocketHandle new_socket = socket(
+		m_domain,
+		m_type | SOCK_NONBLOCK,
+		m_protocol
+	);
 
 	if (new_socket == impl::SocketHelper::bad_socket)
 		throw SystemException("socket");

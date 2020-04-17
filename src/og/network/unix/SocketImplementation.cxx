@@ -22,9 +22,9 @@ void SocketHelper::set_non_blocking(SocketHandle socket)
 	int socket_status = fcntl(socket, F_GETFL);
 
 	// Socket is blocking
-	if (socket_status & O_NONBLOCK)
+	if (!(socket_status & O_NONBLOCK))
 	{
-		if (fcntl(socket, socket_status | O_NONBLOCK) == -1)
+		if (fcntl(socket, F_SETFL, socket_status | O_NONBLOCK) == -1)
 			throw SystemException("fcntl");
 	}
 }

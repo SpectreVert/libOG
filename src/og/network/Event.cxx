@@ -71,7 +71,7 @@ Events::Events(std::size_t t_capacity)
 
 Events::~Events()
 {
-	delete m_epoll_events;
+	delete[] m_epoll_events;
 }
 
 std::vector<Event> Events::events() const

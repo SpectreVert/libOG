@@ -13,8 +13,6 @@
 
 #include <og/network/UdpSocket.hpp>
 
-#include <og/network/TcpSocket.hpp>
-
 #include <og/network/TcpListener.hpp>
 
 #include <og/network/TcpStream.hpp>

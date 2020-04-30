@@ -17,15 +17,13 @@ set(SRC
 	${SRCDIR}/Poll.cxx
 	${HEADIR}/Poll.hpp
 	${HEADIR}/Registry.hpp
+	${HEADIR}/Selector.hpp
 	${HEADIR}/IBaseSelector.hpp
 	${SRCDIR}/TcpListener.cxx
 	${HEADIR}/TcpListener.hpp
 	${HEADIR}/SocketImplementation.hpp
 	${HEADIR}/Ipv4.hpp
 	${SRCDIR}/Ipv4.cxx
-	${HEADIR}/http/Headers.hpp
-	${SRCDIR}/http/Headers.cxx
-	${HEADIR}/http/Message.hpp
 )
 
 if(UNIX)

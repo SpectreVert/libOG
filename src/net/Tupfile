@@ -1,0 +1,4 @@
+include_rules
+
+: foreach *.c |> !cc |>
+: *.o |> !ar |> libog_net.a

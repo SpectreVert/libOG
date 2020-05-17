@@ -1,0 +1,7 @@
+CC = clang
+CFLAGS = -W -Wall -Wextra -Wpedantic -I$(TUP_CWD)/include
+
+NET = $(TUP_CWD)/src/net
+
+!cc = |> $(CC) -c %f -o %o $(CFLAGS) $(LDFLAGS) |> %B.o
+!ar = |> ar crs %o %f |>

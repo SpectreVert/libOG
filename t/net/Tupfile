@@ -1,0 +1,7 @@
+include_rules
+
+LIBNAME   = og_net
+LIB       = $(NET)/lib$(LIBNAME).a
+LDFLAGS   += -L$(NET) -l$(LIBNAME)
+
+: foreach *.c | $(LIB) |> $(CC) %f -o %o $(CFLAGS) $(LDFLAGS) |> %B.t

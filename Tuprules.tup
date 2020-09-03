@@ -1,0 +1,7 @@
+CXX = clang
+CXXFLAGS = -W -Wall -Wextra -Wpedantic -I$(TUP_CWD)/include
+
+NET = $(TUP_CWD)/src/og/net
+
+!cxx = |> $(CXX) -c %f -o %o $(CXXFLAGS) $(LDFLAGS) |> %B.o
+!ar = |> ar crs %o %f |>

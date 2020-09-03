@@ -1,0 +1,5 @@
+include_rules
+
+: foreach *.cc |> !cxx |>
+: foreach unix/*.cc |> !cxx |>
+: *.o |> !ar |> libog_net.a

@@ -10,9 +10,6 @@
 
 using namespace og;
 
-/* Actually the constructor does nothing. The real OS specific socket
- * is opened during binding
-*/
 Socket::Socket(int domain, int type, int protocol)
 	: m_socket(impl::SocketHelper::bad_socket)
 	, m_domain(domain)
@@ -31,7 +28,7 @@ int Socket::bind(const Ipv4& address, Ipv4::Port port)
 	sockaddr_in addr = impl::SocketHelper::mk_ipv4_sockaddr(address, port);
 
 	close(); open();
-	
+
 	if (::bind(m_socket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
 		return Socket::Error;
 

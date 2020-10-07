@@ -25,6 +25,7 @@ public:
 		Error = -1
 	};
 
+	Socket(int domain, int type, int protocol = 0);
 	virtual ~Socket();
 
 	SocketHandle handle() const { return m_socket; };
@@ -32,8 +33,6 @@ public:
 	virtual int bind(const Ipv4& address, Port port);
 
 protected:
-	Socket(int domain, int type, int protocol = 0);
-
 	virtual int open();
 	virtual int open(SocketHandle handle);
 	virtual int close();

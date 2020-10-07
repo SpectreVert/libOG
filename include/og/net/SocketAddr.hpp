@@ -28,4 +28,9 @@ private:
 
 }; // class SocketAddrV4
 
+union SocketAddr {
+	SocketAddrV4 v4;
+
+}; // union SocketAddr
+
 } // namespace og

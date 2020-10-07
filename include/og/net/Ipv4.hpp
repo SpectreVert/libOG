@@ -7,33 +7,28 @@
 
 #pragma once
 
+#include <arpa/inet.h>
 #include <string>
 
 namespace og {
 
-class Ipv4 {
-public:
-	typedef uint16_t Port;
-
+struct Ipv4 {
 	static const Ipv4 Broadcast;
 	static const Ipv4 Any;
 	static const Ipv4 Loopback;
 
 	static Ipv4 get_local_address();
 
-	Ipv4();
+	Ipv4() = delete;
 	Ipv4(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);
 	Ipv4(uint32_t address);
-	Ipv4(const char* address);
-	Ipv4(const std::string& address);
+	explicit Ipv4(const char* address);
 
 	std::string to_string() const;
 	uint32_t to_decimal() const;
 
-private:
-	bool m_good;
-	uint32_t m_address;
+	uint32_t address;
 
-}; // class Ipv4
+}; // struct Ipv4
 
 } // namespace og

@@ -23,7 +23,7 @@ Socket::~Socket()
 	close();
 }
 
-int Socket::bind(const Ipv4& address, Ipv4::Port port)
+int Socket::bind(const Ipv4& address, Port port)
 {
 	sockaddr_in addr = impl::SocketHelper::mk_ipv4_sockaddr(address, port);
 

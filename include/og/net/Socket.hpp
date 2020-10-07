@@ -9,6 +9,7 @@
 
 #include "og/net/SocketHandle.hpp"
 #include "og/net/Ipv4.hpp"
+#include "og/net/SocketAddr.hpp"
 
 namespace og {
 
@@ -28,7 +29,7 @@ public:
 
 	SocketHandle handle() const { return m_socket; };
 
-	virtual int bind(const Ipv4& address, Ipv4::Port port);
+	virtual int bind(const Ipv4& address, Port port);
 
 protected:
 	Socket(int domain, int type, int protocol = 0);

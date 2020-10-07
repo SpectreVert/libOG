@@ -53,7 +53,7 @@ bool is_blocking(SocketHandle socket)
 	return true;
 }
 
-sockaddr_in mk_ipv4_sockaddr(const Ipv4& address, Ipv4::Port port)
+sockaddr_in mk_ipv4_sockaddr(const Ipv4& address, Port port)
 {
 	sockaddr_in addr;
 

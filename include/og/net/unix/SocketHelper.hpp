@@ -26,7 +26,7 @@ public:
 	static int close(SocketHandle socket);
 	static int set_blocking(SocketHandle socket, bool block);
 	static bool is_blocking(SocketHandle socket);
-	static sockaddr_in mk_ipv4_sockaddr(const Ipv4& address, Ipv4::Port port);
+	static sockaddr_in mk_ipv4_sockaddr(const Ipv4& address, Port port);
 
 }; // class SocketHelper
 

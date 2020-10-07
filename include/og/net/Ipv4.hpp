@@ -1,7 +1,7 @@
 /*
  * libOG, 2020
  *
- * Name: ipv4.hpp
+ * Name: Ipv4.hpp
  *
 */
 

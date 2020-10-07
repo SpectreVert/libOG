@@ -1,11 +1,11 @@
 /*
  * libOG, 2020
  *
- * Name: ipv4.cc
+ * Name: Ipv4.cc
  *
 */
 
-#include "og/net/ipv4.hpp"
+#include "og/net/Ipv4.hpp"
 
 #include <arpa/inet.h>
 #include <cstring>

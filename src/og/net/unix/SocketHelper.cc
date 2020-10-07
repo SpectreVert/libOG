@@ -1,11 +1,11 @@
 /*
  * libOG, 2020
  *
- * Name: socketimpl.cc
+ * Name: SocketHelper.cc
  *
 */
 
-#include "og/net/unix/socketimpl.hpp"
+#include "og/net/unix/SocketHelper.hpp"
 
 #include <cstring>
 #include <fcntl.h>

@@ -1,12 +1,12 @@
 /*
  * libOG, 2020
  *
- * Name: socket.cc
+ * Name: Socket.cc
  *
 */
 
-#include "og/net/socket.hpp"
-#include "og/net/socketimpl.hpp"
+#include "og/net/Socket.hpp"
+#include "og/net/SocketHelper.hpp"
 
 using namespace og;
 

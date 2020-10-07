@@ -1,14 +1,14 @@
 /*
  * libOG, 2020
  *
- * Name: socket.hpp
+ * Name: Socket.hpp
  *
 */
 
 #pragma once
 
-#include "og/net/sockethandle.hpp"
-#include "og/net/ipv4.hpp"
+#include "og/net/SocketHandle.hpp"
+#include "og/net/Ipv4.hpp"
 
 namespace og {
 

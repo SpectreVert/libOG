@@ -1,7 +1,7 @@
 /*
  * libOG, 2020
  *
- * Name: sockethandle.hpp
+ * Name: SocketHandle.hpp
  *
 */
 

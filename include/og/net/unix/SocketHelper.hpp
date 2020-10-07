@@ -1,15 +1,15 @@
 /*
  * libOG, 2020
  *
- * Name: socketimpl.h
+ * Name: SocketHelper.hpp
  *
 */
 
 #pragma once
 
-#include "og/net/ipv4.hpp"
-#include "og/net/sockethandle.hpp"
-#include "og/net/socket.hpp"
+#include "og/net/Ipv4.hpp"
+#include "og/net/SocketHandle.hpp"
+#include "og/net/Socket.hpp"
 
 #include <sys/socket.h>
 #include <arpa/inet.h>

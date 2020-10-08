@@ -69,18 +69,6 @@ bool is_blocking(SocketHandle socket)
 	return true;
 }
 
-sockaddr_in mk_ipv4_sockaddr(const Ipv4& address, Port port)
-{
-	sockaddr_in addr;
-
-	std::memset(&addr, 0, sizeof(addr));
-	addr.sin_family = PF_INET;
-	addr.sin_port = htons(port);
-	addr.sin_addr.s_addr = address.to_decimal();
-	
-	return addr;
-}
-
 } // namespace impl
 
 } // namespace og

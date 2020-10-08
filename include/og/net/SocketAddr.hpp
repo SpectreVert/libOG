@@ -13,24 +13,29 @@ namespace og {
 
 typedef uint16_t Port;
 
-class SocketAddrV4 {
-public:
+struct SocketAddrV4 {
 	SocketAddrV4() = delete;
 	SocketAddrV4(Ipv4 address, Port port);
 
-	Ipv4 ip() const { return m_socket_addr.sin_addr.s_addr; };
-	Port port() const { return m_socket_addr.sin_port; };
+	Ipv4 ip() const { return socket_addr.sin_addr.s_addr; };
+	Port port() const { return socket_addr.sin_port; };
 	void set_ip(Ipv4 ip);
 	void set_port(Port port);
 
-private:
-	sockaddr_in m_socket_addr;
+	sockaddr_in socket_addr;
 
-}; // class SocketAddrV4
+}; // struct SocketAddrV4
 
-union SocketAddr {
-	SocketAddrV4 v4;
+struct SocketAddr {
+	enum {
+		V4,
+		V6
+	} version;
 
-}; // union SocketAddr
+	union {
+		SocketAddrV4 v4;
+	} addr;
+
+}; // struct SocketAddr
 
 } // namespace og

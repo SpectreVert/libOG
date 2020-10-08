@@ -30,7 +30,7 @@ public:
 
 	SocketHandle handle() const { return m_socket; };
 
-	virtual int bind(const Ipv4& address, Port port);
+	virtual int bind(const SocketAddr& address);
 
 protected:
 	virtual int open();

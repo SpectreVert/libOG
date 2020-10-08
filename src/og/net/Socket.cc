@@ -23,16 +23,11 @@ Socket::~Socket()
 	close();
 }
 
-int Socket::bind(const Ipv4& address, Port port)
+int Socket::bind(const SocketAddr& address)
 {
-	sockaddr_in addr = impl::SocketHelper::mk_ipv4_sockaddr(address, port);
-
 	close(); open();
 
-	if (::bind(m_socket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1)
-		return Socket::Error;
-
-	return Socket::Success;
+	return impl::SocketHelper::bind(m_socket, address);
 }
 
 int Socket::open()
@@ -45,14 +40,14 @@ int Socket::open()
 	return open(sock);
 }
 
-int Socket::open(SocketHandle sock)
+int Socket::open(SocketHandle model)
 {
-	if (sock == impl::SocketHelper::bad_socket)
+	if (model == impl::SocketHelper::bad_socket)
 		return Socket::Error;
 
-	m_socket = sock;
+	m_socket = model;
 
-	return impl::SocketHelper::set_blocking(sock, true);
+	return impl::SocketHelper::set_blocking(m_socket, true);
 }
 
 int Socket::close()

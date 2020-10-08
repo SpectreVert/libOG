@@ -11,7 +11,7 @@ using namespace og;
 
 SocketAddrV4::SocketAddrV4(Ipv4 address, uint16_t port)
 {
-	m_socket_addr = {
+	socket_addr = {
 		.sin_family = PF_INET,
 		.sin_port = port,
 		.sin_addr = { .s_addr = address.to_decimal() }

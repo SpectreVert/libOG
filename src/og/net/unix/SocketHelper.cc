@@ -17,6 +17,22 @@ namespace impl {
 
 SocketHandle SocketHelper::bad_socket = -1;
 
+int SocketHelper::bind(SocketHandle socket, const SocketAddr& address)
+{
+	const sockaddr* addr_ptr = reinterpret_cast<const sockaddr*>(&address.addr);
+	std::size_t addr_size = 0;
+
+	if (address.version == SocketAddr::V4)
+		addr_size = sizeof(sockaddr_in);
+	else
+		addr_size = sizeof(sockaddr_in6);
+
+	if (::bind(socket, addr_ptr, addr_size) == -1)
+		return Socket::Error;
+
+	return Socket::Success;
+}
+
 int SocketHelper::close(SocketHandle socket)
 {
 	if (::close(socket) == -1)

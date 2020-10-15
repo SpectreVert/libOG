@@ -21,10 +21,11 @@ class Socket {
 public:
 	enum
 	{
-		Success = 0,
-		Error = -1
+		Error = -1,
+		Success = 0
 	};
 
+	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);
 	virtual ~Socket();
 

@@ -62,13 +62,10 @@ int SocketIO::connect(SocketHandle socket, const SocketAddr& address)
 	if (::connect(socket, addr_ptr, addr_size) == -1)
 	{
 		if (errno == EINPROGRESS)
-		{
 			return Socket::Connecting;
-		}
 
 		return Socket::Error;
 	}
-
 
 	return Socket::Success;
 }

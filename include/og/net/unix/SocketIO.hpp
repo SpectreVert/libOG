@@ -1,7 +1,7 @@
 /*
  * libOG, 2020
  *
- * Name: SocketHelper.hpp
+ * Name: SocketIO.hpp
  *
 */
 
@@ -19,17 +19,21 @@ namespace og {
 
 namespace impl {
 
-class SocketHelper {
+class SocketIO {
 public:
-	static constexpr int msg_flags = MSG_NOSIGNAL;
+	static constexpr int MSG_FLAG = MSG_NOSIGNAL;
 	static SocketHandle bad_socket;
 
+	static std::size_t get_sockaddr_size(int version);
+
 	static int bind(SocketHandle socket, const SocketAddr& address);
+	static int connect(SocketHandle socket, const SocketAddr& address);
+
 	static int close(SocketHandle socket);
 	static int set_blocking(SocketHandle socket, bool block);
 	static bool is_blocking(SocketHandle socket);
 
-}; // class SocketHelper
+}; // class SocketIO
 
 } // namespace impl
 

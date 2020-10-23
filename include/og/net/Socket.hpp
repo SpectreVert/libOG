@@ -22,7 +22,10 @@ public:
 	enum
 	{
 		Error = -1,
-		Success = 0
+		Success,
+		Connecting,
+		Retry,
+		PartialSend,
 	};
 
 	Socket() = delete;
@@ -38,7 +41,7 @@ protected:
 	virtual int open(SocketHandle handle);
 	virtual int close();
 
-private:
+	// think about defining this as private
 	SocketHandle m_socket;
 	int m_domain;
 	int m_type;

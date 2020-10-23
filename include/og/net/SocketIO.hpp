@@ -1,7 +1,7 @@
 /*
  * libOG, 2020
  *
- * Name: SocketImplementation.hpp
+ * Name: SocketIO.hpp
  *
 */
 
@@ -10,9 +10,9 @@
 #include "og/core/config.hpp"
 
 #if defined(OG_SYSTEM_UNIX)
-	#include "og/net/unix/SocketHelper.hpp"
+	#include "og/net/unix/SocketIO.hpp"
 
 #elif defined(OG_SYSTEM_WINDOWS)
-	#include "og/net/win/SocketHelper.hpp"
+	#include "og/net/win/SocketIO.hpp"
 
 #endif

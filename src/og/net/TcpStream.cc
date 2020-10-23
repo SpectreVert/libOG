@@ -15,6 +15,10 @@ TcpStream::TcpStream() :
 {
 }
 
+TcpStream::~TcpStream()
+{
+}
+
 int TcpStream::connect(const SocketAddr& address)
 {
 	close(); open();

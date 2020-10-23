@@ -24,6 +24,7 @@ public:
 	static constexpr int MSG_FLAG = MSG_NOSIGNAL;
 	static SocketHandle bad_socket;
 
+	static const sockaddr* get_sockaddr_ptr(const SocketAddr& address);
 	static std::size_t get_sockaddr_size(int version);
 
 	static int bind(SocketHandle socket, const SocketAddr& address);

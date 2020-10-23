@@ -47,7 +47,7 @@ int Socket::open(SocketHandle model)
 
 	m_socket = model;
 
-	return impl::SocketIO::set_blocking(m_socket, true);
+	return impl::SocketIO::set_blocking(m_socket, false);
 }
 
 int Socket::close()

@@ -27,12 +27,18 @@ struct SocketAddrV4 {
 }; // struct SocketAddrV4
 
 struct SocketAddr {
+	SocketAddr(Ipv4 address, Port port);
+	SocketAddr(SocketAddrV4 socket_address);
+
 	enum {
 		V4,
 		V6
 	} version;
 
-	union {
+	union AddrSet {
+		AddrSet(Ipv4 address, Port port);
+		AddrSet(SocketAddrV4 socket_address);
+
 		SocketAddrV4 v4;
 	} addr;
 

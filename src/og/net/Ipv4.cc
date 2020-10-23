@@ -11,6 +11,8 @@
 
 using namespace og;
 
+const Ipv4 Ipv4::Loopback(127, 0, 0, 1);
+
 Ipv4 Ipv4::get_local_address()
 {
 	return 0;

@@ -17,6 +17,19 @@ namespace impl {
 
 SocketHandle SocketIO::bad_socket = -1;
 
+inline const sockaddr* SocketIO::get_sockaddr_ptr(const SocketAddr& address)
+{
+	switch (address.version)
+	{
+		case SocketAddr::V4:
+			return reinterpret_cast<const sockaddr*>(&address.addr.v4.socket_addr);
+		case SocketAddr::V6:
+			return 0x0;
+		default:
+			return 0x0;
+	}
+}
+
 inline std::size_t SocketIO::get_sockaddr_size(int version)
 {
 	switch (version)
@@ -32,7 +45,7 @@ inline std::size_t SocketIO::get_sockaddr_size(int version)
 
 int SocketIO::bind(SocketHandle socket, const SocketAddr& address)
 {
-	const sockaddr* addr_ptr = reinterpret_cast<const sockaddr*>(&address.addr);
+	const sockaddr* addr_ptr = get_sockaddr_ptr(address);
 	std::size_t addr_size = get_sockaddr_size(address.version);
 
 	if (::bind(socket, addr_ptr, addr_size) == -1)
@@ -43,24 +56,33 @@ int SocketIO::bind(SocketHandle socket, const SocketAddr& address)
 
 int SocketIO::connect(SocketHandle socket, const SocketAddr& address)
 {
-	const sockaddr* addr_ptr = reinterpret_cast<const sockaddr*>(&address.addr);
+	const sockaddr* addr_ptr = get_sockaddr_ptr(address);
 	std::size_t addr_size = get_sockaddr_size(address.version);
 
 	if (::connect(socket, addr_ptr, addr_size) == -1)
 	{
 		if (errno == EINPROGRESS)
+		{
 			return Socket::Connecting;
+		}
 
 		return Socket::Error;
 	}
+
 
 	return Socket::Success;
 }
 
 int SocketIO::close(SocketHandle socket)
 {
-	if (::close(socket) == -1)
+	if (socket == impl::SocketIO::bad_socket)
+	{
+		return Socket::Success;
+	}
+	else if (::close(socket) == -1)
+	{
 		return Socket::Error;
+	}
 
 	return Socket::Success;
 }

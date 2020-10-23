@@ -14,6 +14,7 @@ namespace og {
 
 class TcpStream : public Socket {
 public:
+	TcpStream();
 	virtual ~TcpStream();
 
 	virtual int connect(const SocketAddr& address);
@@ -23,9 +24,6 @@ public:
 	virtual int send(const void* data, std::size_t len, ssize_t& sent);
 	virtual int receive(void* data, std::size_t len);
 	virtual int receive(void* data, std::size_t len, ssize_t& received);
-
-private:
-	TcpStream();
 
 }; // class TcpSocket
 

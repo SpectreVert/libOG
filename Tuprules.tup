@@ -1,4 +1,4 @@
-CXX = clang
+CXX = clang++
 CXXFLAGS = -std=c++20 -W -Wall -Wextra -Wpedantic -I$(TUP_CWD)/include
 
 NET = $(TUP_CWD)/src/og/net

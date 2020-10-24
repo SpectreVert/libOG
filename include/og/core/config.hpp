@@ -24,6 +24,13 @@
 	
 	#endif
 
+#elif defined(__APPLE__) && defined(__MACH__)
+	#if TARGET_OS_MAC
+		#define OG_SYSTEM_MACOS
+
+	#else
+		#error operating system not supported
+
 #elif defined(_WIN32)
 	#define OG_SYSTEM_WINDOWS
 

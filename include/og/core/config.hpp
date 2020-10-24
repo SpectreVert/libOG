@@ -25,6 +25,8 @@
 	#endif
 
 #elif defined(__APPLE__) && defined(__MACH__)
+	#include "TargetConditionals.h"
+
 	#if TARGET_OS_MAC
 		#define OG_SYSTEM_MACOS
 

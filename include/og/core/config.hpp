@@ -30,12 +30,12 @@
 		#define OG_SYSTEM_MACOS
 	
 	#else
-		#error operating system not supported
+		#error Apple operating system not supported
 	#endif
 
 #elif defined(_WIN32)
 	#define OG_SYSTEM_WINDOWS
 
 #else
-	#error operating system not supported
+	#error Windows operating system not supported
 #endif

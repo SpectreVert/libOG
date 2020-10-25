@@ -5,7 +5,7 @@
  *
 */
 
-#include "og/net/unix/SocketIO.hpp"
+#include "og/net/SocketIO.hpp"
 
 #include <cstring>
 #include <fcntl.h>
@@ -15,7 +15,11 @@ namespace og {
 
 namespace impl {
 
+#if defined(OG_SYSTEM_WINDOWS)
+SocketHandle SocketIO::bad_socket = INVALID_SOCKET;
+#else
 SocketHandle SocketIO::bad_socket = -1;
+#endif
 
 inline const sockaddr* SocketIO::get_sockaddr_ptr(const SocketAddr& address)
 {

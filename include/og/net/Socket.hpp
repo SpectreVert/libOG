@@ -11,6 +11,13 @@
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketAddr.hpp"
 
+#if defined(OG_SYSTEM_UNIX)
+	#include <errno.h>
+
+#elif defined(OG_SYSTEM_FREEBSD) || defined(OG_SYSTEM_MACOS)
+	#include <sys/errno.h>
+#endif
+
 namespace og {
 
 // Note: this class and subsequently all socket classes

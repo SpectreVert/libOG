@@ -35,7 +35,8 @@ int Socket::open()
 	if (m_socket != impl::SocketIO::bad_socket)
 		return Socket::Success;
 
-	SocketHandle sock = socket(m_domain, m_type | SOCK_NONBLOCK, m_protocol);
+	SocketHandle sock = socket(m_domain, m_type, m_protocol);
+	impl::SocketIO::set_blocking(sock, false);
 
 	return open(sock);
 }

@@ -36,7 +36,6 @@ int Socket::open()
 		return Socket::Success;
 
 	SocketHandle sock = socket(m_domain, m_type, m_protocol);
-	impl::SocketIO::set_blocking(sock, false);
 
 	return open(sock);
 }

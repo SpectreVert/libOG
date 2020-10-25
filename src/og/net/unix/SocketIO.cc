@@ -23,28 +23,18 @@ SocketHandle SocketIO::bad_socket = -1;
 
 inline const sockaddr* SocketIO::get_sockaddr_ptr(const SocketAddr& address)
 {
-	switch (address.version)
-	{
-		case SocketAddr::V4:
-			return reinterpret_cast<const sockaddr*>(&address.addr.v4.socket_addr);
-		case SocketAddr::V6:
-			return 0x0;
-		default:
-			return 0x0;
-	}
+	if (address.version == SocketAddr::V4)
+		return reinterpret_cast<const sockaddr*>(&address.addr.v4.socket_addr);
+
+	return 0x0;
 }
 
 inline std::size_t SocketIO::get_sockaddr_size(int version)
 {
-	switch (version)
-	{
-		case SocketAddr::V4:
-			return sizeof(sockaddr_in);
-		case SocketAddr::V6:
-			return sizeof(sockaddr_in6);
-		default:
-			return 0;
-	}
+	if (version == SocketAddr::V4)
+		return sizeof(sockaddr_in);
+
+	return sizeof(sockaddr_in6);
 }
 
 int SocketIO::bind(SocketHandle socket, const SocketAddr& address)

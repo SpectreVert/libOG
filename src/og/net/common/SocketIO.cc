@@ -5,6 +5,8 @@
  *
 */
 
+#ifndef OG_SYSTEM_WINDOWS
+
 #include "og/net/SocketIO.hpp"
 
 #include <cstring>
@@ -14,12 +16,6 @@
 namespace og {
 
 namespace impl {
-
-#if defined(OG_SYSTEM_WINDOWS)
-SocketHandle SocketIO::bad_socket = INVALID_SOCKET;
-#else
-SocketHandle SocketIO::bad_socket = -1;
-#endif
 
 inline const sockaddr* SocketIO::get_sockaddr_ptr(const SocketAddr& address)
 {
@@ -31,10 +27,15 @@ inline const sockaddr* SocketIO::get_sockaddr_ptr(const SocketAddr& address)
 
 inline std::size_t SocketIO::get_sockaddr_size(int version)
 {
-	if (version == SocketAddr::V4)
-		return sizeof(sockaddr_in);
-
-	return sizeof(sockaddr_in6);
+	switch (version)
+	{
+		case SocketAddr::V4:
+			return sizeof(sockaddr_in);
+		case SocketAddr::V6:
+			return sizeof(sockaddr_in6);
+		default:
+			return 0;
+	}
 }
 
 int SocketIO::bind(SocketHandle socket, const SocketAddr& address)
@@ -109,3 +110,5 @@ bool SocketIO::is_blocking(SocketHandle socket)
 } // namespace impl
 
 } // namespace og
+
+#endif // !OG_SYSTEM_WINDOWS

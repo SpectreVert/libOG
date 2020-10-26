@@ -30,13 +30,13 @@ public:
 	// static constexpr SocketHandle bad_socket = ??;
 #else
 	static constexpr SocketHandle bad_socket = -1;
-  	
-	#if defined(OG_SYSTEM_UNIX)
-		static constexpr int MSG_FLAG = MSG_NOSIGNAL;
-	#else
-		static constexpr int MSG_FLAG = 0;
-	#endif
-#endif
+#endif // OG_SYSTEM_WINDOWS
+
+#if defined(OG_SYSTEM_UNIX)
+	static constexpr int MSG_FLAG = MSG_NOSIGNAL;
+#else
+	static constexpr int MSG_FLAG = 0;
+#endif // OG_SYSTEM_UNIX
 
 	static const sockaddr* get_sockaddr_ptr(const SocketAddr& address);
 	static std::size_t get_sockaddr_size(int version);

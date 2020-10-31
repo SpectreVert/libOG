@@ -29,7 +29,7 @@ public:
 protected:
 	virtual int open() = 0;
 	virtual int open(THandle handle) = 0;
-	virtual int close();
+	virtual int close() = 0;
 
 }; // class Source
 

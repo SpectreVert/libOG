@@ -21,6 +21,8 @@
 
 namespace og {
 
+namespace net {
+
 namespace impl {
 
 class SocketIO {
@@ -50,5 +52,7 @@ public:
 }; // class SocketIO
 
 } // namespace impl
+
+} // namespace net
 
 } // namespace og

@@ -19,6 +19,8 @@
 
 namespace og {
 
+namespace net {
+
 // for unix systems
 #if defined(OG_SYSTEM_UNIX)
 typedef int SocketHandle;
@@ -58,5 +60,7 @@ protected:
 	int m_type;
 	int m_protocol;
 }; // class Socket
+
+} // namespace net
 
 } // namespace og

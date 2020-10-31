@@ -9,7 +9,7 @@
 
 #include <cstring>
 
-using namespace og;
+using namespace og::net;
 
 const Ipv4 Ipv4::Loopback(127, 0, 0, 1);
 

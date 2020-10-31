@@ -8,7 +8,7 @@
 #include "og/net/TcpStream.hpp"
 #include "og/net/SocketIO.hpp"
 
-using namespace og;
+using namespace og::net;
 
 TcpStream::TcpStream() :
 	Socket(PF_INET, SOCK_STREAM)

@@ -12,6 +12,8 @@
 
 namespace og {
 
+namespace net {
+
 class TcpStream : public Socket {
 public:
 	TcpStream();
@@ -26,5 +28,7 @@ public:
 	virtual int receive(void* data, std::size_t len, ssize_t& received);
 
 }; // class TcpSocket
+
+} // namespace net
 
 } // namespace og

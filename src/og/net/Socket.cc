@@ -8,7 +8,7 @@
 #include "og/net/Socket.hpp"
 #include "og/net/SocketIO.hpp"
 
-using namespace og;
+using namespace og::net;
 
 Socket::Socket(int domain, int type, int protocol)
 	: m_socket(impl::SocketIO::bad_socket)

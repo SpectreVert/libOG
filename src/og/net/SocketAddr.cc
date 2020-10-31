@@ -7,7 +7,7 @@
 
 #include "og/net/SocketAddr.hpp"
 
-using namespace og;
+using namespace og::net;
 
 SocketAddrV4::SocketAddrV4(Ipv4 address, Port port)
 {

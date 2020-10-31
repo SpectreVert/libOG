@@ -11,6 +11,8 @@
 
 namespace og {
 
+namespace net {
+
 typedef uint16_t Port;
 
 struct SocketAddrV4 {
@@ -43,5 +45,7 @@ struct SocketAddr {
 	} addr;
 
 }; // struct SocketAddr
+
+} // namespace net
 
 } // namespace og

@@ -12,6 +12,8 @@
 
 namespace og {
 
+namespace net {
+
 struct Ipv4 {
 	static const Ipv4 Broadcast;
 	static const Ipv4 Any;
@@ -30,5 +32,7 @@ struct Ipv4 {
 	uint32_t address;
 
 }; // struct Ipv4
+
+} // namespace net
 
 } // namespace og

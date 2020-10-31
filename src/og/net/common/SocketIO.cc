@@ -13,9 +13,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-namespace og {
-
-namespace impl {
+using namespace og::net::impl;
 
 inline const sockaddr* SocketIO::get_sockaddr_ptr(const SocketAddr& address)
 {
@@ -106,9 +104,5 @@ bool SocketIO::is_blocking(SocketHandle socket)
 
 	return true;
 }
-
-} // namespace impl
-
-} // namespace og
 
 #endif // !OG_SYSTEM_WINDOWS

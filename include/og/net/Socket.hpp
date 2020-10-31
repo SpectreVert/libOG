@@ -7,24 +7,29 @@
 
 #pragma once
 
+#include "og/io/SourceHandle.hpp"
 #include "og/net/SocketHandle.hpp"
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketAddr.hpp"
 
-#if defined(OG_SYSTEM_UNIX)
+#if defined(OG_SYSTEM_LINUX)
 	#include <errno.h>
-
 #elif defined(OG_SYSTEM_FREEBSD) || defined(OG_SYSTEM_MACOS)
 	#include <sys/errno.h>
 #endif
 
 namespace og {
 
+// for unix systems
+#if defined(OG_SYSTEM_UNIX)
+typedef int SocketHandle;
+#endif
+
 // Note: this class and subsequently all socket classes
 // will return int values as error codes.
 // Each socket type will have its own error codes in addition
 // to Socket::Success, Socket::Error
-class Socket {
+class Socket : public io::Source<SocketHandle> {
 public:
 	enum
 	{

@@ -8,7 +8,6 @@
 #pragma once
 
 #include "og/net/Socket.hpp"
-#include "og/net/SocketHandle.hpp"
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketAddr.hpp"
 

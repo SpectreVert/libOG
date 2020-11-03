@@ -30,6 +30,8 @@ int Socket::bind(const SocketAddr& address)
 	return impl::SocketIO::bind(m_socket, address);
 }
 
+// TODO: add open() to impl
+// https://docs.rs/crate/mio/0.7.5/source/src/sys/unix/net.rs
 int Socket::open()
 {
 	if (m_socket != impl::SocketIO::bad_socket)

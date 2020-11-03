@@ -1,7 +1,7 @@
 /*
  * libOG, 2020
  *
- * Name: SourceHandle.hpp
+ * Name: ISource.hpp
  *
 */
 
@@ -15,23 +15,23 @@ namespace io {
 
 //! Source contains an Handle which can be polled for
 //! events.
-template<typename THandle>
-class Source {
+template<typename T>
+class ISource {
 public:
-	virtual ~Source() = default;
+	virtual ~ISource() = default;
 	
 	//! \brief Return the internal handle of the I/O source
 	//!
 	//! \return The underlying OS descriptor for the I/O source
 	//!
-	virtual THandle handle() const = 0;
+	virtual T handle() const = 0;
 
 protected:
 	virtual int open() = 0;
-	virtual int open(THandle handle) = 0;
+	virtual int open(T handle) = 0;
 	virtual int close() = 0;
 
-}; // class Source
+}; // interface ISource
 
 } // namespace io
 

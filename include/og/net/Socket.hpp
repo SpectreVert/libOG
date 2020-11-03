@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "og/io/SourceHandle.hpp"
+#include "og/io/ISource.hpp"
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketAddr.hpp"
 
@@ -30,7 +30,7 @@ typedef int SocketHandle;
 // will return int values as error codes.
 // Each socket type will have its own error codes in addition
 // to Socket::Success, Socket::Error
-class Socket : public io::Source<SocketHandle> {
+class Socket : public io::ISource<SocketHandle> {
 public:
 	enum
 	{

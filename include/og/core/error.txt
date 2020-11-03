@@ -1,9 +1,0 @@
-namespace og;
-
-class Error
-{
-public:
-
-private:
-
-}

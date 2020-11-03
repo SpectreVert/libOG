@@ -5,7 +5,10 @@
  *
 */
 
+// TODO: change this to check if it is unix instead
 #ifndef OG_SYSTEM_WINDOWS
+
+// BTW: https://docs.rs/crate/mio/0.7.5/source/src/sys/unix/net.rs
 
 #include "og/net/SocketIO.hpp"
 

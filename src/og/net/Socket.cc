@@ -11,7 +11,7 @@
 using namespace og::net;
 
 Socket::Socket(int domain, int type, int protocol)
-	: m_socket(io::intl::bad_socket)
+	: m_handle(io::intl::bad_socket)
 	, m_domain(domain)
 	, m_type(type)
 	, m_protocol(protocol)
@@ -25,21 +25,24 @@ Socket::~Socket()
 
 int Socket::bind(const SocketAddr& address)
 {
-	return io::intl::bind(m_socket, address);
+	return io::intl::bind(m_handle, address);
 }
 
 // TODO: add open() to io::intl
 // https://docs.rs/crate/mio/0.7.5/source/src/sys/unix/net.rs
 int Socket::open()
 {
-	io::SocketHandle sock;
+	io::SocketHandle new_h;
 
-	sock = io::intl::open(m_domain, m_type, m_protocol);
+	new_h = io::intl::open(m_domain, m_type, m_protocol);
+	if (new_h == io::intl::bad_socket)
+		return Socket::Error;
 
-	return sock == io::intl::bad_socket ? Socket::Error : Socket::Success;
+	m_handle = new_h;
+	return Socket::Success;
 }
 
 int Socket::close()
 {
-	return io::intl::close(m_socket);
+	return io::intl::close(m_handle);
 }

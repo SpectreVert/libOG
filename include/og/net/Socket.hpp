@@ -41,7 +41,7 @@ public:
 	Socket(int domain, int type, int protocol = 0);
 	virtual ~Socket();
 
-	io::SocketHandle handle() const { return m_socket; };
+	io::SocketHandle handle() const { return m_handle; };
 
 	virtual int bind(const SocketAddr& address);
 
@@ -49,8 +49,7 @@ protected:
 	virtual int open();
 	virtual int close();
 
-	// think about defining this as private
-	io::SocketHandle m_socket;
+	io::SocketHandle m_handle;
 	int m_domain;
 	int m_type;
 	int m_protocol;

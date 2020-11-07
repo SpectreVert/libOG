@@ -7,6 +7,8 @@
 
 #pragma once
 
+// sorry but this "unix" definition is ballz
+// actually I need to redo this whole file
 #if defined(__unix__)
 	#define OG_SYSTEM_UNIX
 
@@ -20,7 +22,7 @@
 		#define OG_SYSTEM_FREEBSD
 
 	#else
-		#error unix distribution not supported
+		#error distribution not supported
 	#endif
 
 #elif defined(__APPLE__) && defined(__MACH__)
@@ -30,12 +32,9 @@
 		#define OG_SYSTEM_MACOS
 	
 	#else
-		#error Apple operating system not supported
+		#error distribution not supported
 	#endif
 
-#elif defined(_WIN32)
-	#define OG_SYSTEM_WINDOWS
-
 #else
-	#error Windows operating system not supported
+	#error distribution not supported
 #endif

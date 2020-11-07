@@ -34,7 +34,7 @@ struct SocketAddr {
 
 	enum {
 		V4,
-		V6
+		/* V6 // will be activated once SocketAddrV6 is written */
 	} version;
 
 	union AddrSet {

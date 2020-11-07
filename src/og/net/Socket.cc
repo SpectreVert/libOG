@@ -6,12 +6,12 @@
 */
 
 #include "og/net/Socket.hpp"
-#include "og/net/SocketIO.hpp"
+#include "og/io/Internal.hpp"
 
 using namespace og::net;
 
 Socket::Socket(int domain, int type, int protocol)
-	: m_socket(impl::SocketIO::bad_socket)
+	: m_socket(io::intl::bad_socket)
 	, m_domain(domain)
 	, m_type(type)
 	, m_protocol(protocol)
@@ -25,34 +25,34 @@ Socket::~Socket()
 
 int Socket::bind(const SocketAddr& address)
 {
-	close(); open();
-
-	return impl::SocketIO::bind(m_socket, address);
+	return io::intl::bind(m_socket, address);
 }
 
-// TODO: add open() to impl
+// TODO: add open() to io::intl
 // https://docs.rs/crate/mio/0.7.5/source/src/sys/unix/net.rs
 int Socket::open()
 {
-	if (m_socket != impl::SocketIO::bad_socket)
+	io::SocketHandle sock;
+
+	if (m_socket != io::intl::bad_socket)
 		return Socket::Success;
 
-	SocketHandle sock = socket(m_domain, m_type, m_protocol);
+	sock = socket(m_domain, m_type, m_protocol);
 
 	return open(sock);
 }
 
-int Socket::open(SocketHandle model)
+int Socket::open(io::SocketHandle model)
 {
-	if (model == impl::SocketIO::bad_socket)
+	if (model == io::intl::bad_socket)
 		return Socket::Error;
 
 	m_socket = model;
 
-	return impl::SocketIO::set_blocking(m_socket, false);
+	return io::intl::set_nonblock(m_socket, true);
 }
 
 int Socket::close()
 {
-	return impl::SocketIO::close(m_socket);
+	return io::intl::close(m_socket);
 }

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "og/core/config.hpp"
+#include "og/Config.hpp"
 
 namespace og {
 

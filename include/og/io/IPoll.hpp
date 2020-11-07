@@ -19,12 +19,12 @@ namespace io {
 //! handles registrations and deregistration, as
 //! well as polling for events.
 //!
-template<typename T, std::size_t N>
+template<typename T, typename E>
 class IPoll {
 public:
 	virtual ~IPoll() = default;
 
-	virtual int poll(Events<N> events, int timeout) = 0;
+	virtual int poll(E& events, int timeout) = 0;
 	virtual int add(T source, io::Tag id, io::Concern concern) = 0;
 	virtual int remove(T source) = 0;
 	

@@ -6,12 +6,12 @@
 */
 
 #include "og/net/TcpStream.hpp"
-#include "og/net/SocketIO.hpp"
+#include "og/io/Internal.hpp"
 
 using namespace og::net;
 
 TcpStream::TcpStream() :
-	Socket(PF_INET, SOCK_STREAM)
+	Socket(AF_INET, SOCK_STREAM)
 {
 }
 
@@ -21,14 +21,7 @@ TcpStream::~TcpStream()
 
 int TcpStream::connect(const SocketAddr& address)
 {
-	close(); open();
-
-	return impl::SocketIO::connect(m_socket, address);
-}
-
-void TcpStream::disconnect()
-{
-	close();
+	return io::intl::connect(m_socket, address);
 }
 
 int TcpStream::send(const void* data, std::size_t len)
@@ -48,7 +41,7 @@ int TcpStream::send(const void* data, std::size_t len, ssize_t& sent)
 			m_socket,
 			static_cast<const char*>(data) + sent,
 			static_cast<std::size_t>(len - sent),
-			impl::SocketIO::MSG_FLAG
+			io::intl::MSG_FLAG
 		);
 
 		if (delivered < 0)
@@ -83,7 +76,7 @@ int TcpStream::receive(void* data, std::size_t len, ssize_t& received)
 		m_socket,
 		data,
 		len,
-		impl::SocketIO::MSG_FLAG
+		io::intl::MSG_FLAG
 	);
 
 	if (received < 0)

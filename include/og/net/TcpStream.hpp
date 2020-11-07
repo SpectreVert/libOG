@@ -20,7 +20,6 @@ public:
 	virtual ~TcpStream();
 
 	virtual int connect(const SocketAddr& address);
-	virtual void disconnect();
 
 	virtual int send(const void* data, std::size_t len);
 	virtual int send(const void* data, std::size_t len, ssize_t& sent);

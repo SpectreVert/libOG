@@ -42,16 +42,6 @@ int Socket::open()
 	return open(sock);
 }
 
-int Socket::open(io::SocketHandle model)
-{
-	if (model == io::intl::bad_socket)
-		return Socket::Error;
-
-	m_socket = model;
-
-	return io::intl::set_nonblock(m_socket, true);
-}
-
 int Socket::close()
 {
 	return io::intl::close(m_socket);

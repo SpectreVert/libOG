@@ -47,7 +47,6 @@ public:
 
 protected:
 	virtual int open();
-	virtual int open(io::SocketHandle handle);
 	virtual int close();
 
 	// think about defining this as private

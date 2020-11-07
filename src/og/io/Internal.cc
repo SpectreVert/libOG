@@ -26,6 +26,8 @@ SocketHandle intl::open(int domain, int type, int protocol)
 	else if (errno != EINVAL)
 		return intl::bad_socket;
 #endif
+	
+	int res;
 
 	/* There's no support for the shortcut flags.
 	 * -> the socket fd might leak to a forked program
@@ -35,7 +37,7 @@ SocketHandle intl::open(int domain, int type, int protocol)
 	if (sock == intl::bad_socket)
 		return intl::bad_socket;
 
-	int res = intl::set_cloexec(sock, true);
+	res = intl::set_cloexec(sock, true);
 	if (res == 0)
 		res = intl::set_nonblock(sock, true);
 	

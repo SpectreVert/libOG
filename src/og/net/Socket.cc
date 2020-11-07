@@ -34,12 +34,9 @@ int Socket::open()
 {
 	io::SocketHandle sock;
 
-	if (m_socket != io::intl::bad_socket)
-		return Socket::Success;
+	sock = io::intl::open(m_domain, m_type, m_protocol);
 
-	sock = socket(m_domain, m_type, m_protocol);
-
-	return open(sock);
+	return sock == io::intl::bad_socket ? Socket::Error : Socket::Success;
 }
 
 int Socket::close()

@@ -14,7 +14,7 @@
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketAddr.hpp"
 
-#include <arpa/inet.h> // sockaddr
+#include <arpa/inet.h> // sockaddr, socklen_t
 
 namespace og {
 
@@ -48,17 +48,18 @@ int connect(SocketHandle socket, net::SocketAddr const& address);
 ssize_t send(SocketHandle handle, RawBuffer const data);
 ssize_t send_to(SocketHandle handle, RawBuffer const data, net::SocketAddr const& addr);
 ssize_t recv(SocketHandle handle, RawBuffer const data);
-ssize_t recv_from(SocketHandle handle, RawBuffer const data, net::SocketAddr const& addr);
+ssize_t recv_from(SocketHandle handle, RawBuffer const data, net::SocketAddr& addr);
 
 int set_nonblock(SocketHandle socket, bool set);
 int set_cloexec(SocketHandle socket, bool set);
 
 /* Misc utils */
-const sockaddr* get_sockaddr_ptr(net::SocketAddr const& address);
+sockaddr* get_sockaddr_ptr(net::SocketAddr& address);
+sockaddr const* get_sockaddr_ptr(net::SocketAddr const& address);
 std::size_t get_sockaddr_size(int version);
 
 } // namespace intl
 
-} // namespace og
+} // namespace io
 
 } // namespace og

@@ -117,7 +117,7 @@ ssize_t intl::send_to(SocketHandle handle, RawBuffer const data,
 {
 	ssize_t res;
 	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
-	std::size_t addr_size = get_sockaddr_size(address.version);
+	socklen_t addr_size = get_sockaddr_size(address.version);
 
 	do
 		res = sendto( \
@@ -140,16 +140,16 @@ ssize_t intl::recv(SocketHandle handle, RawBuffer const data)
 }
 
 ssize_t intl::recv_from(SocketHandle handle, RawBuffer const data,
-                        SocketAddr const& address)
+                        SocketAddr& address)
 {
 	ssize_t res;
-	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
-	std::size_t addr_size = get_sockaddr_size(address.version);
+	sockaddr* addr_ptr = get_sockaddr_ptr(address);
+	socklen_t addr_size = get_sockaddr_size(address.version);
 
 	do
-		res = recvfrom( \
+		res = ::recvfrom( \
 		handle, data.first, data.second, \
-		intl::MSG_FLAG, addr_ptr, addr_size);
+		intl::MSG_FLAG, addr_ptr, &addr_size);
 	while (res == -1 && errno == EINTR);
 
 	return res;
@@ -188,10 +188,18 @@ int intl::set_cloexec(SocketHandle socket, bool set)
 /* NOTE: net::Ipv6 and net::SockAddrV6 aren't implemented yet,
  * so these two functions can only return Ipv4 related values.
 */
+inline sockaddr* intl::get_sockaddr_ptr(net::SocketAddr& address)
+{
+	if (address.version == SocketAddr::V4)
+		return reinterpret_cast<sockaddr*>(&address.addr.v4.socket_addr);
+
+	return 0x0;
+}
+
 inline sockaddr const* intl::get_sockaddr_ptr(net::SocketAddr const& address)
 {
 	if (address.version == SocketAddr::V4)
-		return reinterpret_cast<const sockaddr*>(&address.addr.v4.socket_addr);
+		return reinterpret_cast<sockaddr const*>(&address.addr.v4.socket_addr);
 
 	return 0x0;
 }

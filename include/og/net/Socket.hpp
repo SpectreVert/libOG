@@ -22,10 +22,6 @@ namespace og {
 
 namespace net {
 
-// Note: this class and subsequently all socket classes
-// will return int values as error codes.
-// Each socket type will have its own error codes in addition
-// to Socket::Success, Socket::Error
 class Socket : public io::ISource<io::SocketHandle> {
 public:
 	enum // actually gon need to add all error codes

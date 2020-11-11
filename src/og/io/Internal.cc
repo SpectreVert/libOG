@@ -11,6 +11,13 @@
 #include <sys/types.h>  // for BSD friends
 #include <sys/ioctl.h>
 #include <unistd.h>     // close(2)
+#include <assert.h>
+
+/* Some BSD OS(es?) didn't set EAGAIN to the same value
+ * value as EWOULDBLOCK so we gotta check both.
+*/
+#define WOULD_BLOCK(errno) \
+        (errno == EAGAIN || errno == EWOULDBLOCK)
 
 using namespace og::io;
 using namespace og::net;
@@ -66,9 +73,9 @@ int intl::close(SocketHandle socket)
 	return 0;	
 }
 
-int intl::bind(SocketHandle socket, const SocketAddr& address)
+int intl::bind(SocketHandle socket, SocketAddr const& address)
 {
-	const sockaddr* addr_ptr = get_sockaddr_ptr(address);
+	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
 	std::size_t addr_size = get_sockaddr_size(address.version);
 
 	if (::bind(socket, addr_ptr, addr_size))
@@ -77,9 +84,9 @@ int intl::bind(SocketHandle socket, const SocketAddr& address)
 	return 0;	
 }
 
-int intl::connect(SocketHandle socket, const SocketAddr& address)
+int intl::connect(SocketHandle socket, SocketAddr const& address)
 {
-	const sockaddr* addr_ptr = get_sockaddr_ptr(address);
+	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
 	std::size_t addr_size = get_sockaddr_size(address.version);
 	int res;
 
@@ -90,6 +97,60 @@ int intl::connect(SocketHandle socket, const SocketAddr& address)
 
 	if (res == -1 && errno == EINPROGRESS)
 		return 0;
+
+	return res;
+}
+
+ssize_t intl::send(SocketHandle handle, RawBuffer const data)
+{
+	ssize_t res;
+
+	do
+		res = ::send(handle, data.first, data.second, intl::MSG_FLAG);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+ssize_t intl::send_to(SocketHandle handle, RawBuffer const data,
+                      net::SocketAddr const& address)
+{
+	ssize_t res;
+	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
+	std::size_t addr_size = get_sockaddr_size(address.version);
+
+	do
+		res = sendto( \
+		handle, data.first, data.second, \
+		intl::MSG_FLAG, addr_ptr, addr_size);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+ssize_t intl::recv(SocketHandle handle, RawBuffer const data)
+{
+	ssize_t res;
+
+	do
+		res =::recv(handle, data.first, data.second, io::intl::MSG_FLAG);
+	while (res == -1 && errno == EINTR);
+
+	return res;	
+}
+
+ssize_t intl::recv_from(SocketHandle handle, RawBuffer const data,
+                        SocketAddr const& address)
+{
+	ssize_t res;
+	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
+	std::size_t addr_size = get_sockaddr_size(address.version);
+
+	do
+		res = recvfrom( \
+		handle, data.first, data.second, \
+		intl::MSG_FLAG, addr_ptr, addr_size);
+	while (res == -1 && errno == EINTR);
 
 	return res;
 }
@@ -127,7 +188,7 @@ int intl::set_cloexec(SocketHandle socket, bool set)
 /* NOTE: net::Ipv6 and net::SockAddrV6 aren't implemented yet,
  * so these two functions can only return Ipv4 related values.
 */
-inline const sockaddr* intl::get_sockaddr_ptr(const net::SocketAddr& address)
+inline sockaddr const* intl::get_sockaddr_ptr(net::SocketAddr const& address)
 {
 	if (address.version == SocketAddr::V4)
 		return reinterpret_cast<const sockaddr*>(&address.addr.v4.socket_addr);

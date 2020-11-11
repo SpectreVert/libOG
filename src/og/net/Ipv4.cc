@@ -40,7 +40,7 @@ Ipv4::Ipv4(const char* t_address)
 std::string Ipv4::to_string() const
 {
 	char addr[INET_ADDRSTRLEN];
-	struct in_addr buf = { 0 };
+	struct in_addr buf{};
 
 	buf.s_addr = address;
 	inet_ntop(AF_INET, &buf, addr, INET_ADDRSTRLEN);

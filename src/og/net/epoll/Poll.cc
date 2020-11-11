@@ -12,7 +12,6 @@
 #include <fcntl.h> // O_CLOEXEC
 #include <errno.h> // errno
 
-using namespace og;
 using namespace og::net;
 
 Poll::Poll()

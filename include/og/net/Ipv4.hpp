@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include <arpa/inet.h>
 #include <string>
+
+#include <arpa/inet.h>
 
 namespace og {
 

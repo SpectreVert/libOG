@@ -11,10 +11,10 @@
 
 namespace og {
 
-namespace io {
+namespace core {
 
 typedef std::pair<void*, std::size_t> RawBuffer;
 
-} // namespace io
+} // namespace core
 
 } // namespace og

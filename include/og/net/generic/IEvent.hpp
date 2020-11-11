@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include "og/io/Tag.hpp"
+#include "og/core/Tag.hpp"
 
 namespace og {
 
-namespace io {
+namespace net {
 
 struct IEvent {
 	virtual ~IEvent() = default;
 
-	virtual io::Tag id() const = 0;
+	virtual core::Tag id() const = 0;
 
 	virtual bool is_readable() const = 0;
 	virtual bool is_writable() const = 0;
@@ -26,6 +26,6 @@ struct IEvent {
 
 }; // interface IEvent
 
-} // namespace io
+} // namespace net
 
 } // namespace og

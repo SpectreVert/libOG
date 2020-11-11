@@ -9,12 +9,12 @@
 
 namespace og {
 
-namespace io {
+namespace net {
 
 //! \brief A wraper around the int file descriptor type
 //!
 typedef int SocketHandle;
 
-} // namespace io
+} // namespace net
 
 } // namespace og

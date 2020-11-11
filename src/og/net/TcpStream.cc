@@ -5,8 +5,8 @@
  *
 */
 
+#include "og/net/Internal.hpp"
 #include "og/net/TcpStream.hpp"
-#include "og/io/Internal.hpp"
 
 using namespace og::net;
 
@@ -22,22 +22,25 @@ TcpStream::~TcpStream()
 
 int TcpStream::connect(const SocketAddr& address)
 {
-	return io::intl::connect(m_handle, address);
+	return intl::connect(m_handle, address);
 }
 
-int TcpStream::send(const void* data, std::size_t len)
+int TcpStream::send(core::RawBuffer const data)
 {
-	
+	return 0;
 }
 
-int TcpStream::send(const void* data, std::size_t len, ssize_t& sent)
+int TcpStream::send(core::RawBuffer const data, ssize_t& sent)
 {
+	return 0;
 }
 
-int TcpStream::receive(void* data, std::size_t len)
+int TcpStream::recv(core::RawBuffer& data)
 {
+	return 0;
 }
 
-int TcpStream::receive(void* data, std::size_t len, ssize_t& received)
+int TcpStream::recv(core::RawBuffer& data, ssize_t& received)
 {
+	return 0;
 }

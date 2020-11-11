@@ -11,12 +11,12 @@
 
 namespace og {
 
-namespace io {
+namespace core {
 
 //! \brief Wrapper around an const unsigned int
 //!
 typedef uint32_t const Tag;
 
-} // namespace io
+} // namespace core
 
 } // namespace og

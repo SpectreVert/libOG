@@ -9,7 +9,7 @@
 
 namespace og {
 
-namespace io {
+namespace core {
 
 enum Concern
 {
@@ -18,6 +18,6 @@ enum Concern
 	Both = Writable | Readable
 };
 
-} // namespace io
+} // namespace core
 
 } // namespace og

@@ -11,7 +11,7 @@
 
 namespace og {
 
-namespace io {
+namespace net {
 
 //! Source contains an Handle which can be polled for
 //! events.
@@ -33,6 +33,6 @@ protected:
 
 }; // interface ISource
 
-} // namespace io
+} // namespace net
 
 } // namespace og

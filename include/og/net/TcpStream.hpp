@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "og/core/RawBuffer.hpp"
 #include "og/net/Socket.hpp"
 #include "og/net/SocketAddr.hpp"
 
@@ -21,10 +22,10 @@ public:
 
 	virtual int connect(const SocketAddr& address);
 
-	virtual int send(const void* data, std::size_t len);
-	virtual int send(const void* data, std::size_t len, ssize_t& sent);
-	virtual int receive(void* data, std::size_t len);
-	virtual int receive(void* data, std::size_t len, ssize_t& received);
+	virtual int send(core::RawBuffer const data);
+	virtual int send(core::RawBuffer const data, ssize_t& sent);
+	virtual int recv(core::RawBuffer& data);
+	virtual int recv(core::RawBuffer& data, ssize_t& received);
 
 }; // class TcpSocket
 

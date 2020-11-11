@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "og/io/IPoll.hpp"
-#include "og/net/epoll/Event.hpp"
 #include "og/net/Socket.hpp"
+#include "og/net/epoll/Event.hpp"
+#include "og/net/generic/IPoll.hpp"
 
 #include <sys/epoll.h>
 
@@ -19,14 +19,14 @@ namespace net {
 
 //! \brief Poll implementation for epoll
 //!
-class Poll : io::IPoll<io::SocketHandle, Events> {
+class Poll : IPoll<SocketHandle, Events> {
 public:
     Poll();
     virtual ~Poll() = default;
 
     virtual int poll(Events& events, int timeout);
-    virtual int add(io::SocketHandle source, io::Tag id, io::Concern concern);
-    virtual int remove(io::SocketHandle source);
+    virtual int add(SocketHandle source, core::Tag id, core::Concern concern);
+    virtual int remove(SocketHandle source);
 
 private:
     int m_epoll_fd;

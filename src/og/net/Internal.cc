@@ -5,7 +5,7 @@
  *
 */
 
-#include "og/io/Internal.hpp"
+#include "og/net/Internal.hpp"
 
 #include <sys/socket.h>
 #include <sys/types.h>  // for BSD friends
@@ -13,13 +13,6 @@
 #include <unistd.h>     // close(2)
 #include <assert.h>
 
-/* Some BSD OS(es?) didn't set EAGAIN to the same value
- * value as EWOULDBLOCK so we gotta check both.
-*/
-#define WOULD_BLOCK(errno) \
-        (errno == EAGAIN || errno == EWOULDBLOCK)
-
-using namespace og::io;
 using namespace og::net;
 
 SocketHandle intl::open(int domain, int type, int protocol)
@@ -101,7 +94,7 @@ int intl::connect(SocketHandle socket, SocketAddr const& address)
 	return res;
 }
 
-ssize_t intl::send(SocketHandle handle, RawBuffer const data)
+ssize_t intl::send(SocketHandle handle, core::RawBuffer const data)
 {
 	ssize_t res;
 
@@ -112,15 +105,15 @@ ssize_t intl::send(SocketHandle handle, RawBuffer const data)
 	return res;
 }
 
-ssize_t intl::send_to(SocketHandle handle, RawBuffer const data,
-                      net::SocketAddr const& address)
+ssize_t intl::send_to(SocketHandle handle, core::RawBuffer const data,
+                      SocketAddr const& address)
 {
 	ssize_t res;
 	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
 	socklen_t addr_size = get_sockaddr_size(address.version);
 
 	do
-		res = sendto( \
+		res = ::sendto( \
 		handle, data.first, data.second, \
 		intl::MSG_FLAG, addr_ptr, addr_size);
 	while (res == -1 && errno == EINTR);
@@ -128,18 +121,18 @@ ssize_t intl::send_to(SocketHandle handle, RawBuffer const data,
 	return res;
 }
 
-ssize_t intl::recv(SocketHandle handle, RawBuffer const data)
+ssize_t intl::recv(SocketHandle handle, core::RawBuffer const& data)
 {
 	ssize_t res;
 
 	do
-		res =::recv(handle, data.first, data.second, io::intl::MSG_FLAG);
+		res = ::recv(handle, data.first, data.second, intl::MSG_FLAG);
 	while (res == -1 && errno == EINTR);
 
 	return res;	
 }
 
-ssize_t intl::recv_from(SocketHandle handle, RawBuffer const data,
+ssize_t intl::recv_from(SocketHandle handle, core::RawBuffer const& data,
                         SocketAddr& address)
 {
 	ssize_t res;
@@ -185,10 +178,10 @@ int intl::set_cloexec(SocketHandle socket, bool set)
 	return res;
 }
 
-/* NOTE: net::Ipv6 and net::SockAddrV6 aren't implemented yet,
+/* NOTE: Ipv6 and SockAddrV6 aren't implemented yet,
  * so these two functions can only return Ipv4 related values.
 */
-inline sockaddr* intl::get_sockaddr_ptr(net::SocketAddr& address)
+inline sockaddr* intl::get_sockaddr_ptr(SocketAddr& address)
 {
 	if (address.version == SocketAddr::V4)
 		return reinterpret_cast<sockaddr*>(&address.addr.v4.socket_addr);
@@ -196,7 +189,7 @@ inline sockaddr* intl::get_sockaddr_ptr(net::SocketAddr& address)
 	return 0x0;
 }
 
-inline sockaddr const* intl::get_sockaddr_ptr(net::SocketAddr const& address)
+inline sockaddr const* intl::get_sockaddr_ptr(SocketAddr const& address)
 {
 	if (address.version == SocketAddr::V4)
 		return reinterpret_cast<sockaddr const*>(&address.addr.v4.socket_addr);

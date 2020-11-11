@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "og/io/IEvent.hpp"
+#include "og/net/generic/IEvent.hpp"
 
 #include <vector>
 
@@ -19,12 +19,12 @@ namespace net {
 
 //! \brief Event implemetation for epoll
 //!
-struct Event : io::IEvent {
+struct Event : IEvent {
 
     Event(epoll_event t_event);
     virtual ~Event() = default;
 
-	virtual io::Tag id() const;
+	virtual core::Tag id() const;
 
 	virtual bool is_readable() const;
 	virtual bool is_writable() const;

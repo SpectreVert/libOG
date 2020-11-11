@@ -9,8 +9,9 @@
 
 #if defined(OG_SYSTEM_LINUX)
 
-using namespace og;
-using namespace og::net;
+namespace og {
+
+namespace net {
 
 Event::Event(epoll_event t_event) :
 
@@ -18,7 +19,7 @@ Event::Event(epoll_event t_event) :
 {
 }
 
-io::Tag Event::id() const
+core::Tag Event::id() const
 {
     return event.data.u32;
 }
@@ -49,5 +50,9 @@ bool Event::is_error() const
 {
 	return (event.events & EPOLLERR) != 0;
 }
+
+} // namespace net
+
+} // namespace og
 
 #endif // OG_SYSTEM_LINUX

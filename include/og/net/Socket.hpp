@@ -24,12 +24,6 @@ namespace net {
 
 class Socket : public ISource<SocketHandle> {
 public:
-	enum
-	{
-		Error = -1,  //! Operation not successful
-		Success = 0, //! Operation successful
-		Again,       //! Operation started but not finished
-	};
 
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);

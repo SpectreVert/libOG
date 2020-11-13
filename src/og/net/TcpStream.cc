@@ -27,11 +27,15 @@ int TcpStream::connect(const SocketAddr& address)
 
 int TcpStream::send(core::RawBuffer const data)
 {
-	return 0;
+	ssize_t sent;
+
+	return send(data, sent);
 }
 
 int TcpStream::send(core::RawBuffer const data, ssize_t& sent)
 {
+	sent = intl::send(m_handle, data);
+
 	return 0;
 }
 

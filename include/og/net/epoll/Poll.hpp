@@ -22,7 +22,7 @@ namespace net {
 class Poll : IPoll<SocketHandle, Events> {
 public:
     Poll();
-    virtual ~Poll() = default;
+    virtual ~Poll();
 
     virtual int poll(Events& events, int timeout);
     virtual int add(SocketHandle source, core::Tag id, core::Concern concern);

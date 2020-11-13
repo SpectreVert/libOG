@@ -7,9 +7,8 @@
 
 #pragma once
 
-#include "og/Config.hpp"
-
 #include "og/core/RawBuffer.hpp"
+#include "og/core/System.hpp"
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketAddr.hpp"
 #include "og/net/SocketHandle.hpp"
@@ -27,11 +26,13 @@ SocketHandle constexpr bad_socket = -1;
 /* here also the macro is really bad. Supported OSes are
  * linux, android, dragonfly, freebsd, openbsd, netbsd
 */
-#if defined(OG_SYSTEM_UNIX)
+# if defined(OG_SYSTEM_LINUX) \
+  || defined(OG_SYSTEM_ANDROID) \
+  || defined(OG_SYSTEM_FREEBSD)
 	int constexpr MSG_FLAG = MSG_NOSIGNAL;
-#else
+# else
 	int constexpr MSG_FLAG = 0;
-#endif // OG_SYSTEM_UNIX
+# endif 
 
 /* The following function return 0 on success and -1 on error.
  * errno is set to indicate the error.

@@ -5,6 +5,7 @@
  *
 */
 
+#include "og/core/System.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/Socket.hpp"
 
@@ -35,10 +36,10 @@ int Socket::open()
 
 	new_h = intl::open(m_domain, m_type, m_protocol);
 	if (new_h == intl::bad_socket)
-		return Socket::Error;
+		return og::Error;
 
 	m_handle = new_h;
-	return Socket::Success;
+	return og::Success;
 }
 
 int Socket::close()

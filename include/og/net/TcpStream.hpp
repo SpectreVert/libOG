@@ -22,10 +22,10 @@ public:
 
 	virtual int connect(const SocketAddr& address);
 
-	virtual int send(core::RawBuffer const data);
-	virtual int send(core::RawBuffer const data, ssize_t& sent);
+	virtual int send(core::RawBufferConst data);
+	virtual int send(core::RawBufferConst data, std::size_t& sent);
 	virtual int recv(core::RawBuffer& data);
-	virtual int recv(core::RawBuffer& data, ssize_t& received);
+	virtual int recv(core::RawBuffer& data, std::size_t& received);
 
 }; // class TcpSocket
 

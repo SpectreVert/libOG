@@ -12,3 +12,7 @@ Make a bash/sh (?) script to generate Tuprules.tup depending on the target OS.
 - Make namespaces for modules (net, core)
 - Rename config.hpp to Config.hpp ---------------------------- [X]
 - Rewrite Config.hpp cause it **sucks**
+
+# Features
+
+- Future-based mutex

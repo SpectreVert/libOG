@@ -94,7 +94,7 @@ int intl::connect(SocketHandle socket, SocketAddr const& address)
 	return res;
 }
 
-ssize_t intl::send(SocketHandle handle, core::RawBuffer const data)
+ssize_t intl::send(SocketHandle handle, core::RawBufferConst data)
 {
 	ssize_t res;
 
@@ -105,7 +105,7 @@ ssize_t intl::send(SocketHandle handle, core::RawBuffer const data)
 	return res;
 }
 
-ssize_t intl::send_to(SocketHandle handle, core::RawBuffer const data,
+ssize_t intl::send_to(SocketHandle handle, core::RawBufferConst data,
                       SocketAddr const& address)
 {
 	ssize_t res;

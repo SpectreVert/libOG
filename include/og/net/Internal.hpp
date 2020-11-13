@@ -46,8 +46,8 @@ int connect(SocketHandle socket, SocketAddr const& address);
 
 /* Proposition: implement lower-level calls like send_msg() or recv_msg().
 */
-ssize_t send(SocketHandle handle, core::RawBuffer const data);
-ssize_t send_to(SocketHandle handle, core::RawBuffer const data, SocketAddr const& addr);
+ssize_t send(SocketHandle handle, core::RawBufferConst data);
+ssize_t send_to(SocketHandle handle, core::RawBufferConst data, SocketAddr const& addr);
 ssize_t recv(SocketHandle handle, core::RawBuffer const& data);
 ssize_t recv_from(SocketHandle handle, core::RawBuffer const& data, SocketAddr& addr);
 

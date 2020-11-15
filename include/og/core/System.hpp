@@ -39,7 +39,7 @@ namespace og {
 
 enum {
 	Error = -1,
-	Success = 0
+	Success,
 };
 
 } // namespace og

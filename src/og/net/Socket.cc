@@ -17,6 +17,7 @@ Socket::Socket(int domain, int type, int protocol)
 	, m_type(type)
 	, m_protocol(protocol)
 {
+	open();
 }
 
 Socket::~Socket()

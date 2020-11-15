@@ -8,6 +8,8 @@
 #include "og/net/Internal.hpp"
 #include "og/net/TcpStream.hpp"
 
+#include <assert.h>
+
 using namespace og::net;
 
 TcpStream::TcpStream() :
@@ -29,46 +31,52 @@ int TcpStream::send(core::RawBufferConst data)
 {
 	ssize_t res = intl::send(m_handle, data);
 
-	if (res)
-		return og::Error;
+	if (res != -1)
+		return Success;
 
-	return og::Success;
+	return Error;
 }
 
 int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
 {
 	ssize_t res = intl::send(m_handle, data);
 
-	if (res)
+	if (res != -1)
 	{
-		sent = 0;
-		return og::Error;
+		sent = static_cast<std::size_t>(res);
+		return Success;
 	}
 
-	sent = static_cast<std::size_t>(res);
-	return og::Success;
+	sent = 0;
+	return Error;
 }
 
 int TcpStream::recv(core::RawBuffer& data)
 {
 	ssize_t res = intl::recv(m_handle, data);
 
-	if (res)
-		return og::Error;
+	if (res > 0)
+		return Success;
 
-	return og::Success;
+	if (res == 0)
+		return Closed;
+	
+	return Error;
 }
 
 int TcpStream::recv(core::RawBuffer& data, size_t& received)
 {
 	ssize_t res = intl::recv(m_handle, data);
 
-	if (res)
+	if (res > 0)
 	{
-		received = 0;
-		return og::Error;
+		received = static_cast<std::size_t>(res);
+		return og::Success;
 	}
 
-	received = static_cast<std::size_t>(res);
-	return og::Success;
+	received = 0;
+	if (res == 0)
+		return Closed;
+
+	return Error;
 }

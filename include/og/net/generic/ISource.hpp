@@ -26,7 +26,6 @@ public:
 
 protected:
 	virtual int open() = 0;
-	virtual int open(T handle) = 0;
 	virtual int close() = 0;
 
 }; // interface ISource

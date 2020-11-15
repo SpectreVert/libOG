@@ -21,8 +21,18 @@ namespace net {
 //!
 class Poll : IPoll<SocketHandle, Events> {
 public:
-    Poll();
+	//! \brief Initialize the internal resource for event
+	//!        polling.
+	//!
+	//! \see   is_valid
+	//!
+	Poll();
     virtual ~Poll();
+
+	//! \brief Indicates if the object has been properly
+	//!        initialized and can be used safely.
+	//!
+	virtual bool is_valid() const;
 
     virtual int poll(Events& events, int timeout);
     virtual int add(SocketHandle source, core::Tag id, core::Concern concern);

@@ -88,9 +88,6 @@ int intl::connect(SocketHandle socket, SocketAddr const& address)
 		res = ::connect(socket, addr_ptr, addr_size);
 	} while (res == -1 && errno == EINTR);
 
-	if (res == -1 && errno == EINPROGRESS)
-		return 0;
-
 	return res;
 }
 

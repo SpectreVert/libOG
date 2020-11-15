@@ -24,7 +24,12 @@ TcpStream::~TcpStream()
 
 int TcpStream::connect(const SocketAddr& address)
 {
-	return intl::connect(m_handle, address);
+	int res = intl::connect(m_handle, address);
+
+	if (res == -1 && errno == EINPROGRESS)
+		return Success;
+
+	return res;
 }
 
 int TcpStream::send(core::RawBufferConst data)
@@ -33,6 +38,9 @@ int TcpStream::send(core::RawBufferConst data)
 
 	if (res != -1)
 		return Success;
+
+	if (errno == EWOULDBLOCK || errno == EAGAIN)
+		return WouldBlock;
 
 	return Error;
 }
@@ -46,8 +54,11 @@ int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
 		sent = static_cast<std::size_t>(res);
 		return Success;
 	}
-
+	
 	sent = 0;
+	if (errno == EWOULDBLOCK || errno == EAGAIN)
+		return WouldBlock;
+
 	return Error;
 }
 
@@ -61,6 +72,9 @@ int TcpStream::recv(core::RawBuffer& data)
 	if (res == 0)
 		return Closed;
 	
+	if (errno == EWOULDBLOCK || errno == EAGAIN)
+		return WouldBlock;
+
 	return Error;
 }
 
@@ -77,6 +91,9 @@ int TcpStream::recv(core::RawBuffer& data, size_t& received)
 	received = 0;
 	if (res == 0)
 		return Closed;
+	
+	if (errno == EWOULDBLOCK || errno == EAGAIN)
+		return WouldBlock;
 
 	return Error;
 }

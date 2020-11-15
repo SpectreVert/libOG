@@ -16,6 +16,7 @@ namespace net {
 enum {
 	Error = og::core::Error,
 	Success,
+	WouldBlock,
 	Closed
 };
 

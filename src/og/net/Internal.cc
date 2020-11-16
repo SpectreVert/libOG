@@ -7,11 +7,21 @@
 
 #include "og/net/Internal.hpp"
 
+#include <assert.h>
+# if defined(OG_SYSTEM_LINUX) \
+  || defined(OG_SYSTEM_ANDROID) \
+  || defined(OG_SYSTEM_FREEBSD)
+#   include <errno.h>
+
+# else
+#   include <sys/errno.h>
+
+# endif
+
+#include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>  // for BSD friends
-#include <sys/ioctl.h>
 #include <unistd.h>     // close(2)
-#include <assert.h>
 
 using namespace og::net;
 

@@ -39,6 +39,9 @@ int Socket::open()
 	if (new_h == intl::bad_socket)
 		return og::Error;
 
+	if (m_handle != intl::bad_socket)
+		close();
+
 	m_handle = new_h;
 	return og::Success;
 }

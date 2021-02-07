@@ -28,18 +28,9 @@
 #     error "Distribution not supported"
 #   endif
 
-// will add more OSes here 
+/* Additional OSes go here
+*/
+
 # else
 #   error "Distribution not supported"
 # endif
-
-/* System wide parameters and utils
-*/
-namespace og {
-
-enum {
-	Error = -1,
-	Success,
-};
-
-} // namespace og

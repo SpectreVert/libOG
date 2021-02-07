@@ -24,7 +24,6 @@ namespace net {
 
 class Socket : public ISource<SocketHandle> {
 public:
-
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);
 	virtual ~Socket();

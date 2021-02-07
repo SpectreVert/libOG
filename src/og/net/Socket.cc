@@ -37,13 +37,13 @@ int Socket::open()
 
 	new_h = intl::open(m_domain, m_type, m_protocol);
 	if (new_h == intl::bad_socket)
-		return og::Error;
+		return -errno;
 
 	if (m_handle != intl::bad_socket)
 		close();
 
 	m_handle = new_h;
-	return og::Success;
+	return 0;
 }
 
 int Socket::close()

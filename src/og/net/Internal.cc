@@ -5,18 +5,8 @@
  *
 */
 
+#include "og/core/Error.hpp"
 #include "og/net/Internal.hpp"
-
-#include <assert.h>
-# if defined(OG_SYSTEM_LINUX) \
-  || defined(OG_SYSTEM_ANDROID) \
-  || defined(OG_SYSTEM_FREEBSD)
-#   include <errno.h>
-
-# else
-#   include <sys/errno.h>
-
-# endif
 
 #include <sys/ioctl.h>
 #include <sys/socket.h>

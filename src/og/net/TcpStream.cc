@@ -8,8 +8,6 @@
 #include "og/net/Internal.hpp"
 #include "og/net/TcpStream.hpp"
 
-#include <assert.h>
-
 using namespace og::net;
 
 TcpStream::TcpStream() :
@@ -27,9 +25,9 @@ int TcpStream::connect(const SocketAddr& address)
 	int res = intl::connect(m_handle, address);
 
 	if (res == -1 && errno == EINPROGRESS)
-		return Success;
+		return 0;
 
-	return res;
+	return -errno;
 }
 
 int TcpStream::send(core::RawBufferConst data)
@@ -37,12 +35,14 @@ int TcpStream::send(core::RawBufferConst data)
 	ssize_t res = intl::send(m_handle, data);
 
 	if (res != -1)
-		return Success;
+		return 0;
 
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return WouldBlock;
+	/* We could get a case of EAGAIN or EWOULDBLOCK here - but
+	 * normally we should be using a selector so as to get these
+	 * errors less.
+	*/
 
-	return Error;
+	return -errno; 
 }
 
 int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
@@ -52,30 +52,22 @@ int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
 	if (res != -1)
 	{
 		sent = static_cast<std::size_t>(res);
-		return Success;
+		return 0;
 	}
 	
 	sent = 0;
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return WouldBlock;
-
-	return Error;
+	return -errno;
 }
 
 int TcpStream::recv(core::RawBuffer& data)
 {
 	ssize_t res = intl::recv(m_handle, data);
 
-	if (res > 0)
-		return Success;
-
-	if (res == 0)
-		return Closed;
+	// if(res) == 0 -> orderly disconnect for stream socket.
+	if (res >= 0)
+		return 0;
 	
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return WouldBlock;
-
-	return Error;
+	return -errno;
 }
 
 int TcpStream::recv(core::RawBuffer& data, size_t& received)
@@ -85,15 +77,9 @@ int TcpStream::recv(core::RawBuffer& data, size_t& received)
 	if (res > 0)
 	{
 		received = static_cast<std::size_t>(res);
-		return og::Success;
+		return 0;
 	}
 
 	received = 0;
-	if (res == 0)
-		return Closed;
-	
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return WouldBlock;
-
-	return Error;
+	return -errno;
 }

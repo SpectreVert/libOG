@@ -8,7 +8,6 @@
 #pragma once
 
 #include "og/core/RawBuffer.hpp"
-#include "og/net/Errors.hpp"
 #include "og/net/Socket.hpp"
 #include "og/net/SocketAddr.hpp"
 

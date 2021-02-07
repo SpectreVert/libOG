@@ -23,10 +23,10 @@ namespace intl {
 
 SocketHandle constexpr bad_socket = -1;
 
-/* here also the macro is really bad. Supported OSes are
+/* Supported OSes are
  * linux, android, dragonfly, freebsd, openbsd, netbsd
 */
-# if defined(OG_SYSTEM_LINUX) \
+# if defined(OG_SYSTEM_LINUX)   \
   || defined(OG_SYSTEM_ANDROID) \
   || defined(OG_SYSTEM_FREEBSD)
 	int constexpr MSG_FLAG = MSG_NOSIGNAL;
@@ -34,18 +34,15 @@ SocketHandle constexpr bad_socket = -1;
 	int constexpr MSG_FLAG = 0;
 # endif 
 
-/* The following function return 0 on success and -1 on error.
- * errno is set to indicate the error.
+/* The following functions return a negative integer in case of error.
+ * Otherwise, they return either zero or a positive integer.
 */
 
-/* Socket manipulation & operation */
 SocketHandle open(int domain, int type, int protocol);
 int close(SocketHandle socket);
 int bind(SocketHandle socket, SocketAddr const& address);
 int connect(SocketHandle socket, SocketAddr const& address);
 
-/* Proposition: implement lower-level calls like send_msg() or recv_msg().
-*/
 ssize_t send(SocketHandle handle, core::RawBufferConst data);
 ssize_t send_to(SocketHandle handle, core::RawBufferConst data, SocketAddr const& addr);
 ssize_t recv(SocketHandle handle, core::RawBuffer const& data);
@@ -54,7 +51,6 @@ ssize_t recv_from(SocketHandle handle, core::RawBuffer const& data, SocketAddr& 
 int set_nonblock(SocketHandle socket, bool set);
 int set_cloexec(SocketHandle socket, bool set);
 
-/* Misc utils */
 sockaddr* get_sockaddr_ptr(SocketAddr& address);
 sockaddr const* get_sockaddr_ptr(SocketAddr const& address);
 std::size_t get_sockaddr_size(int version);

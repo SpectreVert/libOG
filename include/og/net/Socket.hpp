@@ -12,12 +12,6 @@
 #include "og/net/SocketAddr.hpp"
 #include "og/net/generic/ISource.hpp"
 
-#if defined(OG_SYSTEM_LINUX)
-	#include <errno.h>
-#elif defined(OG_SYSTEM_FREEBSD) || defined(OG_SYSTEM_MACOS)
-	#include <sys/errno.h>
-#endif
-
 namespace og {
 
 namespace net {

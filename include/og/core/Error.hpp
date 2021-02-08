@@ -13,8 +13,21 @@
 #include <cerrno>
 #include <cassert>
 
-/* Maybe one day I'll come up with a clever error reporting system... 
- * As for now, we'll stick to -errno shenanigans.
-*/
+namespace og {
+
+namespace net {
+
+//! Network specific error codes
+//!
+enum {
+	Success,
+	Closed,
+	WouldBlock,
+	InProgress
+};
+
+} // namespace net
+
+} // namspace og
 
 #endif /* _ERROR_HPP_ */

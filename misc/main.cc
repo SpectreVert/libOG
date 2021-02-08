@@ -11,6 +11,7 @@
 
 #include "og/net/Poll.hpp"
 #include "og/net/TcpStream.hpp"
+#include "og/core/Error.hpp"
 
 #define SOCKET 1
 
@@ -60,7 +61,7 @@ int main()
 					{
 						goto closed;
 					}
-					else if (res == og::net::Error)
+					else if (res < 0)
 					{
 						std::cerr << "error on the socket: " << strerror(errno) << '\n';
 						return 1;

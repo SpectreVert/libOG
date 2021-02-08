@@ -63,16 +63,11 @@ int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
 
 int TcpStream::recv(core::RawBuffer& data)
 {
+	/* Provided buffer and length should be bigger
+	 * than zero.
+	*/
 	ssize_t res = intl::recv(m_handle, data);
 
-	/* I have quite a dilema going on here. The POSIX implementation of
-	 * recv() is said to return 0 if the connection has been gracefully
-	 * closed, more than zero if bytes were received and -1 for an error.
-	 * Linux's man page says that recv() could return zero if the length
-	 * argument for the buffer size is zero. Now BSD's man pages do NOT
-	 * indicate anything similar. So we won't be testing for that case here.
-	 * FIXME
-	*/
 	if (res > 0)
 		return og::net::Success;
 

@@ -71,10 +71,7 @@ int intl::bind(SocketHandle socket, SocketAddr const& address)
 	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
 	std::size_t addr_size = get_sockaddr_size(address.version);
 
-	if (::bind(socket, addr_ptr, addr_size))
-		return -1;
-
-	return 0;	
+	return ::bind(socket, addr_ptr, addr_size);
 }
 
 int intl::connect(SocketHandle socket, SocketAddr const& address)
@@ -91,18 +88,30 @@ int intl::connect(SocketHandle socket, SocketAddr const& address)
 	return res;
 }
 
-ssize_t intl::send(SocketHandle handle, core::RawBufferConst data)
+int intl::listen(SocketHandle socket, int backlog)
+{ 
+	/* Backlog serves as a hint so it shouldn't really be a concern,
+	 * but we're checking for negative values anyway. I'd like to
+	 * keep the int type for compatibility reasons.
+	*/
+	if (backlog < 0)
+		backlog = 128;
+
+	return ::listen(socket, backlog);
+}
+
+ssize_t intl::send(SocketHandle socket, core::RawBufferConst data)
 {
 	ssize_t res;
 
 	do
-		res = ::send(handle, data.first, data.second, intl::MSG_FLAG);
+		res = ::send(socket, data.first, data.second, intl::MSG_FLAG);
 	while (res == -1 && errno == EINTR);
 
 	return res;
 }
 
-ssize_t intl::send_to(SocketHandle handle, core::RawBufferConst data,
+ssize_t intl::send_to(SocketHandle socket, core::RawBufferConst data,
                       SocketAddr const& address)
 {
 	ssize_t res;
@@ -111,25 +120,25 @@ ssize_t intl::send_to(SocketHandle handle, core::RawBufferConst data,
 
 	do
 		res = ::sendto( \
-		handle, data.first, data.second, \
+		socket, data.first, data.second, \
 		intl::MSG_FLAG, addr_ptr, addr_size);
 	while (res == -1 && errno == EINTR);
 
 	return res;
 }
 
-ssize_t intl::recv(SocketHandle handle, core::RawBuffer const& data)
+ssize_t intl::recv(SocketHandle socket, core::RawBuffer const& data)
 {
 	ssize_t res;
 
 	do
-		res = ::recv(handle, data.first, data.second, intl::MSG_FLAG);
+		res = ::recv(socket, data.first, data.second, intl::MSG_FLAG);
 	while (res == -1 && errno == EINTR);
 
 	return res;	
 }
 
-ssize_t intl::recv_from(SocketHandle handle, core::RawBuffer const& data,
+ssize_t intl::recv_from(SocketHandle socket, core::RawBuffer const& data,
                         SocketAddr& address)
 {
 	ssize_t res;
@@ -138,7 +147,7 @@ ssize_t intl::recv_from(SocketHandle handle, core::RawBuffer const& data,
 
 	do
 		res = ::recvfrom( \
-		handle, data.first, data.second, \
+		socket, data.first, data.second, \
 		intl::MSG_FLAG, addr_ptr, &addr_size);
 	while (res == -1 && errno == EINTR);
 

@@ -18,11 +18,11 @@ namespace net {
 
 class TcpListener : public Socket {
 public:
-	TpcListener();
-	virtual ~TpcListener();
+	TcpListener();
+	virtual ~TcpListener();
 
 	virtual int listen(int backlog);
-	virtual int accept(TcpStream& new_stream);
+	virtual int accept(TcpStream& socket);
 
 }; // class TcpListener
 
@@ -31,4 +31,3 @@ public:
 } // namespace og
 
 #endif /* _TCPLISTENER_HPP_ */
-

@@ -42,6 +42,7 @@ SocketHandle open(int domain, int type, int protocol);
 int close(SocketHandle socket);
 int bind(SocketHandle socket, SocketAddr const& address);
 int connect(SocketHandle socket, SocketAddr const& address);
+int listen(SocketHandle socket, int backlog);
 
 ssize_t send(SocketHandle handle, core::RawBufferConst data);
 ssize_t send_to(SocketHandle handle, core::RawBufferConst data, SocketAddr const& addr);

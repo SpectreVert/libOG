@@ -5,19 +5,16 @@
  *
 */
 
+#include "og/core/Error.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/Poll.hpp"
 
 #if defined(OG_SYSTEM_LINUX)
 
 #include <fcntl.h>  // O_CLOEXEC
-#include <errno.h>  // errno
 #include <unistd.h> // close
-#include <assert.h>
+
 #include <cstdlib>  // abort
-
-
-
 #include <iostream>
 
 using namespace og::net;
@@ -46,6 +43,8 @@ Poll::~Poll()
 	::close(m_epoll_fd);
 }
 
+/* TODO: find a better method doing this. Assert?
+*/
 bool Poll::is_valid() const
 {
 	return m_epoll_fd == -1 ? false : true;
@@ -55,7 +54,7 @@ int Poll::poll(Events& events, int timeout)
 {
 	int nb_events;
 	epoll_event events_buffer[IPoll::s_poll_event_capacity];
-	std::size_t reprompt = s_poll_max_reprompt;
+	std::size_t reprompt = IPoll::s_poll_max_reprompt;
 	std::size_t hint = 1024;
 
 	assert(timeout >= -1);
@@ -78,16 +77,16 @@ int Poll::poll(Events& events, int timeout)
 		{
 			assert(timeout != -1);
 
-			return 0;
+			return og::net::Success;
 		}
 
 		if (nb_events == -1)
 		{
 			/* If errno is something else than EINTR,
-			 * something is very wrong -- abandon ship!
+			 * something is most likely wrong.
 			*/
 			if (errno != EINTR)
-				abort();
+				return -errno;
 
 			/* Otherwise, we've just been interrupted by a signal.
 			 * Either redo a loop -- not taking into account time
@@ -109,9 +108,12 @@ int Poll::poll(Events& events, int timeout)
 		break;
 	}
 
-	return 0;
+	return og::net::Success;
 }
 
+/* TODO: return -errno rather than the return value from epoll_ctl
+ * which is either 0 or -1
+*/
 int Poll::add(SocketHandle source, core::Tag id, core::Concern concern)
 {
 	uint32_t bits = EPOLLET;

@@ -4,6 +4,7 @@
  * 05-02-2021 @ 17:10:56
 */
 
+#include "og/core/Error.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/TcpListener.hpp"
 

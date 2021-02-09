@@ -5,6 +5,7 @@
  *
 */
 
+#include "og/core/Error.hpp"
 #include "og/core/System.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/Socket.hpp"
@@ -43,7 +44,7 @@ int Socket::open()
 		close();
 
 	m_handle = new_h;
-	return 0;
+	return og::net::Success;
 }
 
 int Socket::close()

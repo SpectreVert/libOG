@@ -6,8 +6,8 @@
 */
 
 #include <iostream>
-#include <string_view>
 #include <cstring>
+#include <iostream>
 
 #include "og/net/Poll.hpp"
 #include "og/net/TcpStream.hpp"
@@ -71,6 +71,6 @@ int main()
 		}
 	}
 closed:
-	std::cerr << "Connection closed\n";
+	std::cerr << "Connection closed" << std::endl;
 	return 0;
 }

@@ -27,10 +27,25 @@ int TcpListener::listen(int backlog)
 	if (res == -1)
 		return -errno;
 
-	return 0;
+	return og::net::Success;
 }
 
-int TcpListener::accept(TcpStream& socket)
+int TcpListener::accept(TcpStream& new_stream, int flags)
 {
-	return 0;
+	SocketAddr tmp_address(0, 0);
+
+	return accept(new_stream, tmp_address, flags);
+}
+
+int TcpListener::accept(TcpStream& new_stream, SocketAddr& new_address,
+                        int flags)
+{
+	SocketHandle new_handle;
+	int res = intl::accept(m_handle, new_handle, new_address, flags);
+
+	if (res == -1)
+		return -errno;
+
+	new_stream.handle(new_handle);
+	return og::net::Success;
 }

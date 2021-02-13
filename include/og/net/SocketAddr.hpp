@@ -28,6 +28,8 @@ struct SocketAddrV4 {
 
 }; // struct SocketAddrV4
 
+/* TODO: rename this SocketAddress (?)
+*/
 struct SocketAddr {
 	SocketAddr(Ipv4 address, Port port);
 	SocketAddr(SocketAddrV4 socket_address);
@@ -43,6 +45,10 @@ struct SocketAddr {
 
 		SocketAddrV4 v4;
 	} addr;
+
+	struct sockaddr* socket_address();
+	struct sockaddr const* socket_address() const;
+	socklen_t socket_address_size() const;
 
 }; // struct SocketAddr
 

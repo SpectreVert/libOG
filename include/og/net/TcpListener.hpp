@@ -22,7 +22,9 @@ public:
 	virtual ~TcpListener();
 
 	virtual int listen(int backlog);
-	virtual int accept(TcpStream& socket);
+	virtual int accept(TcpStream& new_stream, int flags = intl::ACCEPT_FLAG);
+	virtual int accept(TcpStream& new_stream, SocketAddr& new_adress,
+	                   int flags = intl::ACCEPT_FLAG);
 
 }; // class TcpListener
 

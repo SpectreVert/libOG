@@ -16,6 +16,11 @@ TcpStream::TcpStream() :
 {
 }
 
+TcpStream::TcpStream(SocketHandle handle) :
+	Socket(handle)
+{
+}
+
 TcpStream::~TcpStream()
 {
 	close();

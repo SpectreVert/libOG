@@ -25,7 +25,7 @@ public:
 	virtual T handle() const = 0;
 
 protected:
-	virtual int open() = 0;
+	virtual int open(int domain, int type, int protocol) = 0;
 	virtual int close() = 0;
 
 }; // interface ISource

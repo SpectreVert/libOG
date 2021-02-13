@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "og/net/Internal.hpp"
 #include "og/net/Ipv4.hpp"
 #include "og/net/SocketHandle.hpp"
 #include "og/net/SocketAddr.hpp"
@@ -20,20 +21,19 @@ class Socket : public ISource<SocketHandle> {
 public:
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);
+	Socket(SocketHandle handle);
 	virtual ~Socket();
 
 	SocketHandle handle() const { return m_handle; };
+	void handle(SocketHandle handle);
 
 	virtual int bind(const SocketAddr& address);
 
 protected:
-	virtual int open();
+	virtual int open(int domain, int type, int protocol);
 	virtual int close();
 
-	SocketHandle m_handle;
-	int m_domain;
-	int m_type;
-	int m_protocol;
+	SocketHandle m_handle = intl::bad_socket;
 }; // class Socket
 
 } // namespace net

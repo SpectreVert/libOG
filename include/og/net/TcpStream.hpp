@@ -18,6 +18,7 @@ namespace net {
 class TcpStream : public Socket {
 public:
 	TcpStream();
+	TcpStream(SocketHandle handle);
 	virtual ~TcpStream();
 
 	virtual int connect(const SocketAddr& address);

@@ -5,6 +5,7 @@
  *
 */
 
+#include "og/core/Error.hpp"
 #include "og/net/SocketAddr.hpp"
 
 using namespace og::net;
@@ -38,4 +39,25 @@ SocketAddr::AddrSet::AddrSet(Ipv4 address, Port port) :
 SocketAddr::AddrSet::AddrSet(SocketAddrV4 socket_address) :
 	v4(socket_address)
 {
+}
+
+sockaddr* SocketAddr::socket_address()
+{
+	assert(version == SocketAddr::V4);
+	
+	return reinterpret_cast<sockaddr*>(&addr.v4.socket_addr);
+}
+
+sockaddr const* SocketAddr::socket_address() const
+{
+	assert(version == SocketAddr::V4);
+
+	return reinterpret_cast<sockaddr const*>(&addr.v4.socket_addr);
+}
+
+socklen_t SocketAddr::socket_address_size() const
+{
+	assert(version == SocketAddr::V4);
+
+	return sizeof(addr.v4.socket_addr);
 }

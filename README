@@ -5,6 +5,8 @@ to use and monitor event-based, non-blocking TCP/UDP sockets.
 
 disclaimer
 ----------
+The library is currently in active development. Interfaces and
+code are not stable and can change drastically.
 
 strictly conventional and simple
 --------------------------------
@@ -19,17 +21,11 @@ done sparingly and with error codes rather than exceptions.
 non-features
 ------------
 libOG is not:
+ * a general event notification library (libev)
+ * an asynchronous framework (libuv)
+ * a threading library (libpthread)
+ * a $h!tfest of template metaprogramming and dependencies (Boost.Asio)
 
- * a general event notification library
- * an asynchronous framework
- * a task scheduler
-
-requirements
-------------
- * a c++11 compliant compiler
- * tup
-
-compilation
------------
-> tup init
-> tup
+ documentation
+ -------------
+ Will be written for release 1.0

@@ -60,10 +60,6 @@ ssize_t recv_from(SocketHandle handle, core::RawBuffer const& data, SocketAddr& 
 int set_nonblock(SocketHandle handle, bool set);
 int set_cloexec(SocketHandle handle, bool set);
 
-sockaddr* get_sockaddr_ptr(SocketAddr& address);
-sockaddr const* get_sockaddr_ptr(SocketAddr const& address);
-std::size_t get_sockaddr_size(int version);
-
 } // namespace intl
 
 } // namespace io

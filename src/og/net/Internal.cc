@@ -26,7 +26,6 @@ SocketHandle intl::open(int domain, int type, int protocol)
 	else if (errno != EINVAL)
 		return intl::bad_socket;
 #endif
-	
 	int res;
 
 	/* There's no support for the shortcut flags.
@@ -68,16 +67,16 @@ int intl::close(SocketHandle socket)
 
 int intl::bind(SocketHandle socket, SocketAddr const& address)
 {
-	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
-	std::size_t addr_size = get_sockaddr_size(address.version);
+	sockaddr const* addr_ptr = address.socket_address();
+	socklen_t addr_size = address.socket_address_size();
 
 	return ::bind(socket, addr_ptr, addr_size);
 }
 
 int intl::connect(SocketHandle socket, SocketAddr const& address)
 {
-	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
-	std::size_t addr_size = get_sockaddr_size(address.version);
+	sockaddr const* addr_ptr = address.socket_address();
+	socklen_t addr_size = address.socket_address_size();
 	int res;
 
 	do {
@@ -100,6 +99,47 @@ int intl::listen(SocketHandle socket, int backlog)
 	return ::listen(socket, backlog);
 }
 
+// TODO: check naming of SocketHandle argument
+//       
+int intl::accept(SocketHandle socket, SocketHandle &new_socket,
+                 SocketAddr& new_address, int flags)
+{
+	SocketHandle sock;
+
+#if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
+	do
+		sock = accept4(socket, 0x0, 0x0, flags);
+	while (sock == intl::bad_socket && errno == EINTR);
+	if (sock != intl::bad_socket)
+	{
+		new_socket = sock;
+		return 0;
+	}
+	else if (errno != EINVAL && errno != ENOSYS)
+		return -1;
+#endif
+	int res;
+
+	do
+		sock = ::accept(socket, 0x0, 0x0);
+	while (sock == intl::bad_socket && errno == EINTR);
+	if (sock == intl::bad_socket)
+		return intl::bad_socket;
+
+	res = intl::set_cloexec(sock, true);
+	if (res == 0)
+		res = intl::set_nonblock(sock, true);
+	
+	if (res)
+	{
+		close(sock);
+		return -1;
+	}
+
+	new_socket = sock;
+	return 0;
+}
+
 ssize_t intl::send(SocketHandle socket, core::RawBufferConst data)
 {
 	ssize_t res;
@@ -115,8 +155,8 @@ ssize_t intl::send_to(SocketHandle socket, core::RawBufferConst data,
                       SocketAddr const& address)
 {
 	ssize_t res;
-	sockaddr const* addr_ptr = get_sockaddr_ptr(address);
-	socklen_t addr_size = get_sockaddr_size(address.version);
+	sockaddr const* addr_ptr = address.socket_address();
+	socklen_t addr_size = address.socket_address_size();
 
 	do
 		res = ::sendto( \
@@ -142,8 +182,8 @@ ssize_t intl::recv_from(SocketHandle socket, core::RawBuffer const& data,
                         SocketAddr& address)
 {
 	ssize_t res;
-	sockaddr* addr_ptr = get_sockaddr_ptr(address);
-	socklen_t addr_size = get_sockaddr_size(address.version);
+	sockaddr* addr_ptr = address.socket_address();
+	socklen_t addr_size = address.socket_address_size();
 
 	do
 		res = ::recvfrom( \
@@ -186,7 +226,7 @@ int intl::set_cloexec(SocketHandle socket, bool set)
 
 /* NOTE: Ipv6 and SockAddrV6 aren't implemented yet,
  * so these two functions can only return Ipv4 related values.
-*/
+*/ /*
 inline sockaddr* intl::get_sockaddr_ptr(SocketAddr& address)
 {
 	if (address.version == SocketAddr::V4)
@@ -209,4 +249,4 @@ inline std::size_t intl::get_sockaddr_size(int version)
 		return sizeof(sockaddr_in);
 
 	return 0;
-}
+} */

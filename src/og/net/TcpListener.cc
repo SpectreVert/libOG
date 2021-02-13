@@ -15,6 +15,11 @@ TcpListener::TcpListener() :
 {
 }
 
+TcpListener::TcpListener(SocketHandle handle) :
+	Socket(handle)
+{
+}
+
 TcpListener::~TcpListener()
 {
 	close();

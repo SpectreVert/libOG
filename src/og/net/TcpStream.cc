@@ -30,7 +30,10 @@ int TcpStream::connect(const SocketAddr& address)
 {
 	int res = intl::connect(m_handle, address);
 
-	if (res == -1 && errno == EINPROGRESS)
+	if (res != -1)
+		return og::net::Success;
+
+	if (errno == EINPROGRESS)
 		return og::net::InProgress;
 
 	return -errno;

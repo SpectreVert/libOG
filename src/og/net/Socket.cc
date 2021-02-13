@@ -39,10 +39,10 @@ int Socket::bind(const SocketAddr& address)
 {
 	int res = intl::bind(m_handle, address);
 
-	if (res == -1)
-		return -errno;
+	if (res != -1)
+		return og::net::Success;
 
-	return og::net::Success;
+	return -errno;
 }
 
 // https://docs.rs/crate/mio/0.7.5/source/src/sys/unix/net.rs
@@ -52,10 +52,10 @@ int Socket::open(int domain, int type, int protocol)
 		close();
 	
 	m_handle = intl::open(domain, type, protocol);
-	if (m_handle == intl::bad_socket)
-		return -errno;
+	if (m_handle != intl::bad_socket)
+		return og::net::Success;
 
-	return og::net::Success;
+	return -errno;
 }
 
 int Socket::close()

@@ -1,0 +1,35 @@
+libOG - minimalist non-blocking network I/O & events
+====================================================
+libOG is a low-level C++ network library providing just enough boiler-plate
+to use and monitor event-based, non-blocking TCP/UDP sockets.
+
+disclaimer
+----------
+
+strictly conventional and simple
+--------------------------------
+libOG is designed as a weigthless object-oriented layer over the Unix socket
+functions. It can be used for writing simple servers and client or as a base
+for higher-level asynchronous libraries.
+
+As such, are avoided most c++ features that present potential overhead in
+compilation time, code and binary size or readability. Error handling is
+done sparingly and with error codes rather than exceptions.
+
+non-features
+------------
+libOG is not:
+
+ * a general event notification library
+ * an asynchronous framework
+ * a task scheduler
+
+requirements
+------------
+ * a c++11 compliant compiler
+ * tup
+
+compilation
+-----------
+> tup init
+> tup

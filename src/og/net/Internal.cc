@@ -223,30 +223,3 @@ int intl::set_cloexec(SocketHandle socket, bool set)
 
 	return res;
 }
-
-/* NOTE: Ipv6 and SockAddrV6 aren't implemented yet,
- * so these two functions can only return Ipv4 related values.
-*/ /*
-inline sockaddr* intl::get_sockaddr_ptr(SocketAddr& address)
-{
-	if (address.version == SocketAddr::V4)
-		return reinterpret_cast<sockaddr*>(&address.addr.v4.socket_addr);
-
-	return 0x0;
-}
-
-inline sockaddr const* intl::get_sockaddr_ptr(SocketAddr const& address)
-{
-	if (address.version == SocketAddr::V4)
-		return reinterpret_cast<sockaddr const*>(&address.addr.v4.socket_addr);
-
-	return 0x0;
-}
-
-inline std::size_t intl::get_sockaddr_size(int version)
-{
-	if (version == SocketAddr::V4)
-		return sizeof(sockaddr_in);
-
-	return 0;
-} */

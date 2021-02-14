@@ -17,7 +17,7 @@ namespace og {
 
 namespace net {
 
-//! \brief Event implemetation for epoll
+//! \brief Event implementation for epoll
 //!
 struct Event : IEvent {
 

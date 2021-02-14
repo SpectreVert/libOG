@@ -45,6 +45,8 @@ events on a Socket-derived ojects:
 
 compilation
 -----------
+Requirements: a c++11 compliant compiler
+
 The library uses tup (http://gittup.org/tup) as a build system. Even though
 make is immensely more widespread, I feel like tup is more in tune with the
 minimalistic Unix philosophy. You can read the details from the website.

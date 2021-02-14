@@ -12,11 +12,9 @@ using namespace og::net;
 
 SocketAddrV4::SocketAddrV4(Ipv4 address, Port port)
 {
-	/*socket_addr = {
-		.sin_family = PF_INET,
-		.sin_port = htons(port),
-		.sin_addr = { .s_addr = address.address }
-	};*/
+	socket_addr.sin_family      = PF_INET;
+	socket_addr.sin_port        = htons(port);
+	socket_addr.sin_addr.s_addr = address.address;
 }
 
 SocketAddr::SocketAddr(Ipv4 address, Port port) :

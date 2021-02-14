@@ -10,7 +10,7 @@ code are not stable and can change drastically.
 
 strictly conventional and simple
 --------------------------------
-libOG is designed as a weigth less object-oriented layer over the Unix socket
+libOG is designed as a weigthless object-oriented layer over the Unix socket
 functions. It can be used for writing simple servers and client or as a base
 for higher-level asynchronous libraries.
 

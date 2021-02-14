@@ -48,9 +48,12 @@ int TcpListener::accept(TcpStream& new_stream, SocketAddr& new_address,
 	SocketHandle new_handle;
 	int res = intl::accept(m_handle, new_handle, new_address, flags);
 
-	if (res == -1)
-		return -errno;
-
 	new_stream.handle(new_handle);
-	return og::net::Success;
+	if (res != -1)
+		return og::net::Success;
+
+	if (errno == EWOULDBLOCK || errno == EAGAIN)
+		return og::net::WouldBlock;
+
+	return -errno;
 }

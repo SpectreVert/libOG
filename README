@@ -22,10 +22,43 @@ non-features
 ------------
 libOG is not:
  * a general event notification library (libev)
- * an asynchronous framework (libuv)
+ * an asynchronous sockets framework (libuv)
  * a threading library (libpthread)
  * a $h!tfest of template metaprogramming and dependencies (Boost.Asio)
 
- documentation
- -------------
- Will be written for release 1.0
+goals
+-----
+The typical TCP and UDP socket classes will be provided by libOG, as well
+as some template and base classes for extensibility reasons:
+ * Socket      implemented, base class for socket objects
+ * TcpStream   implemented, TCP client socket
+ * TcpListener implemented, TCP listening socket
+ * UdpSocket   not implemented, basic UDP socket
+
+The library also exposes a class usable to monitor writable and readable
+events on a Socket-derived ojects:
+ * Poll        implemented only for epoll based kernels, i.e Linux
+               BSD and Darwin implementations scheduled for 1.0
+ * Event       implemented only for epoll based kernels
+               BSD and Darwin implementations scheduled for 1.0
+ * IPoll       interface to be used for writing OS-specific Poll implementations
+
+compilation
+-----------
+The library uses tup (http://gittup.org/tup) as a build system. Even though
+make is immensely more widespread, I feel like tup is more in tune with the
+minimalistic Unix philosophy. You can read the details from the website.
+
+Tuprules.tup contains build macros that you can tune for your needs.
+
+documentation
+-------------
+There will be extensive documentation generated from the source files and
+comments released on 1.0
+
+As of now, the code is mainly self-explainable so don't refrain from diving
+right in.
+
+license
+-------
+libOG is an open source, libre project licensed under the MIT license. See LICENSE.

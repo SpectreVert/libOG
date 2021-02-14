@@ -39,7 +39,7 @@ int TcpListener::accept(TcpStream& new_stream, int flags)
 {
 	SocketAddr tmp_address(0, 0);
 
-	return accept(new_stream, tmp_address, flags);
+	return this->accept(new_stream, tmp_address, flags);
 }
 
 int TcpListener::accept(TcpStream& new_stream, SocketAddr& new_address,

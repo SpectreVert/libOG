@@ -15,6 +15,9 @@
 
 using namespace og::net;
 
+//! FIXME: change the 'socket' name for the SocketHandle
+//! argument to 'handle'
+
 SocketHandle intl::open(int domain, int type, int protocol)
 {
 	SocketHandle sock;

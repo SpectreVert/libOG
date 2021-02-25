@@ -53,8 +53,8 @@ bool Poll::is_valid() const
 int Poll::poll(Events& events, int timeout)
 {
 	int nb_events;
-	epoll_event events_buffer[IPoll::s_poll_event_capacity];
-	std::size_t reprompt = IPoll::s_poll_max_reprompt;
+	epoll_event events_buffer[S_POLL_EVENT_CAPACITY];
+	std::size_t reprompt = S_POLL_MAX_REPROMPT;
 	std::size_t hint = 1024;
 
 	assert(timeout >= -1);
@@ -71,7 +71,7 @@ int Poll::poll(Events& events, int timeout)
 		*/
 		nb_events = epoll_wait( \
 		m_epoll_fd, events_buffer, \
-		IPoll::s_poll_event_capacity, timeout);
+		S_POLL_EVENT_CAPACITY, timeout);
 
 		if (nb_events == 0)
 		{
@@ -101,7 +101,7 @@ int Poll::poll(Events& events, int timeout)
 		for (int i = 0; i != nb_events; ++i)
 			events.push_back(events_buffer[i]);
 
-		if (nb_events == s_poll_event_capacity)
+		if (nb_events == S_POLL_EVENT_CAPACITY)
 			if (--reprompt != 0)
 				continue;
 		

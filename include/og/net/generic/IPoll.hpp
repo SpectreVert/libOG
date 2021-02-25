@@ -27,6 +27,9 @@ template<typename T, typename E>
 class IPoll {
 public:
 
+	//! FIXME: decide where the declaration of these values
+	//! is best: here or in Poll.hpp headers.
+	//!
 	//! \brief The size of kernel-specific buffer for event
 	//!        polling
 	//!
@@ -36,8 +39,8 @@ public:
 	//!
 	//! The ::poll() method will ask the kernel for more
 	//! events if it thinks there are more available for
-	//! as much as s_poll_max_reprompt times; returing
-	//! a maximum total of s_poll_event_capacity *
+	//! as much as S_POLL_MAX_REPROMPT times; returing
+	//! a maximum total of S_POLL_EVENT_CAPACITY *
 	//! s_poll_max_prompt envents to the user.
 	//!
 	//! While increasing this value might bring down
@@ -47,24 +50,24 @@ public:
 	//!
 	//! The casual user should leave the value as is.
 	//!
-	//! \see s_poll_max_repromt
+	//! \see S_POLL_MAX_REPROMPT
 	//!
-	static constexpr std::size_t s_poll_event_capacity = 1024;
+	static std::size_t constexpr S_POLL_EVENT_CAPACITY = 1024;
 
 	//! \brief The amount of times ::poll() will prompt
 	//!        the kernel for events
 	//!
 	//! If the kernel event polling function returns with
 	//! a full buffer, ::poll() is allowed to poll for
-	//! events up to s_poll_max_reprompt times; returning
-	//! a maximum total of s_poll_event_capacity *
+	//! events up to S_POLL_MAX_REPROMPT times; returning
+	//! a maximum total of S_POLL_EVENT_CAPACITY *
 	//! s_poll_max_prompt events to the user.
 	//!
 	//! The casual user should leave the value as is.
 	//!
-	//! \see s_poll_event_capacity
+	//! \see S_POLL_EVENT_CAPACITY
 	//! 
-	static constexpr std::size_t s_poll_max_reprompt = 24;
+	static std::size_t constexpr S_POLL_MAX_REPROMPT = 24;
 
 	virtual ~IPoll() = default;
 	

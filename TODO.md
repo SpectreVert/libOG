@@ -8,10 +8,10 @@ Make a bash/sh (?) script to generate Tuprules.tup depending on the target OS.
 
 ## Ergonomics
 
-- Write up a Error.hpp file with all error codes of the lib
-- Make namespaces for modules (net, core)
+- Write up a Error.hpp file with all error codes of the lib -- [X]
+- Make namespaces for modules (net, core) -------------------- [X]
 - Rename config.hpp to Config.hpp ---------------------------- [X]
-- Rewrite Config.hpp cause it **sucks**
+- Rewrite Config.hpp cause it **sucks** ---------------------- [X]
 
 # Features
 

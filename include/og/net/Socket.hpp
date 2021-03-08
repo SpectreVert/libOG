@@ -7,25 +7,25 @@
 
 #pragma once
 
+#include "og/net/generic/ISource.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/Ipv4.hpp"
-#include "og/net/SocketHandle.hpp"
 #include "og/net/SocketAddr.hpp"
-#include "og/net/generic/ISource.hpp"
+#include "og/net/SocketFd.hpp"
 
 namespace og {
 
 namespace net {
 
-class Socket : public ISource<SocketHandle> {
+class Socket : public ISource<SocketFd> {
 public:
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);
-	Socket(SocketHandle handle);
+	Socket(SocketFd handle);
 	virtual ~Socket();
 
-	SocketHandle handle() const { return m_handle; };
-	void handle(SocketHandle handle);
+	SocketFd handle() const { return m_socket; };
+	void handle(SocketFd handle);
 
 	virtual int bind(const SocketAddr& address);
 
@@ -33,7 +33,7 @@ protected:
 	virtual int open(int domain, int type, int protocol);
 	virtual int close();
 
-	SocketHandle m_handle = intl::bad_socket;
+	SocketFd m_socket = intl::bad_socket;
 }; // class Socket
 
 } // namespace net

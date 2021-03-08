@@ -14,7 +14,6 @@
 #include <fcntl.h>  // O_CLOEXEC
 #include <unistd.h> // close
 
-#include <cstdlib>  // abort
 #include <iostream>
 
 using namespace og::net;
@@ -23,31 +22,27 @@ Poll::Poll()
 {
 	m_epoll_fd = epoll_create1(O_CLOEXEC);
 
+	if (m_epoll_fd != -1)
+		return;
+	
 	/* epoll_create1() can fail because it's not implemented,
 	 * or because it cannot handle O_CLOEXEC flag.
 	*/
-	if (m_epoll_fd == -1 && (errno == ENOSYS || errno == EINVAL))
+	if (errno == ENOSYS || errno == EINVAL)
 	{
 		/* Argument should be ignored (> 2.6.8) but if it isn't
 		 * this looks like a good compromise.
 		*/
 		m_epoll_fd = epoll_create(12000);
-		
-		if (m_epoll_fd != -1)
-			intl::set_cloexec(m_epoll_fd, true);
 	}
+
+	assert(m_epoll_fd != -1);
+	assert(intl::set_cloexec(m_epoll_fd, true) != -1);
 }
 
 Poll::~Poll()
 {
 	::close(m_epoll_fd);
-}
-
-/* TODO: find a better method doing this. Assert?
-*/
-bool Poll::is_valid() const
-{
-	return m_epoll_fd == -1 ? false : true;
 }
 
 int Poll::poll(Events& events, int timeout)
@@ -114,7 +109,7 @@ int Poll::poll(Events& events, int timeout)
 /* TODO: return -errno rather than the return value from epoll_ctl
  * which is either 0 or -1
 */
-int Poll::add(SocketHandle source, core::Tag id, core::Concern concern)
+int Poll::monitor(SocketFd socket, core::Tag id, core::Concern concern)
 {
 	uint32_t bits = EPOLLET;
 	epoll_event event{};
@@ -127,15 +122,15 @@ int Poll::add(SocketHandle source, core::Tag id, core::Concern concern)
 	event.events = bits;
 	event.data.u32 = id;
 
-	return epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, source, &event);
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, socket, &event);
 }
 
-int Poll::remove(SocketHandle source)
+int Poll::forget(SocketFd socket)
 {
 	/* Un-named distrib checks all field */
 	epoll_event event{}; 
 
-	return epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, source, &event);
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, socket, &event);
 }
 
 #endif // OG_SYSTEM_LINUX

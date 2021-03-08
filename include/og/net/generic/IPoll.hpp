@@ -70,12 +70,10 @@ public:
 	static std::size_t constexpr S_POLL_MAX_REPROMPT = 24;
 
 	virtual ~IPoll() = default;
-	
-	virtual bool is_valid() const = 0;
 
 	virtual int poll(E& events, int timeout) = 0;
-	virtual int add(T source, core::Tag id, core::Concern concern) = 0;
-	virtual int remove(T source) = 0;
+	virtual int monitor(T source, core::Tag id, core::Concern concern) = 0;
+	virtual int forget(T source) = 0;
 	
 }; // interface IPoll
 

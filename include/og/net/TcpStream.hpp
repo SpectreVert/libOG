@@ -15,10 +15,14 @@ namespace og {
 
 namespace net {
 
+
+// FIXME: change this class so that the only constructor
+// is from an existing handle and connect becomes a factory.
+//
 class TcpStream : public Socket {
 public:
 	TcpStream();
-	TcpStream(SocketHandle handle);
+	TcpStream(SocketFd handle);
 	virtual ~TcpStream();
 
 	virtual int connect(const SocketAddr& address);

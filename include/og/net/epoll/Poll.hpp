@@ -17,28 +17,21 @@ namespace og {
 
 namespace net {
 
+// FIXME: rather than asking for SocketFd, this
+// should work for derivates of ISource
+
 //! \brief Poll implementation for epoll
 //!
-class Poll : public IPoll<SocketHandle, Events> {
+class Poll : public IPoll<SocketFd, Events> {
 	int m_epoll_fd;
 
 public:
-	//! \brief Initialize the internal resource for event
-	//!        polling.
-	//!
-	//! \see   is_valid
-	//!
-	Poll(); // need an assert here instead of using is_valid
+	Poll();
     virtual ~Poll();
 
-	//! \brief Indicates if the object has been properly
-	//!        initialized and can be used safely.
-	//!
-	virtual bool is_valid() const;
-
     virtual int poll(Events& events, int timeout);
-    virtual int add(SocketHandle source, core::Tag id, core::Concern concern);
-    virtual int remove(SocketHandle source);
+    virtual int monitor(SocketFd socket, core::Tag id, core::Concern concern);
+    virtual int forget(SocketFd socket);
 }; // class Poll
 
 } // namespace net

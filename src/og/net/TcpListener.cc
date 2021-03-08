@@ -15,8 +15,8 @@ TcpListener::TcpListener() :
 {
 }
 
-TcpListener::TcpListener(SocketHandle handle) :
-	Socket(handle)
+TcpListener::TcpListener(SocketFd socket) :
+	Socket(socket)
 {
 }
 
@@ -27,7 +27,7 @@ TcpListener::~TcpListener()
 
 int TcpListener::listen(int backlog)
 {
-	int res = intl::listen(m_handle, backlog);
+	int res = intl::listen(m_socket, backlog);
 
 	if (res == -1)
 		return -errno;
@@ -45,10 +45,10 @@ int TcpListener::accept(TcpStream& new_stream, int flags)
 int TcpListener::accept(TcpStream& new_stream, SocketAddr& new_address,
                         int flags)
 {
-	SocketHandle new_handle;
-	int res = intl::accept(m_handle, new_handle, new_address, flags);
+	SocketFd new_socket;
+	int res = intl::accept(m_socket, new_socket, new_address, flags);
 
-	new_stream.handle(new_handle);
+	new_stream.handle(new_socket);
 	if (res != -1)
 		return og::net::Success;
 

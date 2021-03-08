@@ -15,12 +15,9 @@
 
 using namespace og::net;
 
-//! FIXME: change the 'socket' name for the SocketHandle
-//! argument to 'handle'
-
-SocketHandle intl::open(int domain, int type, int protocol)
+SocketFd intl::open(int domain, int type, int protocol)
 {
-	SocketHandle sock;
+	SocketFd sock;
 
 #if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
 	sock = socket(domain, type | SOCK_NONBLOCK | SOCK_CLOEXEC, protocol);
@@ -52,12 +49,16 @@ SocketHandle intl::open(int domain, int type, int protocol)
 	return sock;
 }
 
+/* FIXME: change SocketFd function arguments to
+ * RawFD or SocketFD
+*/
+
 /* https://sourceware.org/bugzilla/show_bug.cgi?id=14627
  * https://stackoverflow.com/questions/33114152/what-to-do-if-a-posix-close-call-fails
  *TODO: check all cases for close() - based on man page HP-UX does weird stuff,
  * so can other OS too
 */
-int intl::close(SocketHandle socket)
+int intl::close(SocketFd socket)
 {
 	int res;
 
@@ -68,7 +69,7 @@ int intl::close(SocketHandle socket)
 	return 0;	
 }
 
-int intl::bind(SocketHandle socket, SocketAddr const& address)
+int intl::bind(SocketFd socket, SocketAddr const& address)
 {
 	sockaddr const* addr_ptr = address.socket_address();
 	socklen_t addr_size = address.socket_address_size();
@@ -76,7 +77,7 @@ int intl::bind(SocketHandle socket, SocketAddr const& address)
 	return ::bind(socket, addr_ptr, addr_size);
 }
 
-int intl::connect(SocketHandle socket, SocketAddr const& address)
+int intl::connect(SocketFd socket, SocketAddr const& address)
 {
 	sockaddr const* addr_ptr = address.socket_address();
 	socklen_t addr_size = address.socket_address_size();
@@ -90,7 +91,7 @@ int intl::connect(SocketHandle socket, SocketAddr const& address)
 	return res;
 }
 
-int intl::listen(SocketHandle socket, int backlog)
+int intl::listen(SocketFd socket, int backlog)
 { 
 	/* Backlog serves as a hint so it shouldn't really be a concern,
 	 * but we're checking for negative values anyway. I'd like to
@@ -102,12 +103,12 @@ int intl::listen(SocketHandle socket, int backlog)
 	return ::listen(socket, backlog);
 }
 
-// TODO: check naming of SocketHandle argument
+// TODO: check naming of SocketFd argument
 //       
-int intl::accept(SocketHandle socket, SocketHandle &new_socket,
+int intl::accept(SocketFd socket, SocketFd &new_socket,
                  SocketAddr& new_address, int flags)
 {
-	SocketHandle sock;
+	SocketFd sock;
 
 #if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
 	do
@@ -143,7 +144,7 @@ int intl::accept(SocketHandle socket, SocketHandle &new_socket,
 	return 0;
 }
 
-ssize_t intl::send(SocketHandle socket, core::RawBufferConst data)
+ssize_t intl::send(SocketFd socket, core::RawBufferConst data)
 {
 	ssize_t res;
 
@@ -154,7 +155,7 @@ ssize_t intl::send(SocketHandle socket, core::RawBufferConst data)
 	return res;
 }
 
-ssize_t intl::send_to(SocketHandle socket, core::RawBufferConst data,
+ssize_t intl::send_to(SocketFd socket, core::RawBufferConst data,
                       SocketAddr const& address)
 {
 	ssize_t res;
@@ -170,7 +171,11 @@ ssize_t intl::send_to(SocketHandle socket, core::RawBufferConst data,
 	return res;
 }
 
-ssize_t intl::recv(SocketHandle socket, core::RawBuffer const& data)
+// previously was ssize_t intl::recv(SocketFd socket, core::RawBuffer const& data)
+// and with the const it worked perfectly. It is not intuitive though so I removed
+// it for now; at least until I'm sure it's not undefined behavior.
+
+ssize_t intl::recv(SocketFd socket, core::RawBuffer& data)
 {
 	ssize_t res;
 
@@ -181,7 +186,7 @@ ssize_t intl::recv(SocketHandle socket, core::RawBuffer const& data)
 	return res;	
 }
 
-ssize_t intl::recv_from(SocketHandle socket, core::RawBuffer const& data,
+ssize_t intl::recv_from(SocketFd socket, core::RawBuffer& data,
                         SocketAddr& address)
 {
 	ssize_t res;
@@ -204,7 +209,7 @@ ssize_t intl::recv_from(SocketHandle socket, core::RawBuffer const& data,
  * and FIOCLEX - in the linux man pages? Only found them in
  * BSD ioctl(2)...
 */
-int intl::set_nonblock(SocketHandle socket, bool set)
+int intl::set_nonblock(SocketFd socket, bool set)
 {
 	int res;
 
@@ -216,7 +221,7 @@ int intl::set_nonblock(SocketHandle socket, bool set)
 }
 
 // TODO: ditto
-int intl::set_cloexec(SocketHandle socket, bool set)
+int intl::set_cloexec(SocketFd socket, bool set)
 {
 	int res;
 

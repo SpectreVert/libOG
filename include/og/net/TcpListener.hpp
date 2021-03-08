@@ -19,7 +19,7 @@ namespace net {
 class TcpListener : public Socket {
 public:
 	TcpListener();
-	TcpListener(SocketHandle handle);
+	TcpListener(SocketFd socket);
 	virtual ~TcpListener();
 
 	virtual int listen(int backlog);

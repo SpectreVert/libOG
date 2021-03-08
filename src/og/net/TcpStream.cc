@@ -16,8 +16,8 @@ TcpStream::TcpStream() :
 {
 }
 
-TcpStream::TcpStream(SocketHandle handle) :
-	Socket(handle)
+TcpStream::TcpStream(SocketFd socket) :
+	Socket(socket)
 {
 }
 
@@ -28,7 +28,7 @@ TcpStream::~TcpStream()
 
 int TcpStream::connect(const SocketAddr& address)
 {
-	int res = intl::connect(m_handle, address);
+	int res = intl::connect(m_socket, address);
 
 	if (res != -1)
 		return og::net::Success;
@@ -41,7 +41,7 @@ int TcpStream::connect(const SocketAddr& address)
 
 int TcpStream::send(core::RawBufferConst data)
 {
-	ssize_t res = intl::send(m_handle, data);
+	ssize_t res = intl::send(m_socket, data);
 
 	if (res != -1)
 		return og::net::Success;
@@ -54,7 +54,7 @@ int TcpStream::send(core::RawBufferConst data)
 
 int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
 {
-	ssize_t res = intl::send(m_handle, data);
+	ssize_t res = intl::send(m_socket, data);
 
 	if (res != -1)
 	{
@@ -74,7 +74,7 @@ int TcpStream::recv(core::RawBuffer& data)
 	/* Provided buffer and length should be bigger
 	 * than zero.
 	*/
-	ssize_t res = intl::recv(m_handle, data);
+	ssize_t res = intl::recv(m_socket, data);
 
 	if (res > 0)
 		return og::net::Success;
@@ -90,7 +90,7 @@ int TcpStream::recv(core::RawBuffer& data)
 
 int TcpStream::recv(core::RawBuffer& data, size_t& received)
 {
-	ssize_t res = intl::recv(m_handle, data);
+	ssize_t res = intl::recv(m_socket, data);
 
 	if (res > 0)
 	{

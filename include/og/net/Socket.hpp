@@ -19,13 +19,15 @@ namespace net {
 
 class Socket : public ISource {
 public:
+	using Handle = SocketFd;
+
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);
-	Socket(SocketFd handle);
+	Socket(Handle handle);
 	virtual ~Socket();
 
-	SocketFd handle() const { return m_socket; };
-	void handle(SocketFd handle);
+	Handle handle() const { return m_socket; };
+	void handle(Handle handle);
 
 	virtual int bind(const SocketAddr& address);
 
@@ -33,7 +35,7 @@ protected:
 	virtual int open(int domain, int type, int protocol);
 	virtual int close();
 
-	SocketFd m_socket = intl::bad_socket;
+	Handle m_socket = intl::bad_socket;
 }; // class Socket
 
 } // namespace net

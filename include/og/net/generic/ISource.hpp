@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include "og/core/Concern.hpp"
+#include "og/core/Tag.hpp"
+
 namespace og {
 
 namespace net {
@@ -21,6 +24,12 @@ public:
 	//!
 	template<typename T>
 	T handle() const;
+
+	template<typename P>
+	int monitor(P& poll, core::Tag id, core::Concern concern);
+
+	template<typename P>
+	int forget(P& poll);
 
 protected:
 	virtual int close() = 0;

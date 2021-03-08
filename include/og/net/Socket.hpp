@@ -36,6 +36,7 @@ protected:
 	virtual int close();
 
 	Handle m_socket = intl::bad_socket;
+
 }; // class Socket
 
 } // namespace net

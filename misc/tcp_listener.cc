@@ -27,16 +27,13 @@ int main(int ac, char* av[])
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
 
-	if (!poll.is_valid())
-		return 1;
-
 	if (tcplistener.bind(addr) < 0)
 		goto error;
 
 	if (tcplistener.listen(128) < 0)
 		goto error;
 	
-	poll.add(tcplistener.handle(), SOCKET, og::core::Writable | og::core::Readable);
+	poll.monitor(tcplistener.handle(), SOCKET, og::core::Writable | og::core::Readable);
 
 	for (;;) {
 		poll.poll(events, -1); // not timeout -> wait infinite

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <string_view>
 #include <iostream>
 
 #include "og/net/Poll.hpp"
@@ -24,12 +25,9 @@ int main()
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
 
-	if (!poll.is_valid())
-		return 1;
-
 	tcpstream.connect(addr);
 
-	poll.add(tcpstream.handle(), SOCKET, og::core::Writable | og::core::Readable);
+	poll.monitor(tcpstream.handle(), SOCKET, og::core::Writable | og::core::Readable);
 
 	for (;;)
 	{

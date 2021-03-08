@@ -11,8 +11,6 @@ namespace og {
 
 namespace net {
 
-//! Source contains an Handle which can be polled for
-//! events.
 template<typename T>
 class ISource {
 public:
@@ -25,7 +23,6 @@ public:
 	virtual T handle() const = 0;
 
 protected:
-	virtual int open(int domain, int type, int protocol) = 0;
 	virtual int close() = 0;
 
 }; // interface ISource

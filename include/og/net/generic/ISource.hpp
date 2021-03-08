@@ -11,7 +11,6 @@ namespace og {
 
 namespace net {
 
-template<typename T>
 class ISource {
 public:
 	virtual ~ISource() = default;
@@ -20,7 +19,8 @@ public:
 	//!
 	//! \return The underlying OS descriptor for the I/O source
 	//!
-	virtual T handle() const = 0;
+	template<typename T>
+	T handle() const;
 
 protected:
 	virtual int close() = 0;

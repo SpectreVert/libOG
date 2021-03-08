@@ -17,7 +17,7 @@ namespace og {
 
 namespace net {
 
-class Socket : public ISource<SocketFd> {
+class Socket : public ISource {
 public:
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);

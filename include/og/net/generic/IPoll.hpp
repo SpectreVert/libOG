@@ -14,8 +14,8 @@ namespace og {
 
 namespace net {
 
-//! \brief Poll object which handles registration and
-//!        deregistration of ISource derivates. Events
+//! \brief Interface for an object which handles registration
+//!        and deregistration of ISource derivates. Events
 //!        on the sources can then be polled for.
 //!
 class IPoll {

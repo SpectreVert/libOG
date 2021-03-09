@@ -14,6 +14,9 @@ namespace og {
 
 namespace net {
 
+//! \brief Interface for a I/O source that can be registered
+//!        with a IPoll derivate and be monitored for I/O events.
+//!
 class ISource {
 public:
 	virtual ~ISource() = default;

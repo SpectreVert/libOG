@@ -33,7 +33,9 @@ int main(int ac, char* av[])
 	if (tcplistener.listen(128) < 0)
 		goto error;
 	
-	poll.monitor(tcplistener.handle(), SOCKET, og::core::Writable | og::core::Readable);
+	tcplistener.monitor(poll, SOCKET, og::core::Writable | og::core::Readable);
+	//! Alternate syntax:
+	//! poll.monitor(tcplistener.handle(), SOCKET, og::core::Writable | og::core::Readable);
 
 	for (;;) {
 		poll.poll(events, -1); // not timeout -> wait infinite

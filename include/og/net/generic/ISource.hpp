@@ -22,6 +22,8 @@ public:
 	//!
 	//! \return The underlying OS descriptor for the I/O source
 	//!
+	//! FIXME: rename this raw_fd() or something
+	//!
 	template<typename T>
 	T handle() const;
 

@@ -17,21 +17,19 @@ namespace og {
 
 namespace net {
 
-// FIXME: rather than asking for SocketFd, this
-// should work for derivates of ISource
-
 //! \brief Poll implementation for epoll
 //!
-class Poll : public IPoll<SocketFd, Events> {
+class Poll : public IPoll {
 	int m_epoll_fd;
 
 public:
 	Poll();
     virtual ~Poll();
 
-    virtual int poll(Events& events, int timeout);
-    virtual int monitor(SocketFd socket, core::Tag id, core::Concern concern);
-    virtual int forget(SocketFd socket);
+	int poll(Events& events, int timeout);
+    int monitor(SocketFd socket, core::Tag id, core::Concern concern);
+    int forget(SocketFd socket);
+
 }; // class Poll
 
 } // namespace net

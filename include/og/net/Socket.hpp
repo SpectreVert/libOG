@@ -29,11 +29,23 @@ public:
 	Handle handle() const { return m_socket; };
 	void handle(Handle handle);
 
+	template<typename P>
+	int monitor(P& poll, core::Tag id, core::Concern concern)
+	{
+		return poll.monitor(m_socket, id, concern);
+	}
+
+	template<typename P>
+	int forget(P& poll)
+	{
+		return poll.forget(m_socket);
+	}
+
 	virtual int bind(const SocketAddr& address);
 
 protected:
 	virtual int open(int domain, int type, int protocol);
-	virtual int close();
+	virtual int close() final;
 
 	Handle m_socket = intl::bad_socket;
 

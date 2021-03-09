@@ -14,16 +14,10 @@ namespace og {
 
 namespace net {
 
-//! \brief Class template for a Poll object which
-//!        handles registrations and deregistration, as
-//!        well as polling for events
+//! \brief Poll object which handles registration and
+//!        deregistration of ISource derivates. Events
+//!        on the sources can then be polled for.
 //!
-//! To limit overhead and leave more freedom to the user,
-//! pre-made Poll implementations do not keep track of what
-//! handles are currently monitored: only the kernel keeps
-//! a list.
-//!
-template<typename T, typename E>
 class IPoll {
 public:
 
@@ -71,9 +65,14 @@ public:
 
 	virtual ~IPoll() = default;
 
-	virtual int poll(E& events, int timeout) = 0;
-	virtual int monitor(T source, core::Tag id, core::Concern concern) = 0;
-	virtual int forget(T source) = 0;
+	template<typename E>
+	int poll(E& events, int timeout);
+
+	template<typename T>
+	int monitor(T source, core::Tag id, core::Concern concern);
+	
+	template<typename T>
+	int forget(T source);
 	
 }; // interface IPoll
 

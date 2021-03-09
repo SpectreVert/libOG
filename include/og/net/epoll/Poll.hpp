@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "og/core/RawFd.hpp"
 #include "og/net/Socket.hpp"
 #include "og/net/epoll/Event.hpp"
 #include "og/net/generic/IPoll.hpp"
@@ -20,7 +21,7 @@ namespace net {
 //! \brief Poll implementation for epoll
 //!
 class Poll : public IPoll {
-	int m_epoll_fd;
+	core::RawFd m_epoll_fd;
 
 public:
 	Poll();

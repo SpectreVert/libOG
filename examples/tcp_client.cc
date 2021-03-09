@@ -27,7 +27,7 @@ int main()
 
 	tcpstream.connect(addr);
 
-	poll.monitor(tcpstream.handle(), SOCKET, og::core::Writable | og::core::Readable);
+	poll.monitor(tcpstream, SOCKET, og::core::Writable | og::core::Readable);
 
 	for (;;)
 	{

@@ -32,13 +32,13 @@ public:
 	template<typename P>
 	int monitor(P& poll, core::Tag id, core::Concern concern)
 	{
-		return poll.monitor(m_socket, id, concern);
+		return poll.monitor(*this, id, concern);
 	}
 
 	template<typename P>
 	int forget(P& poll)
 	{
-		return poll.forget(m_socket);
+		return poll.forget(*this);
 	}
 
 	virtual int bind(const SocketAddr& address);

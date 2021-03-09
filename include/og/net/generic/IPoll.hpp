@@ -69,10 +69,10 @@ public:
 	int poll(E& events, int timeout);
 
 	template<typename T>
-	int monitor(T source, core::Tag id, core::Concern concern);
+	int monitor(T& source, core::Tag id, core::Concern concern);
 	
 	template<typename T>
-	int forget(T source);
+	int forget(T& source);
 	
 }; // interface IPoll
 

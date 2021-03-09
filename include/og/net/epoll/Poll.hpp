@@ -24,11 +24,11 @@ class Poll : public IPoll {
 
 public:
 	Poll();
-    virtual ~Poll();
+	virtual ~Poll();
 
 	int poll(Events& events, int timeout);
-    int monitor(SocketFd socket, core::Tag id, core::Concern concern);
-    int forget(SocketFd socket);
+	int monitor(SocketFd socket, core::Tag id, core::Concern concern);
+	int forget(SocketFd socket);
 
 }; // class Poll
 

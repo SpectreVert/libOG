@@ -113,7 +113,6 @@ public:
 			break;
 		}
 	
-		std::cerr << "here";
 		return og::net::Success;
 	}
 	

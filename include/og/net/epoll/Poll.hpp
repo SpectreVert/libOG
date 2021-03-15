@@ -55,6 +55,8 @@ public:
 		::close(m_epoll_fd);
 	}
 
+	// FIXME: write a low to no-overhead interface
+	// for Events. push()
 	int poll(Events& events, int timeout)
 	{
 		int nb_events;

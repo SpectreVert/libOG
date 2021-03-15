@@ -1,47 +1,33 @@
-libOG - minimalist non-blocking network I/O & events
-====================================================
-libOG is a low-level C++ network library providing just enough boiler-plate
-to use and monitor event-based, non-blocking TCP/UDP sockets.
+libOG is a minimalist C++ network library designed in layers ranging 
+from «just enough boiler-plate» to «fully-fledged framework.»
 
 disclaimer
 ----------
 The library is currently in active development. Interfaces and
 code are not stable and can change drastically.
 
-strictly conventional and simple
---------------------------------
-libOG is designed as a weigthless object-oriented layer over the Unix socket
-functions. It can be used for writing simple servers and client or as a base
-for higher-level asynchronous libraries.
+strictly efficient and simple
+-----------------------------
+libOG was first designed as a weigthless object-oriented layer over the Berkley
+sockets API and network event polling (epoll, kqueue). It now aims at providing
+an additional layer for out-of-the-box asynchronous networking.
 
-As such, are avoided most c++ features that present potential overhead in
-compilation time, code and binary size or readability. Error handling is
-done sparingly and with error codes rather than exceptions.
++-----------+--------+-----------+-------------+-----------+
+| Scheduler | Driver | TcpStream | TcpListener | UdpSocket | og::async²
++-----------+--------+-----------+-------------+-----------+
+|        Poll        | TcpStream | TcpListener | UdpSocket | og::net¹
++--------------------+-----------+-------------+-----------+
 
-non-features
-------------
-libOG is not:
- * a general event notification library (libev)
- * an asynchronous sockets framework (libuv)
- * a threading library (libpthread)
- * a $h!tfest of template metaprogramming and dependencies (Boost.Asio)
+1. Bare-bones library wrapping the network system calls, platform specific
+event facility and non-blocking TCP/UDP sockets.
 
-goals
------
-The typical TCP and UDP socket classes will be provided by libOG, as well
-as some template and base classes for extensibility reasons:
- * Socket      implemented, base class for socket objects
- * TcpStream   implemented, TCP client socket
- * TcpListener implemented, TCP listening socket
- * UdpSocket   not implemented, basic UDP socket
+2. Asynchronous interface comprising a reactor-like event driver coupled with a
+task scheduler. TCP/UDP socket bindings use futures as a bridge between the reactor
+and the end-user.
 
-The library also exposes a class usable to monitor writable and readable
-events on a Socket-derived ojects:
- * Poll        implemented only for epoll based kernels, i.e Linux
-               BSD and Darwin implementations scheduled for 1.0
- * Event       implemented only for epoll based kernels
-               BSD and Darwin implementations scheduled for 1.0
- * IPoll       interface to be used for writing OS-specific Poll implementations
+todo
+----
+Add 'goals' and 'non-feature' sections
 
 compilation
 -----------

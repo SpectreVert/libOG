@@ -14,13 +14,12 @@
 #include "og/net/Poll.hpp"
 
 #include <functional>
+#include <future>
 
 namespace og {
 
 namespace async {
 
-//! FIXME
-//!
 //! \brief Driver is the event loop that monitors
 //! network I/O resources. It receives events from
 //! the kernel and forward them to the Scheduler.
@@ -38,7 +37,6 @@ namespace async {
 //! background thread. This ensures that application code
 //! cannot significantly impact the reactor's responsiveness.
 //!
-template<typename T, typename E>
 class IDriver {
 
 	// this should be in Driver
@@ -50,42 +48,40 @@ class IDriver {
 	//! Signaling to the scheduler that an event
 	//! is there and the operation for id can
 	//! be completed
-	virtual int dispatch(core::Tag id, E& events) = 0;
+	//!
+	//! Here we have two (maybe more) solutions:
+	//!
+	//! - a thread-agnostic list of ressources; that
+	//!   is modified by the Driver receives an event.
+	//!   The Scheduler should receive an event when the
+	//!   corresponding resource is awoken.
+	//!
+	//! - the Scheduler receives a call from the Driver,
+	//!   indicating that XXX resource is available.
+	//!
+	//! - the Scheduler receives a hint from a message channel
+	//!   it has been waiting on that a resource is ready
+	//!   for polling.
+	//!
+	template<typename E>
+	int dispatch(core::Tag id, E& events);
 
 public:
 	virtual ~IDriver() = default;
-
-	//! Oneshot monitor
-	//! also registers to the scheduler instance
-	virtual int monitor(T source, core::Tag id, core::Concern concern) = 0;
-
-	//! FIXME: (thought experiment)
-	//!
-	//! Be sure that the templated way for the callback is
-	//! the best (inheritance, wrapper...)
-	//!
-	//! Also, try to look into std::result::Result from Rust
-	//! for similar code in C++
-	//!
-	//! Also, the monitor functions could be the same. look into
-	//! a default argument for Callback.
-
-	//! Oneshot monitor with a subsequent callback that
-	//! must have the () operator overloaded. Also a call
-	//! to the () operator must take an net::SocketHandle
-	//! as argument and return an int.
-	//!
-	template<typename C>
-	int monitor_then(T source, core::Tag id, core::Concern concern, C callback);
 
 	//! Perform a single iteration of the event loop
 	//! calls the Poll.poll() which calls one time
 	//! the kernel polling function ande dispatches
 	//! callbacks if needed
+	//!
 	virtual int step(int timeout) = 0;
 
-	//! FIXME: find a better timeout data type
-	//! and for Poll too
+	template<typename T, typename R, typename ...Args>
+	std::future<R> monitor_for(T& source, core::Tag id, core::Concern concern,
+	                           std::packaged_task<R(Args...)>& callback);
+
+	template<typename T>
+	int forget(T& source);
 
 }; // class IDriver
 

@@ -20,8 +20,10 @@ class TcpListener : public Socket {
 public:
 	TcpListener();
 	TcpListener(SocketFd socket);
-	virtual ~TcpListener();
+	virtual ~TcpListener() = default;
 
+	// TODO: move accept to static functions
+	// that return std::optional<TcpStream>
 	virtual int listen(int backlog);
 	virtual int accept(TcpStream& new_stream, int flags = intl::ACCEPT_FLAG);
 	virtual int accept(TcpStream& new_stream, SocketAddr& new_adress,

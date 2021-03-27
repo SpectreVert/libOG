@@ -23,7 +23,7 @@ class TcpStream : public Socket {
 public:
 	TcpStream();
 	TcpStream(SocketFd handle);
-	virtual ~TcpStream();
+	virtual ~TcpStream() = default;
 
 	virtual int connect(const SocketAddr& address);
 

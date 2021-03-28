@@ -19,15 +19,13 @@ namespace net {
 
 class Socket : public ISource {
 public:
-	using Handle = SocketFd;
-
 	Socket() = delete;
 	Socket(int domain, int type, int protocol = 0);
-	Socket(Handle handle);
+	Socket(SocketFd handle);
 	virtual ~Socket();
 
-	Handle handle() const { return m_socket; };
-	void handle(Handle handle);
+	SocketFd handle() const { return m_socket; };
+	void handle(SocketFd handle);
 
 	template<typename P>
 	int monitor(P& poll, core::Tag id, core::Concern concern)
@@ -47,7 +45,7 @@ protected:
 	virtual int open(int domain, int type, int protocol);
 	virtual int close() final;
 
-	Handle m_socket = intl::bad_socket;
+	SocketFd m_socket = intl::bad_socket;
 
 }; // class Socket
 

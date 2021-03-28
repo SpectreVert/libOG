@@ -21,13 +21,13 @@ int main()
 	og::net::TcpStream tcpstream;
 	og::net::SocketAddr addr(og::net::Ipv4(127, 0, 0, 1), 6970);
 	og::net::Poll poll;
-	og::net::Events events;
+	og::net::Events events = og::net::ev::with_capacity(1024);
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
 
 	tcpstream.connect(addr);
 
-	poll.monitor(tcpstream, SOCKET, og::core::Writable | og::core::Readable);
+	poll.monitor(tcpstream, SOCKET, og::core::e_write | og::core::e_read);
 
 	for (;;)
 	{
@@ -35,13 +35,13 @@ int main()
 
 		for (auto event : events)
 		{
-			if (event.is_write_closed())
+			if (og::net::ev::is_write_closed(event))
 				goto closed;
 
-			if (event.is_read_closed())
+			if (og::net::ev::is_read_closed(event))
 				goto closed;
 
-			if (event.is_readable())
+			if (og::net::ev::is_readable(event))
 			{
 				int res;
 				std::size_t recvd;

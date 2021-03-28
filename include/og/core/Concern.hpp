@@ -13,11 +13,11 @@ namespace og {
 
 namespace core {
 
-typedef std::bitset<4> Concern;
+using Concern = std::bitset<4>;
 
 enum {
-	Writable = 1,
-	Readable = 2
+	e_write = 1,
+	e_read  = 2
 };
 
 } // namespace core

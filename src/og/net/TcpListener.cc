@@ -37,6 +37,9 @@ int TcpListener::accept(TcpStream& new_stream, int flags)
 	return this->accept(new_stream, tmp_address, flags);
 }
 
+/* BUG: a new socket is created in accept, but it is
+ * closed right here before being assigned a new handle.
+*/
 int TcpListener::accept(TcpStream& new_stream, SocketAddr& new_address,
                         int flags)
 {

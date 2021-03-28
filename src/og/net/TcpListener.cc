@@ -20,11 +20,6 @@ TcpListener::TcpListener(SocketFd socket) :
 {
 }
 
-TcpListener::~TcpListener()
-{
-	close();
-}
-
 int TcpListener::listen(int backlog)
 {
 	int res = intl::listen(m_socket, backlog);

@@ -21,11 +21,6 @@ TcpStream::TcpStream(SocketFd socket) :
 {
 }
 
-TcpStream::~TcpStream()
-{
-	close();
-}
-
 int TcpStream::connect(const SocketAddr& address)
 {
 	int res = intl::connect(m_socket, address);

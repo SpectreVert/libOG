@@ -103,8 +103,6 @@ int intl::listen(SocketFd socket, int backlog)
 	return ::listen(socket, backlog);
 }
 
-// TODO: check naming of SocketFd argument
-//       
 int intl::accept(SocketFd socket, SocketFd &new_socket,
                  SocketAddr& new_address, int flags)
 {

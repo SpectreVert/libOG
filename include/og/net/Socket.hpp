@@ -17,6 +17,8 @@ namespace og {
 
 namespace net {
 
+// TODO: add copy, move and other
+// constructors.
 class Socket : public ISource {
 public:
 	Socket() = delete;

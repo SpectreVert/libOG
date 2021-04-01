@@ -21,6 +21,8 @@ struct SocketAddrV4 {
 
 	Ipv4 ip() const { return socket_addr.sin_addr.s_addr; };
 	Port port() const { return socket_addr.sin_port; };
+	Ipv4 ip() const { return ntohl(socket_addr.sin_addr.s_addr); }
+	Port host_port() const { return ntohs(socket_addr.sin_port); }
 	void set_ip(Ipv4 ip);
 	void set_port(Port port);
 

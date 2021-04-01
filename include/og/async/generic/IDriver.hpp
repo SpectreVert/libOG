@@ -37,13 +37,8 @@ namespace async {
 //! background thread. This ensures that application code
 //! cannot significantly impact the reactor's responsiveness.
 //!
+template<class TSource, class TEvents>
 class IDriver {
-
-	// this should be in Driver
-    //	struct Resource {
-    //		T handle;
-    //		E events;
-    //	};
 
 	//! Signaling to the scheduler that an event
 	//! is there and the operation for id can
@@ -63,25 +58,21 @@ class IDriver {
 	//!   it has been waiting on that a resource is ready
 	//!   for polling.
 	//!
-	template<typename E>
-	int dispatch(core::Tag id, E& events);
+	virtual int dispatch(core::Tag id, TEvents& events) = 0;
 
 public:
 	virtual ~IDriver() = default;
 
-	//! Perform a single iteration of the event loop
-	//! calls the Poll.poll() which calls one time
-	//! the kernel polling function ande dispatches
-	//! callbacks if needed
-	//!
+	// return the number of future set?
 	virtual int step(int timeout) = 0;
 
-	template<typename T, typename R, typename ...Args>
-	std::future<R> monitor_for(T& source, core::Tag id, core::Concern concern,
-	                           std::packaged_task<R(Args...)>& callback);
+	// std::future<og::Concern> virtual
+	// monitor(TSource& source, core::Tag id, core::Concern concern) = 0;
 
-	template<typename T>
-	int forget(T& source);
+	std::future<int> virtual
+	monitor_then(TSource&, core::Tag, std::function<int()>&) = 0;
+
+	int forget(TSource& source);
 
 }; // class IDriver
 

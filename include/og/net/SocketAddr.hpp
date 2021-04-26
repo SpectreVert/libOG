@@ -19,9 +19,10 @@ struct SocketAddrV4 {
 	SocketAddrV4() = delete;
 	SocketAddrV4(Ipv4 address, Port port);
 
+	// TODO
 	Ipv4 ip() const { return socket_addr.sin_addr.s_addr; };
 	Port port() const { return socket_addr.sin_port; };
-	Ipv4 ip() const { return ntohl(socket_addr.sin_addr.s_addr); }
+	Ipv4 host_ip() const { return ntohl(socket_addr.sin_addr.s_addr); }
 	Port host_port() const { return ntohs(socket_addr.sin_port); }
 	void set_ip(Ipv4 ip);
 	void set_port(Port port);

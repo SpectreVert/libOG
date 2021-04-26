@@ -1,22 +1,25 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Tag.hpp
+ * 26-04-2021 @ 20:45:56
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _TAG_HPP
+#define _TAG_HPP
 
-#include <cstdint>
+#include <cstddef>
 
 namespace og {
 
 namespace core {
 
-//! \brief Wrapper around an const unsigned int
-//!
-typedef uint32_t const Tag;
+//! "wrapper" around a size mark
+typedef std::size_t Tag;
 
 } // namespace core
 
 } // namespace og
+
+#endif /* _TAG_HPP */

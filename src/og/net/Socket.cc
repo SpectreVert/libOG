@@ -5,7 +5,7 @@
  *
 */
 
-#include "og/core/Error.hpp"
+#include "og/net/Error.hpp"
 #include "og/core/System.hpp"
 #include "og/net/Socket.hpp"
 
@@ -40,7 +40,7 @@ int Socket::bind(const SocketAddr& address)
 	int res = intl::bind(m_socket, address);
 
 	if (res != -1)
-		return og::net::Success;
+		return og::net::Status::e_success;
 
 	return -errno;
 }
@@ -52,7 +52,7 @@ int Socket::open(int domain, int type, int protocol)
 	
 	m_socket = intl::open(domain, type, protocol);
 	if (m_socket != intl::bad_socket)
-		return og::net::Success;
+		return og::net::Status::e_success;
 
 	return -errno;
 }

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "og/core/Error.hpp"
+#include "og/net/Error.hpp"
 #include "og/core/RawFd.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/Socket.hpp"

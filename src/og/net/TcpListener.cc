@@ -4,7 +4,7 @@
  * 05-02-2021 @ 17:10:56
 */
 
-#include "og/core/Error.hpp"
+#include "og/net/Error.hpp"
 #include "og/net/Internal.hpp"
 #include "og/net/TcpListener.hpp"
 
@@ -27,7 +27,7 @@ int TcpListener::listen(int backlog)
 	if (res == -1)
 		return -errno;
 
-	return og::net::Success;
+	return og::net::Status::e_success;
 }
 
 int TcpListener::accept(TcpStream& new_stream, int flags)
@@ -48,10 +48,10 @@ int TcpListener::accept(TcpStream& new_stream, SocketAddr& new_address,
 
 	new_stream.handle(new_socket);
 	if (res != -1)
-		return og::net::Success;
+		return og::net::Status::e_success;
 
 	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return og::net::WouldBlock;
+		return og::net::Status::e_would_block;
 
 	return -errno;
 }

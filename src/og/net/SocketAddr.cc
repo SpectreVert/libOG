@@ -5,7 +5,7 @@
  *
 */
 
-#include "og/core/Error.hpp"
+#include "og/net/Error.hpp"
 #include "og/net/SocketAddr.hpp"
 
 using namespace og::net;

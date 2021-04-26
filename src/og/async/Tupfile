@@ -1,4 +1,0 @@
-include_rules
-
-: foreach *.cc |> !cxx |>
-: *.o |> !ar |> libog_async.a

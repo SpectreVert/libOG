@@ -1,24 +1,23 @@
 /*
  * Created by Costa Bushnaq
  *
- * 08-03-2021 @ 22:17:14
+ * 26-04-2021 @ 20:41:26
  *
  * see LICENSE
 */
 
-#ifndef _RAWFD_HPP_
-#define _RAWFD_HPP_
+#ifndef _RAWFD_HPP
+#define _RAWFD_HPP
 
 namespace og {
 
 namespace core {
 
-//! \brief A wrapper around the unix file descriptor type.
-//!
+//! "wrapper" around the unix file descriptor
 typedef int RawFd;
 
 } // namespace core
 
 } // namespace og
 
-#endif /* _RAWFD_HPP_ */
+#endif /* _RAWFD_HPP */

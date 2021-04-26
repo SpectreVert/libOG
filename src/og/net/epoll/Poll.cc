@@ -59,7 +59,7 @@ int Poll::poll(Events& events, int timeout)
 		{
 			assert(timeout != -1);
 
-			return og::net::Success;
+			return og::net::Status::e_success;
 		}
 
 		if (nb_events == -1)
@@ -86,7 +86,7 @@ int Poll::poll(Events& events, int timeout)
 		break;
 	}
 
-	return og::net::Success;
+	return og::net::Status::e_success;
 }
 
 int Poll::monitor(Socket& source, core::Tag id, core::Concern concern)

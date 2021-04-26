@@ -1,33 +1,49 @@
-libOG is a minimalist C++ network library designed in layers ranging 
-from «just enough boiler-plate» to «fully-fledged framework.»
+libOG is a minimalist C++ network library providing just enough boiler-plate
+to use and monitor event-based, non-blocking TCP/UDP sockets.
 
 disclaimer
 ----------
 The library is currently in active development. Interfaces and
 code are not stable and can change drastically.
 
-strictly efficient and simple
------------------------------
-libOG was first designed as a weigthless object-oriented layer over the Berkley
-sockets API and network event polling (epoll, kqueue). It now aims at providing
-an additional layer for out-of-the-box asynchronous networking.
+strictly conventional and simple
+--------------------------------
+libOG is designed as a weightless object-oriented layer over the Unix socket
+functions. It can be used for writing simple servers and client or as a base
+for higher-level asynchronous code.
 
-+-----------+--------+-----------+-------------+-----------+
-| Scheduler | Driver | TcpStream | TcpListener | UdpSocket | og::async²
-+-----------+--------+-----------+-------------+-----------+
-|        Poll        | TcpStream | TcpListener | UdpSocket | og::net¹
-+--------------------+-----------+-------------+-----------+
+As such, are avoided most c++ features presenting potential overhead in
+compilation time, code size or readability. Errors are communicated through
+return codes and error handling is left to the user.
 
-1. Bare-bones library wrapping the network system calls, platform specific
-event facility and non-blocking TCP/UDP sockets.
+features
+--------
+The typical TCP and UDP classes will be provided by libOG, as well
+as some base classes for extensibility reasons:
+	
+	<> Socket       implemented, base class for socket objects
+	<> TcpStream    implemented, TCP client socket
+	<> TcpListener  implemented, TCP listener socket
+	<> UdpSocket    not implemented, basic UDP socket
 
-2. Asynchronous interface comprising a reactor-like event driver coupled with a
-task scheduler. TCP/UDP socket bindings use futures as a bridge between the reactor
-and the end-user.
++-------------------------------------+
+|              ISource                | interface for monitorable source
++-------------------------------------+
+|               Socket                | base class for sockets
++-----------+-------------+-----------+
+| TcpStream | TcpListener | UdpSocket | specialised classes
++-----------+-------------+-----------+
 
-todo
-----
-Add 'goals' and 'non-feature' sections
+libOG also has classes aimed at monitoring events:
+
+	<> Poll 		implemented (linux), used to monitor event sources
+	<> Event        implemented, used to manipulate/examine events
+
++----------------------------------+
+|                IPoll             | interface for monitor of event sources
++----------------+-----------------+
+|  Poll (epoll)  |  Poll (kqueue)  | specialised implementations
++----------------+-----------------+
 
 compilation
 -----------
@@ -44,8 +60,7 @@ documentation
 There will be extensive documentation generated from the source files and
 comments released on 1.0
 
-As of now, the code is mainly self-explainable so don't refrain from diving
-right in.
+As of now, the code is mainly self-explainable. Feel free to dive in. 
 
 license
 -------

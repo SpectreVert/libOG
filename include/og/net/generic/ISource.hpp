@@ -12,6 +12,10 @@
 
 namespace og {
 
+
+// TODO: maybe move this to og::core
+
+// TODO: XXX: make this be a wrapper/interface around RawFd!!!!
 namespace net {
 
 //! \brief Interface for a I/O source that can be registered

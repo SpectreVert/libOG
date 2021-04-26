@@ -36,7 +36,7 @@ as some base classes for extensibility reasons:
 
 libOG also has classes aimed at monitoring events:
 
-	<> Poll 		implemented (linux), used to monitor event sources
+	<> Poll         implemented (linux), used to monitor event sources
 	<> Event        implemented, used to manipulate/examine events
 
 +----------------------------------+

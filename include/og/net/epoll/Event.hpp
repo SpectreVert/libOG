@@ -21,6 +21,8 @@ namespace net {
 using Event = epoll_event;
 using Events = std::vector<Event>;
 
+// TODO: bruh this looks nastyyyyy
+
 namespace ev {
 
 //! \brief Create and return an Events object with

@@ -1,11 +1,13 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Concern.hpp
+ * 26-04-2021 @ 21:58:10
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _FIXME
+#define _FIXME
 
 #include <bitset>
 
@@ -13,13 +15,15 @@ namespace og {
 
 namespace core {
 
-using Concern = std::bitset<4>;
-
-enum {
-	e_write = 1,
-	e_read  = 2
+enum Concern {
+	e_read = 1,
+	e_write = 2,
+	e_shared = 4
 };
 
 } // namespace core
 
 } // namespace og
+
+#endif /* _FIXME */
+

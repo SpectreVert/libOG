@@ -15,9 +15,9 @@
 
 using namespace og::net;
 
-SocketFd intl::open(int domain, int type, int protocol)
+og::core::RawFd intl::open(int domain, int type, int protocol)
 {
-	SocketFd sock;
+	core::RawFd sock;
 
 #if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
 	sock = socket(domain, type | SOCK_NONBLOCK | SOCK_CLOEXEC, protocol);
@@ -49,7 +49,7 @@ SocketFd intl::open(int domain, int type, int protocol)
 	return sock;
 }
 
-/* FIXME: change SocketFd function arguments to
+/* FIXME: change core::RawFd function arguments to
  * RawFD or SocketFD
 */
 
@@ -58,18 +58,12 @@ SocketFd intl::open(int domain, int type, int protocol)
  *TODO: check all cases for close() - based on man page HP-UX does weird stuff,
  * so can other OS too
 */
-int intl::close(SocketFd socket)
+int intl::close(core::RawFd socket)
 {
-	int res;
-
-	res = ::close(socket);
-	if (res)
-		return -1;
-
-	return 0;	
+	return ::close(socket);
 }
 
-int intl::bind(SocketFd socket, SocketAddr const& address)
+int intl::bind(core::RawFd socket, SocketAddr const& address)
 {
 	sockaddr const* addr_ptr = address.socket_address();
 	socklen_t addr_size = address.socket_address_size();
@@ -77,7 +71,7 @@ int intl::bind(SocketFd socket, SocketAddr const& address)
 	return ::bind(socket, addr_ptr, addr_size);
 }
 
-int intl::connect(SocketFd socket, SocketAddr const& address)
+int intl::connect(core::RawFd socket, SocketAddr const& address)
 {
 	sockaddr const* addr_ptr = address.socket_address();
 	socklen_t addr_size = address.socket_address_size();
@@ -91,7 +85,7 @@ int intl::connect(SocketFd socket, SocketAddr const& address)
 	return res;
 }
 
-int intl::listen(SocketFd socket, int backlog)
+int intl::listen(core::RawFd socket, int backlog)
 { 
 	/* Backlog serves as a hint so it shouldn't really be a concern,
 	 * but we're checking for negative values anyway. I'd like to
@@ -103,10 +97,10 @@ int intl::listen(SocketFd socket, int backlog)
 	return ::listen(socket, backlog);
 }
 
-int intl::accept(SocketFd socket, SocketFd &new_socket,
+int intl::accept(core::RawFd socket, core::RawFd &new_socket,
                  SocketAddr& new_address, int flags)
 {
-	SocketFd sock;
+	core::RawFd sock;
 
 #if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
 	do
@@ -142,7 +136,7 @@ int intl::accept(SocketFd socket, SocketFd &new_socket,
 	return 0;
 }
 
-ssize_t intl::send(SocketFd socket, core::RawBufferConst data)
+ssize_t intl::send(core::RawFd socket, core::RawBufferConst data)
 {
 	ssize_t res;
 
@@ -153,7 +147,7 @@ ssize_t intl::send(SocketFd socket, core::RawBufferConst data)
 	return res;
 }
 
-ssize_t intl::send_to(SocketFd socket, core::RawBufferConst data,
+ssize_t intl::send_to(core::RawFd socket, core::RawBufferConst data,
                       SocketAddr const& address)
 {
 	ssize_t res;
@@ -169,11 +163,11 @@ ssize_t intl::send_to(SocketFd socket, core::RawBufferConst data,
 	return res;
 }
 
-// previously was ssize_t intl::recv(SocketFd socket, core::RawBuffer const& data)
+// previously was ssize_t intl::recv(core::RawFd socket, core::RawBuffer const& data)
 // and with the const it worked perfectly. It is not intuitive though so I removed
 // it for now; at least until I'm sure it's not undefined behavior.
 
-ssize_t intl::recv(SocketFd socket, core::RawBuffer& data)
+ssize_t intl::recv(core::RawFd socket, core::RawBuffer& data)
 {
 	ssize_t res;
 
@@ -184,7 +178,7 @@ ssize_t intl::recv(SocketFd socket, core::RawBuffer& data)
 	return res;	
 }
 
-ssize_t intl::recv_from(SocketFd socket, core::RawBuffer& data,
+ssize_t intl::recv_from(core::RawFd socket, core::RawBuffer& data,
                         SocketAddr& address)
 {
 	ssize_t res;
@@ -207,7 +201,7 @@ ssize_t intl::recv_from(SocketFd socket, core::RawBuffer& data,
  * and FIOCLEX - in the linux man pages? Only found them in
  * BSD ioctl(2)...
 */
-int intl::set_nonblock(SocketFd socket, bool set)
+int intl::set_nonblock(core::RawFd socket, bool set)
 {
 	int res;
 
@@ -219,7 +213,7 @@ int intl::set_nonblock(SocketFd socket, bool set)
 }
 
 // TODO: ditto
-int intl::set_cloexec(SocketFd socket, bool set)
+int intl::set_cloexec(core::RawFd socket, bool set)
 {
 	int res;
 

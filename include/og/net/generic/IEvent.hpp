@@ -15,12 +15,10 @@ namespace og {
 
 namespace net {
 
-template<typename TEventType>
-class IEvent {
-public:
+struct IEvent {
 	virtual ~IEvent() = default;
 
-	virtual int id() const = 0;
+	virtual core::Tag id() const = 0;
 
 	virtual bool is_error() const = 0;
 	virtual bool is_readable() const = 0;

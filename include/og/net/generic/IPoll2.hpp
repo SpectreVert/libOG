@@ -15,22 +15,26 @@
 #include "og/core/Concern.hpp"
 #include "og/core/Tag.hpp"
 
-#include <vector>
+#include <array>
 
 namespace og {
 
 namespace net {
 
-template<typename THandle, typename TEventType>
+//! interface for registering a derivate of ISource
+//!
+template<typename TSource, typename TEvent>
 class IPoll {
 public:
-	using Source = ISource<THandle>;
-	using Event  = IEvent<TEventType>;
-	using Events = std::vector<Event>;
+	static std::size_t constexpr k_events_size{1024};
+
+	using Source = TSource;
+	using Event  = TEvent;
+	using Events = std::array<Event, k_events_size>;
 
 	virtual ~IPoll() = default;
 
-	virtual int poll(Events& events) = 0;
+	virtual int poll(Events& events, int timeout) = 0;
 
 	virtual int monitor(Source&, core::Tag, core::Concern)= 0;
 	virtual int re_monitor(Source&, core::Tag, core::Concern) = 0;

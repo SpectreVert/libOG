@@ -19,10 +19,12 @@ namespace net {
 template<typename THandle>
 class ISource {
 public:
-	virtual ~ISource() noexcept = default;
+	using Handle = THandle;
 
-	virtual void set_handle(THandle) = 0;
-	virtual THandle handle() const = 0;
+	virtual ~ISource() = default;
+
+	virtual Handle handle() const = 0;
+	virtual void set_handle(Handle) = 0;
 	virtual int close() = 0;
 
 }; // class ISource

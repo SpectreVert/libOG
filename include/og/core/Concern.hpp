@@ -16,9 +16,9 @@ namespace og {
 namespace core {
 
 enum Concern {
-	e_read = 1,
-	e_write = 2,
-	e_shared = 4
+	e_read = 1 << 0,
+	e_write = 1 << 1,
+	e_shared = 1 << 2
 };
 
 } // namespace core

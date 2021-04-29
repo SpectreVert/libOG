@@ -48,34 +48,80 @@ int Poll::poll(Events& events, int timeout)
 			m_epoll_fd, events.data(),
 			events.size(), timeout
 		);
+		
+		if (nb == 0)
+		{
+			assert(timeout != -1);
+			return e_success;
+		}
+
+		if (nb == -1)
+		{
+			if (errno != EINTR)
+				return e_failure;
+
+			if (timeout)
+				continue;
+		}
+
+		break;
 	}
 
-	return 0;
+	return e_success;
 }
 
 int Poll::monitor(Source& src, core::Tag tag, core::Concern concern)
 {
-	(void) src;
-	(void) tag;
-	(void) concern;
+	uint32_t bits{0};
+	epoll_event event{0, {0}};
 
-	return 0;
+	/* if the fd we're using needs to be shared, we're
+	 * staying in level-triggered mode so as to dodge
+	 * starvation with multiple incoming events.
+	*/
+	if (concern & core::e_shared)
+		bits = EPOLLEXCLUSIVE;
+	else
+		bits = EPOLLET;
+
+	if (concern & core::e_write)
+		bits |= EPOLLOUT;
+	if (concern & core::e_read)
+		bits |= EPOLLIN;
+
+	event.events = bits;
+	event.data.u64 = tag;
+
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, src.handle(), &event);
 }
 
-// this basically is a monitor but cannot take
-// shared as concern
+//! this function re_registers an fd/concern pair; but
+//! cannot take e_shared as concern.
 int Poll::re_monitor(Source& src, core::Tag tag, core::Concern concern)
 {
-	(void) src;
-	(void) tag;
-	(void) concern;
+	uint32_t bits{EPOLLET};
+	epoll_event event{0, {0}};
 
-	return 0;
+	if (concern & core::e_shared)
+	{
+		errno = EINVAL;
+		return e_failure;
+	}
+
+	if (concern & core::e_write)
+		bits |= EPOLLOUT;
+	if (concern & core::e_read)
+		bits |= EPOLLIN;
+
+	event.events = bits;
+	event.data.u64 = tag;
+
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, src.handle(), &event);
 }
 
 int Poll::forget(Source& src)
 {
-	(void) src;
+	epoll_event event{0, {0}};
 
-	return 0;
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, src.handle(), &event);
 }

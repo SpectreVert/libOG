@@ -1,50 +1,36 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: ISource.hpp
+ * 26-04-2021 @ 23:40:51
  *
+ * see LICENSE
 */
 
-#pragma once
-
-#include "og/core/Concern.hpp"
-#include "og/core/Tag.hpp"
+#ifndef _ISOURCE_HPP
+#define _ISOURCE_HPP
 
 namespace og {
 
-
-// TODO: maybe move this to og::core
-
-// TODO: XXX: make this be a wrapper/interface around RawFd!!!!
 namespace net {
 
-//! \brief Interface for a I/O source that can be registered
-//!        with a IPoll derivate and be monitored for I/O events.
+//! interface for an arbitrary source that can
+//! be registered to an arbitrary poller.
 //!
+template<typename THandle>
 class ISource {
 public:
+	using Handle = THandle;
+
 	virtual ~ISource() = default;
-	
-	//! \brief Return the internal handle of the I/O source
-	//!
-	//! \return The underlying OS descriptor for the I/O source
-	//!
-	//! FIXME: rename this raw_fd() or something
-	//!
-	template<typename T>
-	T handle() const;
 
-	template<typename P>
-	int monitor(P& poll, core::Tag id, core::Concern concern);
-
-	template<typename P>
-	int forget(P& poll);
-
-protected:
+	virtual Handle handle() const = 0;
+	virtual void set_handle(Handle) = 0;
 	virtual int close() = 0;
 
-}; // interface ISource
+}; // class ISource
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _ISOURCE_HPP */

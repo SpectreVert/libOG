@@ -1,48 +1,49 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: IPoll.hpp
+ * 27-04-2021 @ 14:22:37
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _IPOLL_HPP
+#define _IPOLL_HPP
 
-#include "og/core/Tag.hpp"
-#include "og/core/Concern.hpp"
 #include "og/net/generic/ISource.hpp"
+#include "og/net/generic/IEvent.hpp"
+
+#include "og/core/Concern.hpp"
+#include "og/core/Tag.hpp"
+
+#include <array>
 
 namespace og {
 
 namespace net {
 
-//! \brief Interface for an object which handles registration
-//!        and deregistration of ISource derivates. Events
-//!        on the sources can then be polled for.
+//! interface for registering a derivate of ISource
 //!
-template<typename TSource, typename TEvents>
+template<typename TSource, typename TEvent>
 class IPoll {
 public:
+	static std::size_t constexpr k_events_size{1024};
 
-	//! \brief The size of kernel-specific buffer for event
-	//!        polling
-	//!
-	//! While increasing this value might bring down
-	//! the number of system calls performed it also
-	//! implies a bigger buffer and therefore a bigger
-	//! memory footprint.
-	//!
-	//static std::size_t constexpr k_poll_event_capacity = 1024;
+	using Source = TSource;
+	using Event  = TEvent;
+	using Events = std::array<Event, k_events_size>;
 
 	virtual ~IPoll() = default;
 
-	int poll(TEvents& events, int timeout);
+	virtual int poll(Events& events, int timeout) = 0;
 
-	int monitor(TSource& source, core::Tag id, core::Concern concern);
-	
-	int forget(TSource& source);
-	
-}; // interface IPoll
+	virtual int monitor(Source&, core::Tag, core::Concern)= 0;
+	virtual int re_monitor(Source&, core::Tag, core::Concern) = 0;
+	virtual int forget(Source&) = 0;
+
+}; // class IPoll
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _IPOLL_HPP */

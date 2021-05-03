@@ -1,58 +1,53 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Event.cc
- *
+ * 28-04-2021 @ 16:06:00
 */
 
-#include "og/net/Poll.hpp"
+#include "og/net/epoll/Event.hpp"
 
-#if defined(OG_SYSTEM_LINUX)
+#include <iostream>
 
-namespace og {
+using namespace og::net;
 
-namespace net {
-
-Event::Event(epoll_event t_event) :
-
-    event(t_event)
+Event::Event(epoll_event event)
 {
+	std::cerr << event.events << std::endl;
+	std::cerr << event.data.u64 << std::endl;
+	
+
+	data = event.data;
+	events = event.events;
 }
 
-core::Tag Event::id() const
+og::core::Tag Event::id() const
 {
-    return event.data.u32;
-}
-
-bool Event::is_readable() const
-{
-    return (event.events & EPOLLIN) || (event.events & EPOLLPRI) != 0;
-}
-
-bool Event::is_writable() const
-{
-	return event.events & EPOLLOUT;
-}
-
-bool Event::is_read_closed() const
-{
-	return (event.events & EPOLLHUP) != 0 ||
-	((event.events & EPOLLOUT) != 0 && (event.events & EPOLLERR) != 0);
-}
-
-bool Event::is_write_closed() const
-{
-	return (event.events & EPOLLHUP) != 0 ||
-	((event.events & EPOLLOUT) != 0 && (event.events & EPOLLERR) != 0);
+	return data.u64;
 }
 
 bool Event::is_error() const
 {
-	return (event.events & EPOLLERR) != 0;
+	return (events & EPOLLERR) != 0;
 }
 
-} // namespace net
+bool Event::is_readable() const
+{
+	return (events & EPOLLIN) || (events & EPOLLPRI) != 0;
+}
 
-} // namespace og
+bool Event::is_read_closed() const
+{
+	return (events & EPOLLHUP) != 0 ||
+	((events & EPOLLIN) != 0 && (events & EPOLLERR) != 0);
+}
 
-#endif // OG_SYSTEM_LINUX
+bool Event::is_writable() const
+{
+	return events & EPOLLOUT;
+}
+
+bool Event::is_write_closed() const
+{
+	return (events & EPOLLHUP) != 0 ||
+	((events & EPOLLOUT) != 0 && (events & EPOLLERR) != 0);
+}

@@ -1,6 +1,4 @@
-libOG++ - minimalist non-blocking network I/O & events
-====================================================
-libOG++ is a low-level C++ network library providing just enough boiler-plate
+libOG is a minimalist C++ network library providing just enough boiler-plate
 to use and monitor event-based, non-blocking TCP/UDP sockets.
 
 disclaimer
@@ -10,38 +8,50 @@ code are not stable and can change drastically.
 
 strictly conventional and simple
 --------------------------------
-libOG++ is designed as a weigthless object-oriented layer over the Unix socket
+libOG is designed as a weightless object-oriented layer over the Unix socket
 functions. It can be used for writing simple servers and client or as a base
-for higher-level asynchronous libraries.
+for higher-level asynchronous code.
 
-As such, are avoided most c++ features that present potential overhead in
-compilation time, code and binary size or readability. Error handling is
-done sparingly and with error codes rather than exceptions.
+As such, are avoided most c++ features presenting potential overhead in
+compilation time, code size or readability. Errors are communicated through
+return codes and error handling is left to the user.
+
+features
+--------
+The typical TCP and UDP classes will be provided by libOG, as well
+as some base classes for extensibility reasons:
+	
+	<> Socket       implemented, base class for socket objects
+	<> TcpStream    implemented, TCP client socket
+	<> TcpListener  implemented, TCP listener socket
+	<> UdpSocket    not implemented, basic UDP socket
+
++-------------------------------------+
+|              ISource                | interface for monitorable source
++-------------------------------------+
+|               Socket                | base class for sockets
++-----------+-------------+-----------+
+| TcpStream | TcpListener | UdpSocket | specialised classes
++-----------+-------------+-----------+
+
+libOG also has classes aimed at monitoring events:
+
+	<> Poll         implemented (linux), used to monitor event sources
+	<> Event        implemented, used to manipulate/examine events
+
++----------------------------------+
+|                IPoll             | interface for monitor of event sources
++----------------+-----------------+
+|  Poll (epoll)  |  Poll (kqueue)  | specialised implementations
++----------------+-----------------+
 
 non-features
 ------------
-libOG++ is not:
+libOG is not:
  * a general event notification library (libev)
  * an asynchronous sockets framework (libuv)
  * a threading library (libpthread)
  * a $h!tfest of template metaprogramming and dependencies (Boost.Asio)
-
-goals
------
-The typical TCP and UDP socket classes will be provided by libOG, as well
-as some template and base classes for extensibility reasons:
- * Socket      implemented, base class for socket objects
- * TcpStream   implemented, TCP client socket
- * TcpListener implemented, TCP listening socket
- * UdpSocket   not implemented, basic UDP socket
-
-The library also exposes a class usable to monitor writable and readable
-events on a Socket-derived ojects:
- * Poll        implemented only for epoll based kernels, i.e Linux
-               BSD and Darwin implementations scheduled for 1.0
- * Event       implemented only for epoll based kernels
-               BSD and Darwin implementations scheduled for 1.0
- * IPoll       interface to be used for writing OS-specific Poll implementations
 
 compilation
 -----------
@@ -58,8 +68,7 @@ documentation
 There will be extensive documentation generated from the source files and
 comments released on 1.0
 
-As of now, the code is mainly self-explainable so don't refrain from diving
-right in.
+As of now, the code is mainly self-explainable. Feel free to dive in. 
 
 license
 -------

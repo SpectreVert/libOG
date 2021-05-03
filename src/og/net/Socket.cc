@@ -1,64 +1,57 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Socket.cc
- *
+ * 28-04-2021 @ 22:10:15
 */
 
-#include "og/core/Error.hpp"
-#include "og/core/System.hpp"
+#include "og/net/Error.hpp"
 #include "og/net/Socket.hpp"
 
 using namespace og::net;
 
-Socket::Socket(int domain, int type, int protocol)
-	: m_handle(intl::bad_socket)
+Socket::Socket(int dom, int type, int prot)
 {
-	open(domain, type, protocol);
+	(void) make_handle(dom, type, prot);
 }
 
-Socket::Socket(SocketHandle handle)
+Socket::Socket(Handle handle)
+	: m_handle(handle)
+{	
+}
+
+Socket::Handle Socket::handle() const
+{
+	return m_handle;
+}
+
+void Socket::set_handle(Handle handle)
 {
 	m_handle = handle;
 }
 
-Socket::~Socket()
+int Socket::make_handle(int dom, int type, int prot)
 {
-	close();
-}
-
-void Socket::handle(SocketHandle handle)
-{
-	if (m_handle != intl::bad_socket)
-		close();
-
-	m_handle = handle;
-}
-
-int Socket::bind(const SocketAddr& address)
-{
-	int res = intl::bind(m_handle, address);
-
-	if (res != -1)
-		return og::net::Success;
-
-	return -errno;
-}
-
-// https://docs.rs/crate/mio/0.7.5/source/src/sys/unix/net.rs
-int Socket::open(int domain, int type, int protocol)
-{
-	if (m_handle != intl::bad_socket)
-		close();
+	m_handle = intl::open(dom, type, prot);
 	
-	m_handle = intl::open(domain, type, protocol);
-	if (m_handle != intl::bad_socket)
-		return og::net::Success;
+	if (m_handle != k_bad_socket)
+		return e_success;
 
-	return -errno;
+	return e_failure;
 }
 
+/* not calling close twice is left
+ * to the discretion of the user. */
 int Socket::close()
 {
-	return intl::close(m_handle);
+	if (intl::close(m_handle) == -1)
+		return e_failure;
+
+	m_handle = k_bad_socket;
+
+	return e_success;
+}
+
+int Socket::bind(SocketAddr const& addr)
+{
+	return intl::bind(m_handle, addr);
 }

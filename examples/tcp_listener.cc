@@ -23,12 +23,9 @@ int main(int ac, char* av[])
 	og::net::TcpListener tcplistener;
 	og::net::SocketAddr addr(og::net::Ipv4(127, 0, 0, 1), 6970);
 	og::net::Poll poll;
-	og::net::Events events;
+	og::net::Events events = og::net::ev::with_capacity(1024);
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
-
-	if (!poll.is_valid())
-		return 1;
 
 	if (tcplistener.bind(addr) < 0)
 		goto error;
@@ -36,15 +33,19 @@ int main(int ac, char* av[])
 	if (tcplistener.listen(128) < 0)
 		goto error;
 	
-	poll.add(tcplistener.handle(), SOCKET, og::core::Writable | og::core::Readable);
+	//tcplistener.monitor(poll, SOCKET, og::core::Writable | og::core::Readable);
+	//! Alternate syntax:
+	if (poll.monitor(tcplistener, SOCKET, og::core::e_write | og::core::e_read) == -1)
+		goto error;
 
 	for (;;) {
 		poll.poll(events, -1); // not timeout -> wait infinite
 		og::net::TcpStream new_stream;
 
-		for (auto event : events)
+		std::cerr << "just got " << events.size() << " events\n";
+		auto event = events[0];
 		{
-			if (event.is_readable())
+			if (og::net::ev::is_readable(event))
 			{
 				int res = tcplistener.accept(new_stream);
 
@@ -53,7 +54,6 @@ int main(int ac, char* av[])
 
 				std::cerr << "Accepted socket" << std::endl;
 			}
-			std::cerr << "there";
 		}
 	}
 

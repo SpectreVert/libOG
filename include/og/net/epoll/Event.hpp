@@ -1,15 +1,15 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Event.hpp
+ * 28-04-2021 @ 14:38:49
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _EVENT_HPP
+#define _EVENT_HPP
 
 #include "og/net/generic/IEvent.hpp"
-
-#include <vector>
 
 #include <sys/epoll.h>
 
@@ -17,29 +17,23 @@ namespace og {
 
 namespace net {
 
-//! \brief Event implementation for epoll
-//!
-struct Event : IEvent {
+struct Event : public epoll_event, public IEvent {
+	virtual ~Event() = default;
+	Event() = default;
+	explicit Event(epoll_event);
 
-    Event(epoll_event t_event);
-    virtual ~Event() = default;
+	core::Tag id() const;
 
-	virtual core::Tag id() const;
+	bool is_error() const;
+	bool is_readable() const;
+	bool is_read_closed() const;
+	bool is_writable() const;
+	bool is_write_closed() const;
 
-	virtual bool is_readable() const;
-	virtual bool is_writable() const;
-	virtual bool is_read_closed() const;
-	virtual bool is_write_closed() const;
-	virtual bool is_error() const;
-
-    epoll_event event;
-
-}; // struct Event
-
-//! \brief Events implementation for epoll
-//!
-typedef std::vector<Event> Events;
+}; // class Event
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _EVENT_HPP */

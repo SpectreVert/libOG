@@ -1,67 +1,47 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Internal.hpp
+ * 28-04-2021 @ 23:40:27
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _INTERNAL_HPP
+#define _INTERNAL_HPP
 
 #include "og/core/RawBuffer.hpp"
-#include "og/core/System.hpp"
-#include "og/net/Ipv4.hpp"
+#include "og/core/RawFd.hpp"
 #include "og/net/SocketAddr.hpp"
-#include "og/net/SocketHandle.hpp"
-
-#include <arpa/inet.h> // sockaddr, socklen_t
 
 namespace og {
 
 namespace net {
 
+core::RawFd constexpr k_bad_socket = -1;
+
 namespace intl {
 
-SocketHandle constexpr bad_socket = -1;
+int constexpr k_message_flag = MSG_NOSIGNAL;
 
-/* Supported OSes are
- * linux, android, dragonfly, freebsd, openbsd, netbsd
-*/
-#if defined(OG_SYSTEM_LINUX)   \
- || defined(OG_SYSTEM_ANDROID) \
- || defined(OG_SYSTEM_FREEBSD)
-static int constexpr MSG_FLAG = MSG_NOSIGNAL;
-#else
-static int constexpr MSG_FLAG = 0;
-#endif
+using Handle = core::RawFd;
 
-#if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
-static int constexpr ACCEPT_FLAG = SOCK_NONBLOCK | SOCK_CLOEXEC;
-#else
-static int constexpr ACCEPT_FLAG = 0;
-#endif
+Handle open(int dom, int type, int prot);
+int close(Handle);
+int bind(Handle, SocketAddr const&);
+int connect(Handle, SocketAddr const&);
 
-/* The following functions return a negative integer in case of error.
- * Otherwise, they return either zero or a positive integer.
-*/
+ssize_t send(Handle, core::RawBufferConst data);
+ssize_t send_to(Handle, core::RawBufferConst, SocketAddr const&);
+ssize_t recv(Handle, core::RawBuffer&);
+ssize_t recv_from(Handle, core::RawBuffer&, SocketAddr&);
 
-SocketHandle open(int domain, int type, int protocol);
-int close(SocketHandle handle);
-int bind(SocketHandle handle, SocketAddr const& address);
-int connect(SocketHandle handle, SocketAddr const& address);
-int listen(SocketHandle handle, int backlog);
-int accept(SocketHandle handle, SocketHandle& new_handle, \
-           SocketAddr& new_address, int flags);
-
-ssize_t send(SocketHandle handle, core::RawBufferConst data);
-ssize_t send_to(SocketHandle handle, core::RawBufferConst data, SocketAddr const& addr);
-ssize_t recv(SocketHandle handle, core::RawBuffer const& data);
-ssize_t recv_from(SocketHandle handle, core::RawBuffer const& data, SocketAddr& addr);
-
-int set_nonblock(SocketHandle handle, bool set);
-int set_cloexec(SocketHandle handle, bool set);
+int set_nonblock(Handle, bool);
+int set_cloexec(Handle, bool);
 
 } // namespace intl
 
-} // namespace io
+} // namespace net
 
 } // namespace og
+
+#endif /* _INTERNAL_HPP */

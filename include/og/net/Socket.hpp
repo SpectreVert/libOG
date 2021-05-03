@@ -1,41 +1,45 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Socket.hpp
+ * 27-04-2021 @ 02:30:20
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _SOCKET_HPP
+#define _SOCKET_HPP
 
-#include "og/net/Internal.hpp"
-#include "og/net/Ipv4.hpp"
-#include "og/net/SocketHandle.hpp"
-#include "og/net/SocketAddr.hpp"
+#include "og/core/RawFd.hpp"
 #include "og/net/generic/ISource.hpp"
+#include "og/net/Internal.hpp"
 
 namespace og {
 
 namespace net {
 
-class Socket : public ISource<SocketHandle> {
+class Socket : public ISource<core::RawFd> {
 public:
-	Socket() = delete;
-	Socket(int domain, int type, int protocol = 0);
-	Socket(SocketHandle handle);
-	virtual ~Socket();
+	using Handle = ISource::Handle;
 
-	SocketHandle handle() const { return m_handle; };
-	void handle(SocketHandle handle);
+	virtual ~Socket() = default;
+	Socket() = default;
+	Socket(int dom, int type, int prot);
+	Socket(Handle);
 
-	virtual int bind(const SocketAddr& address);
-
-protected:
-	virtual int open(int domain, int type, int protocol);
+	virtual Handle handle() const;
+	virtual void set_handle(Handle);
+	virtual int make_handle(int dom, int type, int prot);
 	virtual int close();
 
-	SocketHandle m_handle = intl::bad_socket;
+	virtual int bind(SocketAddr const& addr);
+
+protected:
+	Handle m_handle = k_bad_socket;
+
 }; // class Socket
 
-} // namespace net
+} // namespace core
 
 } // namespace og
+
+#endif /* _SOCKET_HPP */

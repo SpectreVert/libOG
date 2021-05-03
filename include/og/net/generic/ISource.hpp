@@ -1,35 +1,36 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: ISource.hpp
+ * 26-04-2021 @ 23:40:51
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _ISOURCE_HPP
+#define _ISOURCE_HPP
 
 namespace og {
 
 namespace net {
 
-//! Source contains an Handle which can be polled for
-//! events.
-template<typename T>
+//! interface for an arbitrary source that can
+//! be registered to an arbitrary poller.
+//!
+template<typename THandle>
 class ISource {
 public:
-	virtual ~ISource() = default;
-	
-	//! \brief Return the internal handle of the I/O source
-	//!
-	//! \return The underlying OS descriptor for the I/O source
-	//!
-	virtual T handle() const = 0;
+	using Handle = THandle;
 
-protected:
-	virtual int open(int domain, int type, int protocol) = 0;
+	virtual ~ISource() = default;
+
+	virtual Handle handle() const = 0;
+	virtual void set_handle(Handle) = 0;
 	virtual int close() = 0;
 
-}; // interface ISource
+}; // class ISource
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _ISOURCE_HPP */

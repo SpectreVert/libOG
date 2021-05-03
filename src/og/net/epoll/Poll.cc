@@ -1,141 +1,129 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Poll.cc
- *
+ * 27-04-2021 @ 15:47:57
 */
 
-#include "og/core/Error.hpp"
+#include "og/net/epoll/Poll.hpp"
+#include "og/net/Error.hpp"
 #include "og/net/Internal.hpp"
-#include "og/net/Poll.hpp"
 
-#if defined(OG_SYSTEM_LINUX)
-
-#include <fcntl.h>  // O_CLOEXEC
-#include <unistd.h> // close
-
-#include <cstdlib>  // abort
-#include <iostream>
+#include <cstring>
+#include <fcntl.h> // O_CLOEXEC
 
 using namespace og::net;
 
-Poll::Poll()
-{
-	m_epoll_fd = epoll_create1(O_CLOEXEC);
-
-	/* epoll_create1() can fail because it's not implemented,
-	 * or because it cannot handle O_CLOEXEC flag.
-	*/
-	if (m_epoll_fd == -1 && (errno == ENOSYS || errno == EINVAL))
-	{
-		/* Argument should be ignored (> 2.6.8) but if it isn't
-		 * this looks like a good compromise.
-		*/
-		m_epoll_fd = epoll_create(12000);
-		
-		if (m_epoll_fd != -1)
-			intl::set_cloexec(m_epoll_fd, true);
-	}
-}
-
 Poll::~Poll()
 {
-	::close(m_epoll_fd);
+	intl::close(m_epoll_fd);
 }
 
-/* TODO: find a better method doing this. Assert?
-*/
-bool Poll::is_valid() const
+Poll::Poll()
 {
-	return m_epoll_fd == -1 ? false : true;
+	m_epoll_fd = epoll_create(O_CLOEXEC);
+
+	if (m_epoll_fd != -1)
+		return;
+
+	/* epoll_create1 can fail because it's not implemented,
+	 * or because it cannot handle O_CLOEXEC flag */
+	if (errno == ENOSYS || errno == EINVAL)
+	{
+		/* see kernel 2.6.8 patch notes */
+		m_epoll_fd = epoll_create(1024);
+	}
+
+	assert(m_epoll_fd != -1);
+	assert(intl::set_cloexec(m_epoll_fd, true) != -1);
 }
 
 int Poll::poll(Events& events, int timeout)
 {
-	int nb_events;
-	epoll_event events_buffer[IPoll::s_poll_event_capacity];
-	std::size_t reprompt = IPoll::s_poll_max_reprompt;
-	std::size_t hint = 1024;
-
+	int nb;
+	
 	assert(timeout >= -1);
-
-	events.clear();
-
-	if (events.capacity() < hint)
-		events.reserve(hint);
+	std::memset((void*) events.data(), 0, events.size() * sizeof(og::net::Event));
 
 	for (;;)
 	{
-		/* TODO: when we can use timers in there, make use of
-		 * signals & epoll_pwait()
-		*/
-		nb_events = epoll_wait( \
-		m_epoll_fd, events_buffer, \
-		IPoll::s_poll_event_capacity, timeout);
-
-		if (nb_events == 0)
+		nb = epoll_wait(
+			m_epoll_fd, events.data(),
+			events.size(), timeout
+		);
+		
+		if (nb == 0)
 		{
 			assert(timeout != -1);
-
-			return og::net::Success;
+			return e_success;
 		}
 
-		if (nb_events == -1)
+		if (nb == -1)
 		{
-			/* If errno is something else than EINTR,
-			 * something is most likely wrong.
-			*/
 			if (errno != EINTR)
-				return -errno;
+				return e_failure;
 
-			/* Otherwise, we've just been interrupted by a signal.
-			 * Either redo a loop -- not taking into account time
-			 * lost in the first poll, for now -- or return.
-			*/
-			if (timeout != 0)
+			if (timeout)
 				continue;
-
-			break;
 		}
 
-		for (int i = 0; i != nb_events; ++i)
-			events.push_back(events_buffer[i]);
-
-		if (nb_events == s_poll_event_capacity)
-			if (--reprompt != 0)
-				continue;
-		
 		break;
 	}
 
-	return og::net::Success;
+	return e_success;
 }
 
-/* TODO: return -errno rather than the return value from epoll_ctl
- * which is either 0 or -1
-*/
-int Poll::add(SocketHandle source, core::Tag id, core::Concern concern)
+int Poll::monitor(Source& src, core::Tag tag, core::Concern concern)
 {
-	uint32_t bits = EPOLLET;
-	epoll_event event{};
+	uint32_t bits{0};
+	epoll_event event{0, {0}};
 
-	if (concern[og::core::Writable - 1])
+	/* if the fd we're using needs to be shared, we're
+	 * staying in level-triggered mode so as to dodge
+	 * starvation with multiple incoming events.
+	*/
+	if (concern & core::e_shared)
+		bits = EPOLLEXCLUSIVE;
+	else
+		bits = EPOLLET;
+
+	if (concern & core::e_write)
 		bits |= EPOLLOUT;
-	if (concern[og::core::Readable - 1])
-		bits = bits | EPOLLRDHUP | EPOLLIN;
+	if (concern & core::e_read)
+		bits |= EPOLLIN;
 
 	event.events = bits;
-	event.data.u32 = id;
+	event.data.u64 = tag;
 
-	return epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, source, &event);
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, src.handle(), &event);
 }
 
-int Poll::remove(SocketHandle source)
+//! this function re_registers an fd/concern pair; but
+//! cannot take e_shared as concern.
+int Poll::re_monitor(Source& src, core::Tag tag, core::Concern concern)
 {
-	/* Un-named distrib checks all field */
-	epoll_event event{}; 
+	uint32_t bits{EPOLLET};
+	epoll_event event{0, {0}};
 
-	return epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, source, &event);
+	if (concern & core::e_shared)
+	{
+		errno = EINVAL;
+		return e_failure;
+	}
+
+	if (concern & core::e_write)
+		bits |= EPOLLOUT;
+	if (concern & core::e_read)
+		bits |= EPOLLIN;
+
+	event.events = bits;
+	event.data.u64 = tag;
+
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, src.handle(), &event);
 }
 
-#endif // OG_SYSTEM_LINUX
+int Poll::forget(Source& src)
+{
+	epoll_event event{0, {0}};
+
+	return epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, src.handle(), &event);
+}

@@ -1,42 +1,49 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: TcpStream.cxx
- *
+ * 02-05-2021 @ 01:04:20
 */
 
-#include "og/core/Error.hpp"
-#include "og/net/Internal.hpp"
+#include "og/net/Error.hpp"
 #include "og/net/TcpStream.hpp"
 
 using namespace og::net;
 
-TcpStream::TcpStream() :
-	Socket(AF_INET, SOCK_STREAM)
+TcpStream::TcpStream()
+	: Socket(AF_INET, SOCK_STREAM, 0)
 {
 }
 
-TcpStream::TcpStream(SocketHandle handle) :
-	Socket(handle)
+TcpStream::TcpStream(Handle handle)
+	: Socket(handle)
 {
 }
 
-TcpStream::~TcpStream()
+std::optional<TcpStream> TcpStream::make_stream(SocketAddr const& address)
 {
-	close();
+	Handle handle;
+
+	handle = intl::open(AF_INET, SOCK_STREAM, 0);
+	if (handle == k_bad_socket)
+		return std::nullopt;
+
+	if (intl::connect(handle, address) == 0 || errno == EINPROGRESS)
+		return handle;
+
+	intl::close(handle);
+
+	return std::nullopt;
 }
 
-int TcpStream::connect(const SocketAddr& address)
+int TcpStream::connect(SocketAddr const& address)
 {
-	int res = intl::connect(m_handle, address);
-
-	if (res != -1)
-		return og::net::Success;
+	if (intl::connect(m_handle, address) == 0)
+		return e_success;
 
 	if (errno == EINPROGRESS)
-		return og::net::InProgress;
+		return e_in_progress;
 
-	return -errno;
+	return e_failure;
 }
 
 int TcpStream::send(core::RawBufferConst data)
@@ -44,12 +51,12 @@ int TcpStream::send(core::RawBufferConst data)
 	ssize_t res = intl::send(m_handle, data);
 
 	if (res != -1)
-		return og::net::Success;
+		return e_success;
 
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return og::net::WouldBlock;
+	if (errno == EAGAIN || errno == EWOULDBLOCK)
+		return e_would_block;
 
-	return -errno;
+	return e_failure;
 }
 
 int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
@@ -59,51 +66,46 @@ int TcpStream::send(core::RawBufferConst data, std::size_t& sent)
 	if (res != -1)
 	{
 		sent = static_cast<std::size_t>(res);
-		return og::net::Success;
+		return e_success;
 	}
-	
-	sent = 0;
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return og::net::WouldBlock;
 
-	return -errno;
+	sent = 0;
+	if (errno == EAGAIN || errno == EWOULDBLOCK)
+		return e_would_block;
+
+	return e_failure;
 }
 
 int TcpStream::recv(core::RawBuffer& data)
 {
-	/* Provided buffer and length should be bigger
-	 * than zero.
-	*/
 	ssize_t res = intl::recv(m_handle, data);
 
 	if (res > 0)
-		return og::net::Success;
-
+		return e_success;
+	
 	if (res == 0)
-		return og::net::Closed;
+		return e_closed;
+	else if (errno == EAGAIN || errno == EWOULDBLOCK)
+		return e_would_block;
 
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return og::net::WouldBlock;
-
-	return -errno;
+	return e_failure;
 }
 
-int TcpStream::recv(core::RawBuffer& data, size_t& received)
+int TcpStream::recv(core::RawBuffer& data, std::size_t& recv)
 {
 	ssize_t res = intl::recv(m_handle, data);
 
 	if (res > 0)
 	{
-		received = static_cast<std::size_t>(res);
-		return og::net::Success;
+		recv = static_cast<std::size_t>(res);
+		return e_success;
 	}
 
-	received = 0;
+	recv = 0;
 	if (res == 0)
-		return og::net::Closed;
+		return e_closed;
+	else if (errno == EAGAIN || errno == EWOULDBLOCK)
+		return e_would_block;
 
-	if (errno == EWOULDBLOCK || errno == EAGAIN)
-		return og::net::WouldBlock;
-
-	return -errno;
+	return e_failure;
 }

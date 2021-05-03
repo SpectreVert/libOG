@@ -1,26 +1,28 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: RawBuffer
+ * 26-04-2021 @ 20:38:49
  *
+ * see LICENSE
 */
 
-#pragma once
-
 #include <utility>
+
+#ifndef _RAWBUFFER_HPP
+#define _RAWBUFFER_HPP
 
 namespace og {
 
 namespace core {
 
-//! \brief A raw buffer paired with a size mark.
-//!
+//! a `read/write` raw buffer paired with a size mark
 typedef std::pair<void*, std::size_t> RawBuffer;
 
-//! \brief A const raw buffer paired with a size mark.
-//!
+//! a `read only` raw buffer paired with a size mark
 typedef std::pair<void const*, std::size_t> RawBufferConst;
 
 } // namespace core
 
 } // namespace og
+
+#endif /* _RAWBUFFER_HPP */

@@ -1,11 +1,13 @@
 /*
- * PROJECT_NAME, 2020
+ * Created by Costa Bushnaq
  *
- * Name:
+ * 27-04-2021 @ 15:22:07
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _IEVENT_HPP
+#define _IEVENT_HPP
 
 #include "og/core/Tag.hpp"
 
@@ -18,14 +20,15 @@ struct IEvent {
 
 	virtual core::Tag id() const = 0;
 
-	virtual bool is_readable() const = 0;
-	virtual bool is_writable() const = 0;
-	virtual bool is_read_closed() const = 0;
-	virtual bool is_write_closed() const = 0;
 	virtual bool is_error() const = 0;
-
-}; // interface IEvent
+	virtual bool is_readable() const = 0;
+	virtual bool is_read_closed() const = 0;
+	virtual bool is_writable() const = 0;
+	virtual bool is_write_closed() const = 0;
+};
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _IEVENT_HPP */

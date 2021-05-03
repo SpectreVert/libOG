@@ -1,15 +1,18 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Poll.hpp
+ * 27-04-2021 @ 15:42:41
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _POLL_HPP
+#define _POLL_HPP
 
-#include "og/net/Socket.hpp"
 #include "og/net/epoll/Event.hpp"
 #include "og/net/generic/IPoll.hpp"
+#include "og/net/generic/ISource.hpp"
+#include "og/net/Socket.hpp"
 
 #include <sys/epoll.h>
 
@@ -17,32 +20,28 @@ namespace og {
 
 namespace net {
 
-//! \brief Poll implementation for epoll
-//!
-class Poll : IPoll<SocketHandle, Events> {
+class Poll : public IPoll<Socket, Event> {
 public:
-	//! \brief Initialize the internal resource for event
-	//!        polling.
-	//!
-	//! \see   is_valid
-	//!
+	using Source = IPoll::Source;
+	using Event  = IPoll::Event;
+	using Events = IPoll::Events;
+
+	virtual ~Poll();
 	Poll();
-    virtual ~Poll();
 
-	//! \brief Indicates if the object has been properly
-	//!        initialized and can be used safely.
-	//!
-	virtual bool is_valid() const;
+	virtual int poll(Events& events, int timeout);
 
-    virtual int poll(Events& events, int timeout);
-    virtual int add(SocketHandle source, core::Tag id, core::Concern concern);
-    virtual int remove(SocketHandle source);
+	virtual int monitor(Source&, core::Tag, short);
+	virtual int re_monitor(Source&, core::Tag, short);
+	virtual int forget(Source&);
 
 private:
-    int m_epoll_fd;
+	core::RawFd m_epoll_fd;
 
 }; // class Poll
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _POLL_HPP */

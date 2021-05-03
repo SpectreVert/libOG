@@ -9,18 +9,23 @@
 
 #include "og/core/RawBuffer.hpp"
 #include "og/net/Socket.hpp"
-#include "og/net/SocketAddr.hpp"
+
+#include <optional>
 
 namespace og {
 
 namespace net {
 
+// FIXME: change this class so that the only constructor
+// is from an existing handle and connect becomes a factory.
+//
 class TcpStream : public Socket {
 public:
+	virtual ~TcpStream() = default;
 	TcpStream();
-	TcpStream(SocketHandle handle);
-	virtual ~TcpStream();
+	TcpStream(Handle handle);
 
+	static std::optional<TcpStream> make_stream(SocketAddr const&);
 	virtual int connect(const SocketAddr& address);
 
 	virtual int send(core::RawBufferConst data);

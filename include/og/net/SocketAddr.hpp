@@ -1,11 +1,13 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: SocketAddr.hpp
+ * 29-04-2021 @ 00:19:47
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _SOCKETADDR_HPP
+#define _SOCKETADDR_HPP
 
 #include "og/net/Ipv4.hpp"
 
@@ -13,41 +15,68 @@ namespace og {
 
 namespace net {
 
-typedef uint16_t Port;
+using Port = uint16_t;
 
+//! Ipv4 socket address
+//!
 struct SocketAddrV4 {
 	SocketAddrV4() = delete;
-	SocketAddrV4(Ipv4 address, Port port);
+	SocketAddrV4(Ipv4 addr, Port port);
 
-	Ipv4 ip() const { return socket_addr.sin_addr.s_addr; };
-	Port port() const { return socket_addr.sin_port; };
-	void set_ip(Ipv4 ip);
-	void set_port(Port port);
+	Ipv4 ip_host_order() const;
+	Ipv4 ip_net_order() const;
+	SocketAddrV4& set_ip(Ipv4); //! <ip> is host order
 
-	sockaddr_in socket_addr;
+	Port port_host_order() const;
+	Port port_net_order() const;
+	SocketAddrV4& set_port(Port); //! <port> is host order
+
+	sockaddr_in socket_address;
 
 }; // struct SocketAddrV4
+/*
+struct SocketAddrV6 {
+	virtual ~SocketAddrV6() = default;
+	SocketAddrV6();
+	SocketAddrV6(Ipv6 addr, Port port);
+	
+	Ipv6 ip() const;
+	Ipv6 net_ip() const;
+	SocketAddrV6& set_ip(Ipv6 ip);
 
-/* TODO: rename this SocketAddress (?)
+	Port port() const;
+	Port net_port() const;
+	SocketAddrV6& set_port(Port port);
+
+}; // struct SocketAddrV6
 */
+
+//! IPv-agnostic socket address
+//!
 struct SocketAddr {
-	SocketAddr(Ipv4 address, Port port);
-	SocketAddr(SocketAddrV4 socket_address);
+	SocketAddr() = delete;
+	SocketAddr(Ipv4, Port);
+	SocketAddr(SocketAddrV4);
 
 	enum {
-		V4,
-		/* V6 // will be activated once SocketAddrV6 is written */
+		e_V4,
+		/* e_V6 */
 	} version;
 
 	union AddrSet {
-		AddrSet(Ipv4 address, Port port);
-		AddrSet(SocketAddrV4 socket_address);
+		AddrSet(Ipv4, Port);
+		AddrSet(SocketAddrV4);
+		/*
+		AddrSet(Ipv6, Port);
+		AddrSet(SocketAddrV6);
+		*/
 
 		SocketAddrV4 v4;
+		// SocketAddrV6 v6;
 	} addr;
 
-	struct sockaddr* socket_address();
-	struct sockaddr const* socket_address() const;
+	sockaddr* socket_address();
+	sockaddr const* socket_address() const;
 	socklen_t socket_address_size() const;
 
 }; // struct SocketAddr
@@ -55,3 +84,5 @@ struct SocketAddr {
 } // namespace net
 
 } // namespace og
+
+#endif /* _SOCKETADDR_HPP */

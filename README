@@ -45,6 +45,14 @@ libOG also has classes aimed at monitoring events:
 |  Poll (epoll)  |  Poll (kqueue)  | specialised implementations
 +----------------+-----------------+
 
+non-features
+------------
+libOG is not:
+ * a general event notification library (libev)
+ * an asynchronous sockets framework (libuv)
+ * a threading library (libpthread)
+ * a $h!tfest of template metaprogramming and dependencies (Boost.Asio)
+
 compilation
 -----------
 Requirements: a c++11 compliant compiler

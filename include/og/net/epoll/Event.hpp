@@ -1,45 +1,39 @@
 /*
  * Created by Costa Bushnaq
  *
- * 27-03-2021 @ 21:04:45
+ * 28-04-2021 @ 14:38:49
  *
+ * see LICENSE
 */
 
-#pragma once
+#ifndef _EVENT_HPP
+#define _EVENT_HPP
 
-#include "og/core/Tag.hpp"
+#include "og/net/generic/IEvent.hpp"
 
-#include <vector>
 #include <sys/epoll.h>
 
 namespace og {
 
 namespace net {
 
-//! \brief Events implementation for epoll
-//!
-using Event = epoll_event;
-using Events = std::vector<Event>;
+struct Event : public epoll_event, public IEvent {
+	virtual ~Event() = default;
+	Event() = default;
+	explicit Event(epoll_event);
 
-// TODO: bruh this looks nastyyyyy
+	core::Tag id() const;
 
-namespace ev {
+	bool is_error() const;
+	bool is_readable() const;
+	bool is_read_closed() const;
+	bool is_writable() const;
+	bool is_write_closed() const;
 
-//! \brief Create and return an Events object with
-//!        at least cap capacity
-//!
-Events with_capacity(std::size_t cap);
-
-core::Tag id(Event event);
-
-bool is_readable(Event event);
-bool is_writable(Event event);
-bool is_read_closed(Event event);
-bool is_write_closed(Event event);
-bool is_error(Event event);
-
-} // namespace ev
+}; // class Event
 
 } // namespace net
 
 } // namespace og
+
+#endif /* _EVENT_HPP */

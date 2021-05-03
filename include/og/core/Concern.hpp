@@ -9,13 +9,13 @@
 #ifndef _FIXME
 #define _FIXME
 
-#include <bitset>
-
 namespace og {
 
 namespace core {
 
-enum Concern {
+typedef short Concern;
+
+enum {
 	e_read = 1 << 0,
 	e_write = 1 << 1,
 	e_shared = 1 << 2

@@ -15,10 +15,10 @@ namespace og {
 
 namespace core {
 
-//! a raw buffer paired with a size mark
+//! a `read/write` raw buffer paired with a size mark
 typedef std::pair<void*, std::size_t> RawBuffer;
 
-//! a const raw buffer paired with a size mark
+//! a `read only` raw buffer paired with a size mark
 typedef std::pair<void const*, std::size_t> RawBufferConst;
 
 } // namespace core

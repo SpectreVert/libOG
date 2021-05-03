@@ -1,225 +1,125 @@
 /*
- * libOG, 2020
+ * Created by Costa Bushnaq
  *
- * Name: Internal.cc
- *
+ * 28-04-2021 @ 23:43:24
 */
 
 #include "og/net/Error.hpp"
 #include "og/net/Internal.hpp"
 
 #include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/types.h>  // for BSD friends
-#include <unistd.h>     // close(2)
+#include <unistd.h> // close
 
 using namespace og::net;
 
-og::core::RawFd intl::open(int domain, int type, int protocol)
+intl::Handle intl::open(int dom, int type, int prot)
 {
-	core::RawFd sock;
-
-#if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
-	sock = socket(domain, type | SOCK_NONBLOCK | SOCK_CLOEXEC, protocol);
-	if (sock != intl::bad_socket)
-		return sock;
-	else if (errno != EINVAL)
-		return intl::bad_socket;
-#endif
-	int res;
-
-	/* There's no support for the shortcut flags.
-	 * -> the socket fd might leak to a forked program
-	 *    before set_cloexec is set.
-	*/
-	sock = socket(domain, type, protocol);
-	if (sock == intl::bad_socket)
-		return intl::bad_socket;
-
-	res = intl::set_cloexec(sock, true);
-	if (res == 0)
-		res = intl::set_nonblock(sock, true);
-	
-	if (res)
-	{
-		close(sock);
-		return intl::bad_socket;
-	}
-
-	return sock;
+	return ::socket(dom, type, prot);
 }
 
-/* FIXME: change core::RawFd function arguments to
- * RawFD or SocketFD
-*/
-
-/* https://sourceware.org/bugzilla/show_bug.cgi?id=14627
- * https://stackoverflow.com/questions/33114152/what-to-do-if-a-posix-close-call-fails
- *TODO: check all cases for close() - based on man page HP-UX does weird stuff,
- * so can other OS too
-*/
-int intl::close(core::RawFd socket)
+int intl::close(intl::Handle handle)
 {
-	return ::close(socket);
+	return ::close(handle);
 }
 
-int intl::bind(core::RawFd socket, SocketAddr const& address)
+int intl::bind(intl::Handle handle, SocketAddr const& addr)
 {
-	sockaddr const* addr_ptr = address.socket_address();
-	socklen_t addr_size = address.socket_address_size();
+	sockaddr const* addr_ptr = addr.socket_address();
+	socklen_t addr_size = addr.socket_address_size();
 
-	return ::bind(socket, addr_ptr, addr_size);
+	return ::bind(handle, addr_ptr, addr_size);
 }
 
-int intl::connect(core::RawFd socket, SocketAddr const& address)
+int intl::connect(intl::Handle handle, SocketAddr const& addr)
 {
-	sockaddr const* addr_ptr = address.socket_address();
-	socklen_t addr_size = address.socket_address_size();
-	int res;
-
-	do {
-		errno = 0;
-		res = ::connect(socket, addr_ptr, addr_size);
-	} while (res == -1 && errno == EINTR);
-
-	return res;
-}
-
-int intl::listen(core::RawFd socket, int backlog)
-{ 
-	/* Backlog serves as a hint so it shouldn't really be a concern,
-	 * but we're checking for negative values anyway. I'd like to
-	 * keep the int type for compatibility reasons.
-	*/
-	if (backlog < 0)
-		backlog = 128;
-
-	return ::listen(socket, backlog);
-}
-
-int intl::accept(core::RawFd socket, core::RawFd &new_socket,
-                 SocketAddr& new_address, int flags)
-{
-	core::RawFd sock;
-
-#if defined(SOCK_NONBLOCK) && defined(SOCK_CLOEXEC)
-	do
-		sock = accept4(socket, 0x0, 0x0, flags);
-	while (sock == intl::bad_socket && errno == EINTR);
-	if (sock != intl::bad_socket)
-	{
-		new_socket = sock;
-		return 0;
-	}
-	else if (errno != EINVAL && errno != ENOSYS)
-		return -1;
-#endif
+	sockaddr const* addr_ptr = addr.socket_address();
+	socklen_t addr_size = addr.socket_address_size();
 	int res;
 
 	do
-		sock = ::accept(socket, 0x0, 0x0);
-	while (sock == intl::bad_socket && errno == EINTR);
-	if (sock == intl::bad_socket)
-		return intl::bad_socket;
-
-	res = intl::set_cloexec(sock, true);
-	if (res == 0)
-		res = intl::set_nonblock(sock, true);
-	
-	if (res)
-	{
-		close(sock);
-		return -1;
-	}
-
-	new_socket = sock;
-	return 0;
-}
-
-ssize_t intl::send(core::RawFd socket, core::RawBufferConst data)
-{
-	ssize_t res;
-
-	do
-		res = ::send(socket, data.first, data.second, intl::MSG_FLAG);
+		res = ::connect(handle, addr_ptr, addr_size);
 	while (res == -1 && errno == EINTR);
 
 	return res;
 }
 
-ssize_t intl::send_to(core::RawFd socket, core::RawBufferConst data,
-                      SocketAddr const& address)
+int intl::set_nonblock(intl::Handle handle, bool on)
+{
+	int res;
+
+	do
+		res = ioctl(handle, FIONBIO, &on);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+int intl::set_cloexec(intl::Handle handle, bool on)
+{
+	int res;
+
+	do
+		res = ioctl(handle, on ? FIOCLEX : FIONCLEX);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+ssize_t intl::send(intl::Handle handle, core::RawBufferConst data)
+{
+	ssize_t res;
+
+	do
+		res = ::send(handle, data.first, data.second, intl::k_message_flag);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+ssize_t 
+intl::send_to(intl::Handle handle, core::RawBufferConst data,
+              SocketAddr const& address)
 {
 	ssize_t res;
 	sockaddr const* addr_ptr = address.socket_address();
 	socklen_t addr_size = address.socket_address_size();
 
 	do
-		res = ::sendto( \
-		socket, data.first, data.second, \
-		intl::MSG_FLAG, addr_ptr, addr_size);
+		res = ::sendto(
+			handle, data.first, data.second,
+		    intl::k_message_flag, addr_ptr, addr_size
+		);
 	while (res == -1 && errno == EINTR);
 
 	return res;
 }
 
-// previously was ssize_t intl::recv(core::RawFd socket, core::RawBuffer const& data)
-// and with the const it worked perfectly. It is not intuitive though so I removed
-// it for now; at least until I'm sure it's not undefined behavior.
-
-ssize_t intl::recv(core::RawFd socket, core::RawBuffer& data)
+ssize_t intl::recv(intl::Handle handle, core::RawBuffer& data)
 {
 	ssize_t res;
 
 	do
-		res = ::recv(socket, data.first, data.second, intl::MSG_FLAG);
+		res = ::recv(handle, data.first, data.second, intl::k_message_flag);
 	while (res == -1 && errno == EINTR);
 
-	return res;	
+	return res;
 }
 
-ssize_t intl::recv_from(core::RawFd socket, core::RawBuffer& data,
+ssize_t intl::recv_from(intl::Handle handle, core::RawBuffer& data,
                         SocketAddr& address)
 {
 	ssize_t res;
 	sockaddr* addr_ptr = address.socket_address();
-	socklen_t addr_size = address.socket_address_size();
+	socklen_t addr_size;
 
 	do
-		res = ::recvfrom( \
-		socket, data.first, data.second, \
-		intl::MSG_FLAG, addr_ptr, &addr_size);
+		res = ::recvfrom(
+			handle, data.first, data.second,
+			intl::k_message_flag, addr_ptr, &addr_size
+		);
 	while (res == -1 && errno == EINTR);
 
-	return res;
-}
-
-/* TODO: using ioctl() for now because it's only a single
- * syscall. Linux source code says it's best to use fcntl()
- * TODO: check where ioctl() is not implemented/complete
- * BTW: who can tell me where to find these values - FIOBIO
- * and FIOCLEX - in the linux man pages? Only found them in
- * BSD ioctl(2)...
-*/
-int intl::set_nonblock(core::RawFd socket, bool set)
-{
-	int res;
-
-	do
-		res = ioctl(socket, FIONBIO, &set);
-	while (res == -1 && errno == EINTR);
-
-	return res;
-}
-
-// TODO: ditto
-int intl::set_cloexec(core::RawFd socket, bool set)
-{
-	int res;
-
-	do
-		res = ioctl(socket, set ? FIOCLEX : FIONCLEX);
-	while (res == -1 && errno == EINTR);
+	assert(addr_size == address.socket_address_size());
 
 	return res;
 }

@@ -10,24 +10,35 @@
 #include <string_view>
 #include <iostream>
 
-#include "og/net/Poll.hpp"
+#include "og/net/epoll/Poll2.hpp"
 #include "og/net/TcpStream.hpp"
-#include "og/core/Error.hpp"
+#include "og/net/Error.hpp"
 
 #define SOCKET 1
 
 int main()
 {
-	og::net::TcpStream tcpstream;
 	og::net::SocketAddr addr(og::net::Ipv4(127, 0, 0, 1), 6970);
 	og::net::Poll poll;
-	og::net::Events events = og::net::ev::with_capacity(1024);
+	og::net::Poll::Events events;
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
 
-	tcpstream.connect(addr);
+	auto res = og::net::TcpStream::make_stream(addr);
 
-	poll.monitor(tcpstream, SOCKET, og::core::e_write | og::core::e_read);
+	if (!res)
+	{
+		std::cerr << "could not connect" << std::endl;
+		return 1;
+	}
+	
+	auto tcpstream = res.value();
+
+	if (poll.monitor(tcpstream, SOCKET, og::core::e_read|og::core::e_write) < 0)
+	{
+		std::cerr << "could not monitor" << std::endl;
+		return 1;
+	}
 
 	for (;;)
 	{
@@ -35,13 +46,17 @@ int main()
 
 		for (auto event : events)
 		{
-			if (og::net::ev::is_write_closed(event))
+			if (event.is_error())
+			{
 				goto closed;
+			}
 
-			if (og::net::ev::is_read_closed(event))
+			if (event.is_read_closed())
+			{
 				goto closed;
+			}
 
-			if (og::net::ev::is_readable(event))
+			if (event.is_readable())
 			{
 				int res;
 				std::size_t recvd;
@@ -50,19 +65,19 @@ int main()
 				{
 					res = tcpstream.recv(data, recvd);
 
-					if (res == og::net::Success)
+					if (res == og::net::e_success)
 					{
 						std::string_view str(reinterpret_cast<char*>(data.first));
 						std::cout << "received message: " << str.substr(0, recvd);
 					}
-					else if (res == og::net::Closed)
+					else if (res == og::net::e_closed)
 					{
 						goto closed;
 					}
 					else if (res < 0)
 					{
-						std::cerr << "error on the socket: " << strerror(errno) << '\n';
-						return 1;
+					std::cerr << "error on socket: " << strerror(errno) << '\n';
+					return 1;
 					}
 				}
 			}

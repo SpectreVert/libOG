@@ -12,10 +12,6 @@ using namespace og::net;
 
 Event::Event(epoll_event event)
 {
-	std::cerr << event.events << std::endl;
-	std::cerr << event.data.u64 << std::endl;
-	
-
 	data = event.data;
 	events = event.events;
 }

@@ -5,7 +5,8 @@
  *
 */
 
-#pragma once
+#ifndef _TCPSTREAM_HPP
+#define _TCPSTREAM_HPP
 
 #include "og/core/RawBuffer.hpp"
 #include "og/net/Socket.hpp"
@@ -38,3 +39,5 @@ public:
 } // namespace net
 
 } // namespace og
+
+#endif /* _TCPSTREAM_HPP */

@@ -2,6 +2,3 @@
 *.a
 *.so
 *.o
-.tup/
-.cache/
-compile_commands.json

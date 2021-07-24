@@ -26,8 +26,8 @@ public:
 	TcpStream();
 	TcpStream(Handle handle);
 
-	static std::optional<TcpStream> make_stream(SocketAddr const&);
-	virtual int connect(const SocketAddr& address);
+	static std::optional<TcpStream> try_connect(SocketAddr const&);
+	virtual int connect(SocketAddr const& address);
 
 	virtual int send(core::RawBufferConst data);
 	virtual int send(core::RawBufferConst data, std::size_t& sent);

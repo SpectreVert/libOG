@@ -21,7 +21,7 @@ class Socket : public ISource<core::RawFd> {
 public:
 	using Handle = ISource::Handle;
 
-	virtual ~Socket() = default;
+	virtual ~Socket();
 	Socket() = default;
 	Socket(int dom, int type, int prot);
 	Socket(Handle);

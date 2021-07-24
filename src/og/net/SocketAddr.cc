@@ -9,11 +9,25 @@
 
 using namespace og::net;
 
+SocketAddrV4::SocketAddrV4()
+{
+	socket_address.sin_family      = PF_INET;
+	socket_address.sin_port        = 0;
+	socket_address.sin_addr.s_addr = 0;
+}
+
 SocketAddrV4::SocketAddrV4(Ipv4 addr, Port port)
 {
 	socket_address.sin_family      = PF_INET;
 	socket_address.sin_port        = htons(port);
 	socket_address.sin_addr.s_addr = addr.net_order();
+}
+
+SocketAddrV4::SocketAddrV4(sockaddr_in net_order_addr)
+{
+	socket_address.sin_family      = PF_INET;
+	socket_address.sin_port        = net_order_addr.sin_port;
+	socket_address.sin_addr.s_addr = net_order_addr.sin_addr.s_addr;
 }
 
 Ipv4 SocketAddrV4::ip_host_order() const
@@ -61,6 +75,12 @@ SocketAddr::SocketAddr(Ipv4 addr, Port port)
 SocketAddr::SocketAddr(SocketAddrV4 sock_addr)
 	: version(e_V4)
 	, addr(sock_addr)
+{
+}
+
+SocketAddr::SocketAddr(sockaddr_in net_order_addr)
+	: version(e_V4)
+	, addr(net_order_addr)
 {
 }
 

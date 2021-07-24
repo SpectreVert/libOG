@@ -12,13 +12,7 @@
 #include "og/net/SocketAddr.hpp"
 #include "og/net/TcpStream.hpp"
 
-/*
 #include <optional>
-#include <tuple>
-
- * This enough to make an 'expected' type?
- *
-*/
 
 namespace og {
 
@@ -26,16 +20,13 @@ namespace net {
 
 class TcpListener : public Socket {
 public:
-	TcpListener();
-	TcpListener(SocketFd socket);
 	virtual ~TcpListener() = default;
+	TcpListener();
+	TcpListener(Handle handle);
 
 	virtual int listen(int backlog);
-	// TODO: move accept to static functions
-	// that return std::optional<TcpStream>
-	virtual int accept(TcpStream& new_stream, int flags = intl::ACCEPT_FLAG);
-	virtual int accept(TcpStream& new_stream, SocketAddr& new_adress,
-	                   int flags = intl::ACCEPT_FLAG);
+	std::optional<TcpStream> try_accept();
+	std::optional<TcpStream> try_accept(SocketAddr&);
 
 }; // class TcpListener
 

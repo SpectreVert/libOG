@@ -9,6 +9,11 @@
 
 using namespace og::net;
 
+Socket::~Socket()
+{
+	(void) close();
+}
+
 Socket::Socket(int dom, int type, int prot)
 {
 	(void) make_handle(dom, type, prot);

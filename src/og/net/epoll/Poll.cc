@@ -46,10 +46,7 @@ int Poll::poll(Events& events, int timeout)
 
 	for (;;)
 	{
-		nb = epoll_wait(
-			m_epoll_fd, events.data(),
-			events.size(), timeout
-		);
+		nb = epoll_wait(m_epoll_fd, events.data(), events.size(), timeout);
 		
 		if (nb == 0)
 		{

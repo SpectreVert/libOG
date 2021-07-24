@@ -20,8 +20,9 @@ using Port = uint16_t;
 //! Ipv4 socket address
 //!
 struct SocketAddrV4 {
-	SocketAddrV4() = delete;
+	SocketAddrV4();
 	SocketAddrV4(Ipv4 addr, Port port);
+	SocketAddrV4(sockaddr_in); //! <sock> is network order
 
 	Ipv4 ip_host_order() const;
 	Ipv4 ip_net_order() const;
@@ -57,6 +58,7 @@ struct SocketAddr {
 	SocketAddr() = delete;
 	SocketAddr(Ipv4, Port);
 	SocketAddr(SocketAddrV4);
+	SocketAddr(sockaddr_in);
 
 	enum {
 		e_V4,

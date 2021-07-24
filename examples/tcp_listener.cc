@@ -14,42 +14,40 @@
 /* TODO: include Error.hpp in headers
  * that use the return codes
 */
-#include "og/core/Error.hpp"
+#include "og/net/Error.hpp"
 
-#define SOCKET 1
+#define L 1
 
 int main(int ac, char* av[])
 {
-	og::net::TcpListener tcplistener;
+	(void) ac;
+
+	og::net::TcpListener listener;
 	og::net::SocketAddr addr(og::net::Ipv4(127, 0, 0, 1), 6970);
 	og::net::Poll poll;
-	og::net::Events events = og::net::ev::with_capacity(1024);
+	og::net::Poll::Events events;
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
 
-	if (tcplistener.bind(addr) < 0)
+	if (listener.bind(addr) < 0)
 		goto error;
 
-	if (tcplistener.listen(128) < 0)
+	if (listener.listen(128) < 0)
 		goto error;
 	
-	//tcplistener.monitor(poll, SOCKET, og::core::Writable | og::core::Readable);
-	//! Alternate syntax:
-	if (poll.monitor(tcplistener, SOCKET, og::core::e_write | og::core::e_read) == -1)
+	if (poll.monitor(listener, L, og::core::e_write | og::core::e_read) == -1)
 		goto error;
 
 	for (;;) {
 		poll.poll(events, -1); // not timeout -> wait infinite
-		og::net::TcpStream new_stream;
 
-		std::cerr << "just got " << events.size() << " events\n";
 		auto event = events[0];
 		{
-			if (og::net::ev::is_readable(event))
+			if (event.is_readable())
 			{
-				int res = tcplistener.accept(new_stream);
+				auto new_str = listener.try_accept();
 
-				if (res < 0)
+				if (!new_str)
 					goto error;
 
 				std::cerr << "Accepted socket" << std::endl;

@@ -19,7 +19,7 @@ TcpStream::TcpStream(Handle handle)
 {
 }
 
-std::optional<TcpStream> TcpStream::make_stream(SocketAddr const& address)
+std::optional<TcpStream> TcpStream::try_connect(SocketAddr const& address)
 {
 	Handle handle;
 

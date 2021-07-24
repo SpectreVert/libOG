@@ -29,8 +29,10 @@ Handle open(int dom, int type, int prot);
 int close(Handle);
 int bind(Handle, SocketAddr const&);
 int connect(Handle, SocketAddr const&);
+int listen(Handle, int);
+intl::Handle accept(Handle, SocketAddr&);
 
-ssize_t send(Handle, core::RawBufferConst data);
+ssize_t send(Handle, core::RawBufferConst);
 ssize_t send_to(Handle, core::RawBufferConst, SocketAddr const&);
 ssize_t recv(Handle, core::RawBuffer&);
 ssize_t recv_from(Handle, core::RawBuffer&, SocketAddr&);

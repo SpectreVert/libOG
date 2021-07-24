@@ -43,6 +43,42 @@ int intl::connect(intl::Handle handle, SocketAddr const& addr)
 	return res;
 }
 
+int intl::listen(intl::Handle handle, int backlog)
+{
+	return ::listen(handle, backlog);
+}
+
+intl::Handle intl::accept(intl::Handle handle, SocketAddr& new_address)
+{
+	intl::Handle new_handle;
+	sockaddr addr;
+	socklen_t len;
+
+	do
+		new_handle = ::accept(handle, &addr, &len);
+	while (new_handle == k_bad_socket && errno == EINTR);
+
+	if (new_handle == k_bad_socket)
+		return new_handle;
+
+	int res = intl::set_cloexec(new_handle, true);
+	if (res == 0)
+		res = intl::set_nonblock(new_handle, true);
+
+	if (res)
+	{
+		// could not set the socket parameters -- get out
+		close(new_handle);
+		return k_bad_socket;
+	}
+
+	// Ipv6 not yet implemented
+	assert(len == sizeof(sockaddr_in));
+	new_address = SocketAddr(*reinterpret_cast<sockaddr_in*>(&addr));
+	
+	return new_handle;
+}
+
 int intl::set_nonblock(intl::Handle handle, bool on)
 {
 	int res;
@@ -76,9 +112,8 @@ ssize_t intl::send(intl::Handle handle, core::RawBufferConst data)
 	return res;
 }
 
-ssize_t 
-intl::send_to(intl::Handle handle, core::RawBufferConst data,
-              SocketAddr const& address)
+ssize_t intl::send_to(intl::Handle handle, core::RawBufferConst data,
+                      SocketAddr const& address)
 {
 	ssize_t res;
 	sockaddr const* addr_ptr = address.socket_address();

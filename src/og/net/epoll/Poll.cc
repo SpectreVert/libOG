@@ -20,7 +20,7 @@ Poll::~Poll()
 
 Poll::Poll()
 {
-	m_epoll_fd = epoll_create(O_CLOEXEC);
+	m_epoll_fd = epoll_create1(O_CLOEXEC);
 
 	if (m_epoll_fd != -1)
 		return;

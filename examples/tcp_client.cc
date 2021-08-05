@@ -8,9 +8,8 @@
 #include <iostream>
 #include <cstring>
 #include <string_view>
-#include <iostream>
 
-#include "og/net/epoll/Poll2.hpp"
+#include "og/net/Poll.hpp"
 #include "og/net/TcpStream.hpp"
 #include "og/net/Error.hpp"
 
@@ -24,7 +23,7 @@ int main()
 	char buffer[48];
 	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
 
-	auto res = og::net::TcpStream::make_stream(addr);
+	auto res = og::net::TcpStream::try_connect(addr);
 
 	if (!res)
 	{

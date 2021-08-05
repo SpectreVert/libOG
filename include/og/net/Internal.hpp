@@ -30,12 +30,12 @@ int close(Handle);
 int bind(Handle, SocketAddr const&);
 int connect(Handle, SocketAddr const&);
 int listen(Handle, int);
-intl::Handle accept(Handle, SocketAddr&);
+Handle accept(Handle, SocketAddr&);
 
 ssize_t send(Handle, core::RawBufferConst);
-ssize_t send_to(Handle, core::RawBufferConst, SocketAddr const&);
+ssize_t send_to(Handle, SocketAddr const&, core::RawBufferConst);
 ssize_t recv(Handle, core::RawBuffer&);
-ssize_t recv_from(Handle, core::RawBuffer&, SocketAddr&);
+ssize_t recv_from(Handle, SocketAddr&, core::RawBuffer&);
 
 int set_nonblock(Handle, bool);
 int set_cloexec(Handle, bool);

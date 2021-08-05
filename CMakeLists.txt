@@ -12,7 +12,8 @@ set(OG_SRC
   src/og/net/Socket.cc
   src/og/net/TcpListener.cc
   src/og/net/TcpStream.cc
-  src/og/net/TcpStream.cc)
+  src/og/net/TcpStream.cc
+  src/og/net/UdpSocket.cc)
 
 # specific targets
 if(${CMAKE_SYSTEM_NAME} STREQUAL Linux)

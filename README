@@ -55,13 +55,11 @@ libOG is not:
 
 compilation
 -----------
-Requirements: a c++11 compliant compiler
+Requirements: a c++20 compliant compiler
 
-The library uses tup (http://gittup.org/tup) as a build system. Even though
-make is immensely more widespread, I feel like tup is more in tune with the
-minimalistic Unix philosophy. You can read the details from the website.
-
-Tuprules.tup contains build macros that you can tune for your needs.
+As of now libOG requires one c++20 feature (std::optional). Soon this will
+be rewritten to make use of smart pointers and to be able to drop back again
+to c++11 standard.
 
 documentation
 -------------

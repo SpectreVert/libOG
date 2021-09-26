@@ -16,6 +16,8 @@
 
 namespace og {
 
+// TODO: transform try_accept to return a smart pointer
+// instead of an optional.
 class TcpListener : public Socket {
 public:
 	virtual ~TcpListener() = default;

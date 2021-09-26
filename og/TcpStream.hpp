@@ -15,9 +15,8 @@
 
 namespace og {
 
-// FIXME: change this class so that the only constructor
-// is from an existing handle and connect becomes a factory.
-//
+// TODO: transform try_connect into returning smart pointer
+// instead of an optional.
 class TcpStream : public Socket {
 public:
 	virtual ~TcpStream() = default;

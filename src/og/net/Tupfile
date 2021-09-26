@@ -1,5 +1,0 @@
-include_rules
-
-: foreach *.cc 		 |> !cxx |>
-: foreach epoll/*.cc |> !cxx |>
-: *.o |> !ar |> libog_net.a

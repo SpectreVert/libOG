@@ -29,9 +29,9 @@ public:
 
 	virtual int poll(Events& events, int timeout);
 
-	virtual int monitor(Source&, Tag, short);
-	virtual int re_monitor(Source&, Tag, short);
-	virtual int forget(Source&);
+	virtual int monitor(Source& socket, Tag id, short concern);
+	virtual int re_monitor(Source& socket, Tag id, short concern);
+	virtual int forget(Source& socket);
 
 private:
 	int m_epoll_fd;

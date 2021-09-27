@@ -16,7 +16,7 @@ Event::Event(epoll_event event)
 	events = event.events;
 }
 
-og::Tag Event::id() const
+Event::Tag Event::id() const
 {
 	return data.u64;
 }

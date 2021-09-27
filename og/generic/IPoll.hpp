@@ -13,7 +13,6 @@
 #include "og/generic/IEvent.hpp"
 
 #include "og/Concern.hpp"
-#include "og/Tag.hpp"
 
 #include <array>
 
@@ -27,12 +26,13 @@ public:
 	using Source = TSource;
 	using Event  = TEvent;
 	using Events = std::array<Event, k_events_size>;
+	using Tag    = IEvent::Tag;
 
 	virtual ~IPoll() = default;
 
 	virtual int poll(Events& events, int timeout) = 0;
 
-	virtual int monitor(Source&, Tag, Concern)= 0;
+	virtual int monitor(Source&, Tag, Concern) = 0;
 	virtual int re_monitor(Source&, Tag, Concern) = 0;
 	virtual int forget(Source&) = 0;
 

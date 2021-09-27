@@ -9,11 +9,13 @@
 #ifndef _IEVENT_HPP
 #define _IEVENT_HPP
 
-#include "og/Tag.hpp"
+#include <utility>
 
 namespace og {
 
 struct IEvent {
+	using Tag = std::size_t;
+
 	virtual ~IEvent() = default;
 
 	virtual Tag id() const = 0;

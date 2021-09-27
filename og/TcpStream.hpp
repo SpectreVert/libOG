@@ -12,6 +12,7 @@
 #include "og/Socket.hpp"
 
 #include <optional>
+#include <memory>
 
 namespace og {
 
@@ -23,7 +24,8 @@ public:
 	TcpStream();
 	TcpStream(Handle handle);
 
-	static std::optional<TcpStream> try_connect(SocketAddr const&);
+	static std::unique_ptr<TcpStream> try_connect(SocketAddr const&);
+	// static std::optional<TcpStream> try_connect(SocketAddr const&);
 	virtual int connect(SocketAddr const& address);
 
 	virtual int send(RawBufferConst data);

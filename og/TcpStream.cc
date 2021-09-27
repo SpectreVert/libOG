@@ -19,20 +19,20 @@ TcpStream::TcpStream(Handle handle)
 {
 }
 
-std::optional<TcpStream> TcpStream::try_connect(SocketAddr const& address)
+std::unique_ptr<TcpStream>
+TcpStream::try_connect(SocketAddr const& address)
 {
-	Handle handle;
+	Handle handle = intl::open(AF_INET, SOCK_STREAM, 0);
 
-	handle = intl::open(AF_INET, SOCK_STREAM, 0);
 	if (handle == k_bad_socket)
-		return std::nullopt;
+		return std::nullptr_t{};
 
 	if (intl::connect(handle, address) == 0 || errno == EINPROGRESS)
-		return handle;
+		return std::make_unique<TcpStream>(handle);
 
 	intl::close(handle);
 
-	return std::nullopt;
+	return std::nullptr_t{};
 }
 
 int TcpStream::connect(SocketAddr const& address)

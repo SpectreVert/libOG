@@ -16,8 +16,6 @@ namespace og {
 
 class Socket : public ISource<intl::Handle> {
 public:
-	using Handle = ISource::Handle;
-
 	virtual ~Socket();
 	Socket() = default;
 	Socket(int dom, int type, int prot);

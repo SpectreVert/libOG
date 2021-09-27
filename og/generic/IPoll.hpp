@@ -19,6 +19,7 @@ namespace og {
 template<typename TSource, typename TEvent>
 class IPoll {
 public:
+	// TODO: have k_events_size be a template argument instead
 	std::size_t static constexpr k_events_size{1024};
 
 	enum {
@@ -27,11 +28,11 @@ public:
 		e_shared = 4
 	};
 
-	using Source = TSource;
-	using Event  = TEvent;
-	using Events = std::array<Event, k_events_size>;
+	using Event   = TEvent;
+	using Events  = std::array<TEvent, k_events_size>;
 	using Concern = short;
-	using Tag    = IEvent::Tag;
+	using Source  = TSource;
+	using Tag     = IEvent::Tag;
 
 	virtual ~IPoll() = default;
 

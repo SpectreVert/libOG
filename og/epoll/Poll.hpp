@@ -20,10 +20,6 @@ namespace og {
 
 class Poll : public IPoll<Socket, Event> {
 public:
-	using Source = IPoll::Source;
-	using Event  = IPoll::Event;
-	using Events = IPoll::Events;
-
 	virtual ~Poll();
 	Poll();
 

@@ -23,19 +23,19 @@ int TcpListener::listen(int backlog)
 	return intl::listen(m_handle, backlog);
 }
 
-std::optional<TcpStream> TcpListener::try_accept()
+std::unique_ptr<TcpStream> TcpListener::try_accept()
 {
 	SocketAddr addr{SocketAddrV4{}};
 
 	return try_accept(addr);
 }
 
-std::optional<TcpStream> TcpListener::try_accept(SocketAddr& addr)
+std::unique_ptr<TcpStream> TcpListener::try_accept(SocketAddr& peer_address)
 {
-	Handle accepted_handle = intl::accept(m_handle, addr);
+	Handle accepted_handle = intl::accept(m_handle, peer_address);
 
 	if (accepted_handle != k_bad_socket)
-		return accepted_handle;
+		return std::make_unique<TcpStream>(accepted_handle);
 
-	return std::nullopt;
+	return std::nullptr_t{};
 }

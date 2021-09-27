@@ -11,21 +11,17 @@
 #include "og/RawBuffer.hpp"
 #include "og/Socket.hpp"
 
-#include <optional>
 #include <memory>
 
 namespace og {
 
-// TODO: transform try_connect into returning smart pointer
-// instead of an optional.
 class TcpStream : public Socket {
 public:
 	virtual ~TcpStream() = default;
 	TcpStream();
 	TcpStream(Handle handle);
 
-	static std::unique_ptr<TcpStream> try_connect(SocketAddr const&);
-	// static std::optional<TcpStream> try_connect(SocketAddr const&);
+	static std::unique_ptr<TcpStream> try_connect(SocketAddr const& peer_addr);
 	virtual int connect(SocketAddr const& address);
 
 	virtual int send(RawBufferConst data);

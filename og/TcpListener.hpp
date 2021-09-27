@@ -12,12 +12,10 @@
 #include "og/SocketAddr.hpp"
 #include "og/TcpStream.hpp"
 
-#include <optional>
+#include <memory>
 
 namespace og {
 
-// TODO: transform try_accept to return a smart pointer
-// instead of an optional.
 class TcpListener : public Socket {
 public:
 	virtual ~TcpListener() = default;
@@ -25,8 +23,8 @@ public:
 	TcpListener(Handle handle);
 
 	virtual int listen(int backlog);
-	std::optional<TcpStream> try_accept();
-	std::optional<TcpStream> try_accept(SocketAddr&);
+	std::unique_ptr<TcpStream> virtual try_accept();
+	std::unique_ptr<TcpStream> virtual try_accept(SocketAddr &peer_address);
 
 }; // class TcpListener
 

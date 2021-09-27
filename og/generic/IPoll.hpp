@@ -19,12 +19,10 @@
 
 namespace og {
 
-//! interface for registering a derivate of ISource
-//!
 template<typename TSource, typename TEvent>
 class IPoll {
 public:
-	static std::size_t constexpr k_events_size{1024};
+	std::size_t static constexpr k_events_size{1024};
 
 	using Source = TSource;
 	using Event  = TEvent;

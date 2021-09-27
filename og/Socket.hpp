@@ -9,13 +9,12 @@
 #ifndef _SOCKET_HPP
 #define _SOCKET_HPP
 
-#include "og/RawFd.hpp"
 #include "og/generic/ISource.hpp"
 #include "og/Internal.hpp"
 
 namespace og {
 
-class Socket : public ISource<int> {
+class Socket : public ISource<intl::Handle> {
 public:
 	using Handle = ISource::Handle;
 

@@ -10,7 +10,6 @@
 #define _INTERNAL_HPP
 
 #include "og/RawBuffer.hpp"
-#include "og/RawFd.hpp"
 #include "og/SocketAddr.hpp"
 
 namespace og {
@@ -21,7 +20,7 @@ namespace intl {
 
 int constexpr k_message_flag = MSG_NOSIGNAL;
 
-using Handle = RawFd;
+using Handle = int;
 
 Handle open(int dom, int type, int prot);
 int close(Handle);

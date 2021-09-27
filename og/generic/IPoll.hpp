@@ -12,8 +12,6 @@
 #include "og/generic/ISource.hpp"
 #include "og/generic/IEvent.hpp"
 
-#include "og/Concern.hpp"
-
 #include <array>
 
 namespace og {
@@ -23,9 +21,16 @@ class IPoll {
 public:
 	std::size_t static constexpr k_events_size{1024};
 
+	enum {
+		e_read   = 1,
+		e_write  = 2,
+		e_shared = 4
+	};
+
 	using Source = TSource;
 	using Event  = TEvent;
 	using Events = std::array<Event, k_events_size>;
+	using Concern = short;
 	using Tag    = IEvent::Tag;
 
 	virtual ~IPoll() = default;

@@ -5,8 +5,8 @@
  *
 */
 
-#ifndef _TCPSTREAM_HPP
-#define _TCPSTREAM_HPP
+#ifndef OG_TCPSTREAM_HPP_
+#define OG_TCPSTREAM_HPP_
 
 #include "og/RawBuffer.hpp"
 #include "og/Socket.hpp"
@@ -17,20 +17,23 @@ namespace og {
 
 class TcpStream : public Socket {
 public:
-	virtual ~TcpStream() = default;
-	TcpStream();
-	TcpStream(Handle handle);
+    virtual ~TcpStream() = default;
+    TcpStream();
+    TcpStream(Handle handle);
 
-	static std::unique_ptr<TcpStream> try_connect(SocketAddr const& peer_addr);
-	virtual int connect(SocketAddr const& address);
+    static Handle mk_handle(SocketAddr const& peer_address);
+    static std::unique_ptr<TcpStream> mk_stream(SocketAddr const& peer_address);
 
-	virtual int send(RawBufferConst data);
-	virtual int send(RawBufferConst data, std::size_t& sent);
-	virtual int recv(RawBuffer& data);
-	virtual int recv(RawBuffer& data, std::size_t& received);
+    virtual int connect(SocketAddr const& peer_address);
 
-}; // class TcpSocket
+    // :Add flags argument
+    virtual int recv(RawBuffer& data);
+    virtual int recv(RawBuffer& data, std::size_t& received);
+    virtual int send(RawBuffer const&);
+    virtual int send(RawBuffer const&, std::size_t& sent);
+
+}; // class TcpStream
 
 } // namespace og
 
-#endif /* _TCPSTREAM_HPP */
+#endif /* OG_TCPSTREAM_HPP_ */

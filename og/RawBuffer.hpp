@@ -8,17 +8,18 @@
 
 #include <utility>
 
-#ifndef _RAWBUFFER_HPP
-#define _RAWBUFFER_HPP
+#ifndef OG_RAWBUFFER_HPP_
+#define OG_RAWBUFFER_HPP_
 
 namespace og {
 
-//! a `read/write` raw buffer paired with a size mark
-typedef std::pair<void*, std::size_t> RawBuffer;
+struct RawBuffer {
+	static constexpr std::size_t k_capacity{ 2048 };
 
-//! a `read only` raw buffer paired with a size mark
-typedef std::pair<void const*, std::size_t> RawBufferConst;
+	char data[k_capacity];
+	std::size_t size;
+};
 
 } // namespace og
 
-#endif /* _RAWBUFFER_HPP */
+#endif /* OG_RAWBUFFER_HPP_ */

@@ -70,7 +70,7 @@ int Poll::poll(Events& events, int timeout)
 }
 
 // TODO: Source const&
-int Poll::monitor(Source& src, Tag tag, Concern concern)
+int Poll::add(Source& src, Tag tag, Concern concern)
 {
 	uint32_t bits{0};
 	epoll_event event{0, {0}};
@@ -97,7 +97,7 @@ int Poll::monitor(Source& src, Tag tag, Concern concern)
 
 //! this function re_registers an fd/concern pair; but
 //! cannot take e_shared as concern.
-int Poll::re_monitor(Source& src, Tag tag, Concern concern)
+int Poll::refresh(Source& src, Tag tag, Concern concern)
 {
 	uint32_t bits{EPOLLET};
 	epoll_event event{0, {0}};

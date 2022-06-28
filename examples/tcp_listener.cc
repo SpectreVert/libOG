@@ -8,13 +8,13 @@
 #include <iostream>
 #include <string_view>
 
-#include "og/net/Poll.hpp"
-#include "og/net/TcpListener.hpp"
+#include "og/Poll.hpp"
+#include "og/TcpListener.hpp"
 
 /* TODO: include Error.hpp in headers
  * that use the return codes
 */
-#include "og/net/Error.hpp"
+#include "og/Error.hpp"
 
 #define L 1
 
@@ -22,12 +22,11 @@ int main(int ac, char* av[])
 {
 	(void) ac;
 
-	og::net::TcpListener listener;
-	og::net::SocketAddr addr(og::net::Ipv4(127, 0, 0, 1), 6970);
-	og::net::Poll poll;
-	og::net::Poll::Events events;
-	char buffer[48];
-	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
+	og::TcpListener listener;
+	og::SocketAddr addr(og::Ipv4(127, 0, 0, 1), 6970);
+	og::Poll poll;
+	og::Poll::Events events;
+	og::RawBuffer data; (void) data;
 
 	if (listener.bind(addr) < 0)
 		goto error;
@@ -35,7 +34,7 @@ int main(int ac, char* av[])
 	if (listener.listen(128) < 0)
 		goto error;
 	
-	if (poll.monitor(listener, L, og::core::e_write | og::core::e_read) == -1)
+	if (poll.add(listener, L, og::Poll::e_write | og::Poll::e_read) == -1)
 		goto error;
 
 	for (;;) {
@@ -45,9 +44,9 @@ int main(int ac, char* av[])
 		{
 			if (event.is_readable())
 			{
-				auto new_str = listener.try_accept();
+				auto new_stream = listener.try_accept();
 
-				if (!new_str)
+				if (!new_stream)
 					goto error;
 
 				std::cerr << "Accepted socket" << std::endl;

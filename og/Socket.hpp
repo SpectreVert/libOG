@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _SOCKET_HPP
-#define _SOCKET_HPP
+#ifndef OG_SOCKET_HPP_
+#define OG_SOCKET_HPP_
 
 #include "og/generic/ISource.hpp"
 #include "og/Internal.hpp"
@@ -22,8 +22,8 @@ public:
 	Socket(Handle);
 
 	virtual Handle handle() const;
+	virtual int mk_handle(int dom, int type, int prot);
 	virtual void set_handle(Handle);
-	virtual int make_handle(int dom, int type, int prot);
 	virtual int close();
 
 	virtual int bind(SocketAddr const& addr);
@@ -35,4 +35,4 @@ protected:
 
 } // namespace og
 
-#endif /* _SOCKET_HPP */
+#endif /* OG_SOCKET_HPP_ */

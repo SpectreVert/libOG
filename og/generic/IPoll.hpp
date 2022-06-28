@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _IPOLL_HPP
-#define _IPOLL_HPP
+#ifndef OG_IPOLL_HPP_
+#define OG_IPOLL_HPP_
 
 #include "og/generic/ISource.hpp"
 #include "og/generic/IEvent.hpp"
@@ -20,7 +20,7 @@ template<typename TSource, typename TEvent>
 class IPoll {
 public:
 	// TODO: have k_events_size be a template argument instead
-	std::size_t static constexpr k_events_size{1024};
+	static constexpr std::size_t k_events_size{ 1024 };
 
 	enum {
 		e_read   = 1,
@@ -38,12 +38,12 @@ public:
 
 	virtual int poll(Events& events, int timeout) = 0;
 
-	virtual int monitor(Source&, Tag, Concern) = 0;
-	virtual int re_monitor(Source&, Tag, Concern) = 0;
+	virtual int add(Source&, Tag, Concern) = 0;
+	virtual int refresh(Source&, Tag, Concern) = 0;
 	virtual int forget(Source&) = 0;
 
 }; // class IPoll
 
 } // namespace og
 
-#endif /* _IPOLL_HPP */
+#endif /* OG_IPOLL_HPP_ */

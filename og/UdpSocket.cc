@@ -10,71 +10,69 @@
 using namespace og;
 
 UdpSocket::UdpSocket()
-	: Socket(AF_INET, SOCK_DGRAM, 0)
+    : Socket(AF_INET, SOCK_DGRAM, 0)
 {}
 
 UdpSocket::UdpSocket(Handle handle)
-	: Socket(handle)
+    : Socket(handle)
 {}
 
-int UdpSocket::send_to(SocketAddr const& addr, RawBufferConst data)
+int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf)
 {
-	ssize_t res = intl::send_to(m_handle, addr, data);
+    ssize_t res = intl::recv_from(m_handle, addr, buf);
 
-	if (res != -1)
-		return e_success;
+    if (res != -1)
+        return e_success;
 
-	if (errno == EAGAIN || errno == EWOULDBLOCK)
-		return e_would_block;
+    if (errno == EAGAIN || errno == EWOULDBLOCK)
+        return e_would_block;
 
-	return e_failure;
+    return e_failure;
 }
 
-int UdpSocket::send_to(SocketAddr const& addr, RawBufferConst data,
-                       std::size_t& sent)
+int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf, std::size_t& received)
 {
-	ssize_t res = intl::send_to(m_handle, addr, data);
+    ssize_t res = intl::recv_from(m_handle, addr, buf);
 
-	if (res != -1)
-	{
-		sent = static_cast<std::size_t>(res);
-		return e_success;
-	}
+    if (res != -1)
+    {
+        received = static_cast<std::size_t>(res);
+        return e_success;
+    }
 
-	sent = 0;
-	if (errno == EAGAIN || errno == EWOULDBLOCK)
-		return e_would_block;
+    received = 0;
+    if (errno == EAGAIN || errno == EWOULDBLOCK)
+        return e_would_block;
 
-	return e_failure;
+    return e_failure;
 }
 
-int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& data)
+int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const& buf)
 {
-	ssize_t res = intl::recv_from(m_handle, addr, data);
+    ssize_t res = intl::send_to(m_handle, addr, buf);
 
-	if (res != -1)
-		return e_success;
+    if (res != -1)
+        return e_success;
 
-	if (errno == EAGAIN || errno == EWOULDBLOCK)
-		return e_would_block;
+    if (errno == EAGAIN || errno == EWOULDBLOCK)
+        return e_would_block;
 
-	return e_failure;
+    return e_failure;
 }
 
-int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& data,
-                         std::size_t& received)
+int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const &buf, std::size_t& sent)
 {
-	ssize_t res = intl::recv_from(m_handle, addr, data);
+    ssize_t res = intl::send_to(m_handle, addr, buf);
 
-	if (res != -1)
-	{
-		received = static_cast<std::size_t>(res);
-		return e_success;
-	}
+    if (res != -1)
+    {
+        sent = static_cast<std::size_t>(res);
+        return e_success;
+    }
 
-	received = 0;
-	if (errno == EAGAIN || errno == EWOULDBLOCK)
-		return e_would_block;
+    sent = 0;
+    if (errno == EAGAIN || errno == EWOULDBLOCK)
+        return e_would_block;
 
-	return e_failure;
+    return e_failure;
 }

@@ -1,0 +1,5 @@
+include_rules
+
+: foreach og/*.cc 		 |> !cxx |>
+: foreach og/epoll/*.cc  |> !cxx |>
+: *.o |> !ar |> libOG_dev.a

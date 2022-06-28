@@ -26,6 +26,7 @@ bool Event::is_error() const
 	return (events & EPOLLERR) != 0;
 }
 
+// @Todo : remove the != 0 bs
 bool Event::is_readable() const
 {
 	return (events & EPOLLIN) || (events & EPOLLPRI) != 0;

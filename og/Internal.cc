@@ -79,12 +79,58 @@ intl::Handle intl::accept(intl::Handle handle, SocketAddr& new_address)
 	return new_handle;
 }
 
-int intl::set_nonblock(intl::Handle handle, bool on)
+ssize_t intl::recv(intl::Handle handle, RawBuffer &buf)
 {
-	int res;
+	ssize_t res;
 
 	do
-		res = ioctl(handle, FIONBIO, &on);
+		res = ::recv(handle, buf.data, buf.k_capacity, intl::k_message_flag);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+ssize_t intl::recv_from(intl::Handle handle, SocketAddr& address,
+                        RawBuffer &buf)
+{
+	ssize_t res;
+	sockaddr* addr_ptr = address.socket_address();
+	socklen_t addr_size{0};
+
+	do
+		res = ::recvfrom(
+			handle, buf.data, buf.k_capacity,
+			intl::k_message_flag, addr_ptr, &addr_size
+		);
+	while (res == -1 && errno == EINTR);
+
+	assert(addr_size == address.socket_address_size());
+
+	return res;
+}
+
+ssize_t intl::send(intl::Handle handle, RawBuffer const &buf)
+{
+	ssize_t res;
+
+	do
+		res = ::send(handle, buf.data, buf.size, intl::k_message_flag);
+	while (res == -1 && errno == EINTR);
+
+	return res;
+}
+
+ssize_t intl::send_to(intl::Handle handle, SocketAddr const& address, RawBuffer const& buf)
+{
+	ssize_t res;
+	sockaddr const* addr_ptr = address.socket_address();
+	socklen_t addr_size = address.socket_address_size();
+
+	do
+		res = ::sendto(
+			handle, buf.data, buf.size,
+		    intl::k_message_flag, addr_ptr, addr_size
+		);
 	while (res == -1 && errno == EINTR);
 
 	return res;
@@ -101,60 +147,13 @@ int intl::set_cloexec(intl::Handle handle, bool on)
 	return res;
 }
 
-ssize_t intl::send(intl::Handle handle, RawBufferConst data)
+int intl::set_nonblock(intl::Handle handle, bool on)
 {
-	ssize_t res;
+	int res;
 
 	do
-		res = ::send(handle, data.first, data.second, intl::k_message_flag);
+		res = ioctl(handle, FIONBIO, &on);
 	while (res == -1 && errno == EINTR);
-
-	return res;
-}
-
-ssize_t intl::send_to(intl::Handle handle, SocketAddr const& address,
-                      RawBufferConst data)
-{
-	ssize_t res;
-	sockaddr const* addr_ptr = address.socket_address();
-	socklen_t addr_size = address.socket_address_size();
-
-	do
-		res = ::sendto(
-			handle, data.first, data.second,
-		    intl::k_message_flag, addr_ptr, addr_size
-		);
-	while (res == -1 && errno == EINTR);
-
-	return res;
-}
-
-ssize_t intl::recv(intl::Handle handle, RawBuffer data)
-{
-	ssize_t res;
-
-	do
-		res = ::recv(handle, data.first, data.second, intl::k_message_flag);
-	while (res == -1 && errno == EINTR);
-
-	return res;
-}
-
-ssize_t intl::recv_from(intl::Handle handle, SocketAddr& address,
-                        RawBuffer data)
-{
-	ssize_t res;
-	sockaddr* addr_ptr = address.socket_address();
-	socklen_t addr_size{0};
-
-	do
-		res = ::recvfrom(
-			handle, data.first, data.second,
-			intl::k_message_flag, addr_ptr, &addr_size
-		);
-	while (res == -1 && errno == EINTR);
-
-	assert(addr_size == address.socket_address_size());
 
 	return res;
 }

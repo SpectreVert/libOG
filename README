@@ -1,30 +1,26 @@
-libOG is a minimalist C++ network library providing just enough boiler-plate
-to use and monitor event-based, non-blocking TCP/UDP sockets.
+
+---------------------------------------
+
+libOG is a minimalist C++ network library providing just enough boiler-plate to use and monitor event-based, non-blocking TCP/UDP sockets.
 
 disclaimer
 ----------
-The library is currently in active development. Interfaces and
-code are not stable and can change drastically.
+The library is currently in active development. Interfaces and code are not stable and can change drastically.
 
 strictly conventional and simple
 --------------------------------
-libOG is designed as a weightless object-oriented layer over the Unix socket
-functions. It can be used for writing simple servers and client or as a base
-for higher-level asynchronous code.
+libOG is designed as a weightless object-oriented layer over the Unix socket functions. It can be used for writing simple servers and client or as a base for higher-level asynchronous code.
 
-As such, are avoided most c++ features presenting potential overhead in
-compilation time, code size or readability. Errors are communicated through
-return codes and error handling is left to the user.
+As such, are avoided most c++ features presenting potential overhead in compilation time, code size or readability. Errors are communicated through return codes and error handling is left to the user.
 
 features
 --------
-The typical TCP and UDP classes will be provided by libOG, as well
-as some base classes for extensibility reasons:
+The typical TCP and UDP classes will be provided by libOG, as well as some base classes for extensibility reasons:
 	
 	<> Socket       implemented, base class for socket objects
 	<> TcpStream    implemented, TCP client socket
 	<> TcpListener  implemented, TCP listener socket
-	<> UdpSocket    not implemented, basic UDP socket
+	<> UdpSocket    implemented, basic UDP socket
 
 +-------------------------------------+
 |              ISource                | interface for monitorable source
@@ -36,7 +32,7 @@ as some base classes for extensibility reasons:
 
 libOG also has classes aimed at monitoring events:
 
-	<> Poll         implemented (linux), used to monitor event sources
+	<> Poll         implemented (epoll only), used to monitor event sources
 	<> Event        implemented, used to manipulate/examine events
 
 +----------------------------------+
@@ -55,16 +51,11 @@ libOG is not:
 
 compilation
 -----------
-Requirements: a c++20 compliant compiler
-
-As of now libOG requires one c++20 feature (std::optional). Soon this will
-be rewritten to make use of smart pointers and to be able to drop back again
-to c++11 standard.
+Requirements: a c++14 compliant compiler
 
 documentation
 -------------
-There will be extensive documentation generated from the source files and
-comments released on 1.0
+There will be extensive documentation generated from the source files and comments released on 1.0
 
 As of now, the code is mainly self-explainable. Feel free to dive in. 
 

@@ -5,6 +5,6 @@ VERSION = 1
 PLATFORM = linux
 #PLATFORM = bsd
 
-CXXFLAGS  = -I. -std=c++20 -pedantic -Wall -Wextra -g3
+CXXFLAGS  = -I. -std=c++14 -pedantic -Wall -Wextra -O3
 CXX       = clang++
 AR        = ar rc

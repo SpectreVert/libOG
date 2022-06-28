@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _UDP_SOCKET_HPP
-#define _UDP_SOCKET_HPP
+#ifndef OG_UDPSOCKET_HPP_
+#define OG_UDPSOCKET_HPP_
 
 #include "og/RawBuffer.hpp"
 #include "og/Socket.hpp"
@@ -16,17 +16,17 @@ namespace og {
 
 class UdpSocket : public Socket {
 public:
-	virtual ~UdpSocket() = default;
-	UdpSocket();
-	UdpSocket(Handle);
+    virtual ~UdpSocket() = default;
+    UdpSocket();
+    UdpSocket(Handle);
 
-	virtual int send_to(SocketAddr const&, RawBufferConst);
-	virtual int send_to(SocketAddr const&, RawBufferConst, std::size_t&);
-	virtual int recv_from(SocketAddr&, RawBuffer&);
-	virtual int recv_from(SocketAddr&, RawBuffer&, std::size_t&);
+    virtual int recv_from(SocketAddr&, RawBuffer&);
+    virtual int recv_from(SocketAddr&, RawBuffer&, std::size_t&);
+    virtual int send_to(SocketAddr const&, RawBuffer const&);
+    virtual int send_to(SocketAddr const&, RawBuffer const&, std::size_t&);
 
 }; // class UdpSocket
 
 } // namespace og
 
-#endif /* _UDP_SOCKET_HPP */
+#endif /* OG_UDPSOCKET_HPP_ */

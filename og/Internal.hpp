@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _INTERNAL_HPP
-#define _INTERNAL_HPP
+#ifndef OG_INTERNAL_HPP_
+#define OG_INTERNAL_HPP_
 
 #include "og/RawBuffer.hpp"
 #include "og/SocketAddr.hpp"
@@ -29,16 +29,16 @@ int connect(Handle, SocketAddr const&);
 int listen(Handle, int);
 Handle accept(Handle, SocketAddr&);
 
-ssize_t send(Handle, RawBufferConst);
-ssize_t send_to(Handle, SocketAddr const&, RawBufferConst);
-ssize_t recv(Handle, RawBuffer);
-ssize_t recv_from(Handle, SocketAddr&, RawBuffer);
+ssize_t recv(Handle, RawBuffer&);
+ssize_t recv_from(Handle, SocketAddr&, RawBuffer&);
+ssize_t send(Handle, RawBuffer const&);
+ssize_t send_to(Handle, SocketAddr const&, RawBuffer const&);
 
-int set_nonblock(Handle, bool);
 int set_cloexec(Handle, bool);
+int set_nonblock(Handle, bool);
 
 } // namespace intl
 
 } // namespace og
 
-#endif /* _INTERNAL_HPP */
+#endif /* OG_INTERNAL_HPP_ */

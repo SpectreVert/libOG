@@ -5,7 +5,7 @@ include config.mk
 LIB=libOG.a
 TARGET=libOG
 
-OBJFILES = og/Internal.o\
+OBJ = og/Internal.o\
 	og/Ipv4.o\
 	og/Socket.o\
 	og/SocketAddr.o\
@@ -14,11 +14,16 @@ OBJFILES = og/Internal.o\
 	og/UdpSocket.o
 
 ifeq (${PLATFORM}, linux)
-	OBJFILES += og/epoll/Event.o\
-				og/epoll/Poll.o
+	OBJ += og/epoll/Event.o og/epoll/Poll.o
 endif
 
 all: options ${LIB}
+
+${LIB}: ${OBJ}
+	${AR} ${LIB} ${OBJ}
+
+.cc.o:
+	${CXX} ${CXXFLAGS} -c $< -o ${basename $<}.o
 
 options:
 	@echo libOG build options:
@@ -27,15 +32,11 @@ options:
 	@echo "CXX       = ${CXX}"
 	@echo "AR        = ${AR}"
 
+re: clean all
+
 install:
 
 uninstall:
 
-${LIB}: ${OBJFILES}
-	${AR} ${LIB} ${OBJFILES}
-
-.cc.o:
-	${CXX} ${CXXFLAGS} -c $< -o ${basename $<}.o
-
 clean:
-	rm -f ${OBJFILES} ${LIB}
+	rm -f ${LIB} ${OBJ}

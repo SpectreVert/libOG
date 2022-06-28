@@ -1,7 +1,5 @@
 CXX = clang++
-CXXFLAGS = -std=c++17 -g3 -W -Wall -Wextra -Wpedantic -I$(TUP_CWD)/include
-
-NET = $(TUP_CWD)/src/og/net
+CXXFLAGS = -std=c++14 -g3 -W -Wall -Wextra -Wpedantic -I.
 
 !cxx = |> $(CXX) -c %f -o %o $(CXXFLAGS) $(LDFLAGS) |> %B.o
 !ar = |> ar crs %o %f |>

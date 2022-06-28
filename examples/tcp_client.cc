@@ -9,31 +9,29 @@
 #include <cstring>
 #include <string_view>
 
-#include "og/net/Poll.hpp"
-#include "og/net/TcpStream.hpp"
-#include "og/net/Error.hpp"
+#include "og/Poll.hpp"
+#include "og/TcpStream.hpp"
+#include "og/Error.hpp"
 
 #define SOCKET 1
 
 int main()
 {
-	og::net::SocketAddr addr(og::net::Ipv4(127, 0, 0, 1), 6970);
-	og::net::Poll poll;
-	og::net::Poll::Events events;
-	char buffer[48];
-	og::core::RawBuffer data{reinterpret_cast<void*>(buffer), 48};
+	og::SocketAddr addr(og::Ipv4(127, 0, 0, 1), 6970);
+	og::Poll poll;
+	og::Poll::Events events;
+	og::RawBuffer data;
 
-	auto res = og::net::TcpStream::try_connect(addr);
+	auto res = og::TcpStream::try_connect(addr);
 
-	if (!res)
-	{
+	if (!res) {
 		std::cerr << "could not connect" << std::endl;
 		return 1;
 	}
 	
-	auto tcpstream = res.value();
+	auto tcpstream = res.get();
 
-	if (poll.monitor(tcpstream, SOCKET, og::core::e_read|og::core::e_write) < 0)
+	if (poll.add(*tcpstream, SOCKET, og::Poll::e_read|og::Poll::e_write) < 0)
 	{
 		std::cerr << "could not monitor" << std::endl;
 		return 1;
@@ -62,14 +60,14 @@ int main()
 
 				for (;;)
 				{
-					res = tcpstream.recv(data, recvd);
+					res = tcpstream->recv(data, recvd);
 
-					if (res == og::net::e_success)
+					if (res == og::e_success)
 					{
-						std::string_view str(reinterpret_cast<char*>(data.first));
+						std::string_view str(reinterpret_cast<char*>(data.data));
 						std::cout << "received message: " << str.substr(0, recvd);
 					}
-					else if (res == og::net::e_closed)
+					else if (res == og::e_closed)
 					{
 						goto closed;
 					}

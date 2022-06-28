@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _POLL_HPP
-#define _POLL_HPP
+#ifndef OG_POLL_HPP_
+#define OG_POLL_HPP_
 
 #include "og/epoll/Event.hpp"
 #include "og/generic/IPoll.hpp"
@@ -25,8 +25,8 @@ public:
 
 	virtual int poll(Events& events, int timeout);
 
-	virtual int monitor(Source& socket, Tag id, Concern concern);
-	virtual int re_monitor(Source& socket, Tag id, Concern concern);
+	virtual int add(Source& socket, Tag id, Concern concern);
+	virtual int refresh(Source& socket, Tag id, Concern concern);
 	virtual int forget(Source& socket);
 
 private:
@@ -36,4 +36,4 @@ private:
 
 } // namespace og
 
-#endif /* _POLL_HPP */
+#endif /* OG_POLL_HPP_ */

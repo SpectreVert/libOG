@@ -16,7 +16,7 @@ Socket::~Socket()
 
 Socket::Socket(int dom, int type, int prot)
 {
-	(void) make_handle(dom, type, prot);
+	(void) mk_handle(dom, type, prot);
 }
 
 Socket::Socket(Handle handle)
@@ -29,12 +29,7 @@ Socket::Handle Socket::handle() const
 	return m_handle;
 }
 
-void Socket::set_handle(Handle handle)
-{
-	m_handle = handle;
-}
-
-int Socket::make_handle(int dom, int type, int prot)
+int Socket::mk_handle(int dom, int type, int prot)
 {
 	m_handle = intl::open(dom, type, prot);
 	
@@ -44,8 +39,11 @@ int Socket::make_handle(int dom, int type, int prot)
 	return e_failure;
 }
 
-/* not calling close twice is left
- * to the discretion of the user. */
+void Socket::set_handle(Handle handle)
+{
+	m_handle = handle;
+}
+
 int Socket::close()
 {
 	if (intl::close(m_handle) == -1)

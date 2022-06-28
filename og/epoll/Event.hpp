@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _EVENT_HPP
-#define _EVENT_HPP
+#ifndef OG_EVENT_HPP_
+#define OG_EVENT_HPP_
 
 #include "og/generic/IEvent.hpp"
 
@@ -32,4 +32,4 @@ struct Event : public epoll_event, public IEvent {
 
 } // namespace og
 
-#endif /* _EVENT_HPP */
+#endif /* OG_EVENT_HPP_ */

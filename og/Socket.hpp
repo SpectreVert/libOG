@@ -16,20 +16,20 @@ namespace og {
 
 class Socket : public ISource<intl::Handle> {
 public:
-	virtual ~Socket();
-	Socket() = default;
-	Socket(int dom, int type, int prot);
-	Socket(Handle);
+    virtual ~Socket();
+    Socket() = default;
+    Socket(int dom, int type, int prot);
+    Socket(Handle);
 
-	virtual Handle handle() const;
-	virtual int mk_handle(int dom, int type, int prot);
-	virtual void set_handle(Handle);
-	virtual int close();
+    virtual Handle handle() const;
+    virtual int mk_handle(int dom, int type, int prot);
+    virtual void set_handle(Handle);
+    virtual int close();
 
-	virtual int bind(SocketAddr const& addr);
+    virtual int bind(SocketAddr const& addr);
 
 protected:
-	Handle m_handle = k_bad_socket;
+    Handle m_handle = k_bad_socket;
 
 }; // class Socket
 

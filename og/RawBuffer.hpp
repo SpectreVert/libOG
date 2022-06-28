@@ -14,10 +14,10 @@
 namespace og {
 
 struct RawBuffer {
-	static constexpr std::size_t k_capacity{ 2048 };
-
-	char data[k_capacity];
-	std::size_t size;
+    static constexpr std::size_t k_capacity{ 2048 };
+    
+    char data[k_capacity];
+    std::size_t size;
 };
 
 } // namespace og

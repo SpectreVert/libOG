@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _ISOURCE_HPP
-#define _ISOURCE_HPP
+#ifndef OG_ISOURCE_HPP_
+#define OG_ISOURCE_HPP_
 
 namespace og {
 
@@ -17,16 +17,16 @@ namespace og {
 template<typename THandle>
 class ISource {
 public:
-	using Handle = THandle;
+    using Handle = THandle;
 
-	virtual ~ISource() = default;
+    virtual ~ISource() = default;
 
-	virtual Handle handle() const = 0;
-	virtual void set_handle(Handle) = 0;
-	virtual int close() = 0;
+    virtual Handle handle() const = 0;
+    virtual void set_handle(Handle) = 0;
+    virtual int close() = 0;
 
 }; // class ISource
 
 } // namespace og
 
-#endif /* _ISOURCE_HPP */
+#endif /* OG_ISOURCE_HPP_ */

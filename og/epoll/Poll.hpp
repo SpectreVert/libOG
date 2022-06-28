@@ -20,17 +20,17 @@ namespace og {
 
 class Poll : public IPoll<Socket, Event> {
 public:
-	virtual ~Poll();
-	Poll();
+    virtual ~Poll();
+    Poll();
 
-	virtual int poll(Events& events, int timeout);
+    virtual int poll(Events& events, int timeout);
 
-	virtual int add(Source& socket, Tag id, Concern concern);
-	virtual int refresh(Source& socket, Tag id, Concern concern);
-	virtual int forget(Source& socket);
+    virtual int add(Source& socket, Tag id, Concern concern);
+    virtual int refresh(Source& socket, Tag id, Concern concern);
+    virtual int forget(Source& socket);
 
 private:
-	int m_epoll_fd;
+    int m_epoll_fd;
 
 }; // class Poll
 

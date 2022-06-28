@@ -6,8 +6,8 @@
  * see LICENSE
 */
 
-#ifndef _IPV4_HPP
-#define _IPV4_HPP
+#ifndef OG_IPV4_HPP_
+#define OG_IPV4_HPP_
 
 #include <string>
 
@@ -16,25 +16,26 @@
 namespace og {
 
 struct Ipv4 {
-	// static const Ipv4 k_loopback = "127.0.0.1";
+    // static const Ipv4 k_loopback = "127.0.0.1";
 
-	virtual ~Ipv4() = default;
-	Ipv4();
-	Ipv4(uint8_t, uint8_t, uint8_t, uint8_t);
-	Ipv4(uint32_t);
-	Ipv4(char const*);
+    virtual ~Ipv4() = default;
+    Ipv4();
+    Ipv4(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);
+    Ipv4(uint32_t address);
+    Ipv4(char const *address);
 
-	static Ipv4 get_local_address();
+    // @Todo: write this function
+    static Ipv4 get_local_address();
 
-	std::string to_string() const;
-	uint32_t host_order() const; //! host order
-	uint32_t net_order() const; //! network order (recommended)
+    std::string to_string() const;
+    uint32_t host_order() const; //! host order
+    uint32_t net_order() const;  //! network order (recommended)
 
 private:
-	uint32_t m_address;
+    uint32_t m_address;
 
 }; // struct Ipv4
 
 } // namespace og
 
-#endif /* _IPV4_HPP */
+#endif /* OG_IPV4_HPP_ */

@@ -6,22 +6,22 @@
  * see LICENSE
 */
 
-#ifndef _ERROR_HPP
-#define _ERROR_HPP
+#ifndef OG_ERROR_HPP_
+#define OG_ERROR_HPP_
 
-#include <cerrno>
 #include <cassert>
+#include <cerrno>
 
 namespace og {
 
 enum Status {
-	e_failure = -1,
-	e_success = 0,
-	e_closed,
-	e_would_block,
-	e_in_progress
+    e_failure = -1,
+    e_success = 0,
+    e_closed,
+    e_would_block,
+    e_in_progress
 };
 
 } // namespace og
 
-#endif /* _ERROR_HPP */
+#endif /* OG_ERROR_HPP_ */

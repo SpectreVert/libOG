@@ -11,50 +11,50 @@ using namespace og;
 
 Socket::~Socket()
 {
-	(void) close();
+    (void) close();
 }
 
 Socket::Socket(int dom, int type, int prot)
 {
-	(void) mk_handle(dom, type, prot);
+    (void) mk_handle(dom, type, prot);
 }
 
 Socket::Socket(Handle handle)
-	: m_handle(handle)
-{	
+    : m_handle(handle)
+{
 }
 
 Socket::Handle Socket::handle() const
 {
-	return m_handle;
+    return m_handle;
 }
 
 int Socket::mk_handle(int dom, int type, int prot)
 {
-	m_handle = intl::open(dom, type, prot);
-	
-	if (m_handle != k_bad_socket)
-		return e_success;
+    m_handle = intl::open(dom, type, prot);
+    
+    if (m_handle != k_bad_socket)
+        return e_success;
 
-	return e_failure;
+    return e_failure;
 }
 
 void Socket::set_handle(Handle handle)
 {
-	m_handle = handle;
+    m_handle = handle;
 }
 
 int Socket::close()
 {
-	if (intl::close(m_handle) == -1)
-		return e_failure;
+    if (intl::close(m_handle) == -1)
+        return e_failure;
 
-	m_handle = k_bad_socket;
+    m_handle = k_bad_socket;
 
-	return e_success;
+    return e_success;
 }
 
 int Socket::bind(SocketAddr const& addr)
 {
-	return intl::bind(m_handle, addr);
+    return intl::bind(m_handle, addr);
 }

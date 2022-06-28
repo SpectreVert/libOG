@@ -14,17 +14,17 @@
 namespace og {
 
 struct IEvent {
-	using Tag = std::size_t;
+    using Tag = std::size_t;
 
-	virtual ~IEvent() = default;
+    virtual ~IEvent() = default;
 
-	virtual Tag id() const = 0;
+    virtual Tag id() const = 0;
 
-	virtual bool is_error() const = 0;
-	virtual bool is_readable() const = 0;
-	virtual bool is_read_closed() const = 0;
-	virtual bool is_writable() const = 0;
-	virtual bool is_write_closed() const = 0;
+    virtual bool is_error() const = 0;
+    virtual bool is_readable() const = 0;
+    virtual bool is_read_closed() const = 0;
+    virtual bool is_writable() const = 0;
+    virtual bool is_write_closed() const = 0;
 };
 
 } // namespace og

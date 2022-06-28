@@ -9,33 +9,45 @@
 using namespace og;
 
 TcpListener::TcpListener()
-	: Socket(AF_INET, SOCK_STREAM, 0)
+    : Socket(AF_INET, SOCK_STREAM, 0)
 {
 }
 
 TcpListener::TcpListener(Handle handle)
-	: Socket(handle)
+    : Socket(handle)
 {
 }
 
 int TcpListener::listen(int backlog)
 {
-	return intl::listen(m_handle, backlog);
+    return intl::listen(m_handle, backlog);
 }
 
-std::unique_ptr<TcpStream> TcpListener::try_accept()
+Socket::Handle TcpListener::accept_handle()
 {
-	SocketAddr addr{SocketAddrV4{}};
+    SocketAddr addr{SocketAddrV4{}};
 
-	return try_accept(addr);
+    return accept_handle(addr);
 }
 
-std::unique_ptr<TcpStream> TcpListener::try_accept(SocketAddr& peer_address)
+Socket::Handle TcpListener::accept_handle(SocketAddr &peer_address)
 {
-	Handle accepted_handle = intl::accept(m_handle, peer_address);
+    return intl::accept(m_handle, peer_address);
+}
 
-	if (accepted_handle != k_bad_socket)
-		return std::make_unique<TcpStream>(accepted_handle);
+std::unique_ptr<TcpStream> TcpListener::accept()
+{
+    SocketAddr addr{SocketAddrV4{}};
 
-	return std::nullptr_t{};
+    return accept(addr);
+}
+
+std::unique_ptr<TcpStream> TcpListener::accept(SocketAddr& peer_address)
+{
+    Handle accepted_handle = intl::accept(m_handle, peer_address);
+
+    if (accepted_handle != k_bad_socket)
+        return std::make_unique<TcpStream>(accepted_handle);
+
+    return std::nullptr_t{};
 }

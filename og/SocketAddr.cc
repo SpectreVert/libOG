@@ -69,20 +69,17 @@ SocketAddrV4& SocketAddrV4::set_port(Port port)
 SocketAddr::SocketAddr(Ipv4 addr, Port port)
     : version(e_V4)
     , addr(addr, port)
-{
-}
+{}
 
 SocketAddr::SocketAddr(SocketAddrV4 sock_addr)
     : version(e_V4)
     , addr(sock_addr)
-{
-}
+{}
 
 SocketAddr::SocketAddr(sockaddr_in net_order_addr)
     : version(e_V4)
     , addr(net_order_addr)
-{
-}
+{}
 
 /*
 SocketAddr::SocketAddr(Ipv6 addr, Port port)
@@ -123,10 +120,8 @@ socklen_t SocketAddr::socket_address_size() const
 
 SocketAddr::AddrSet::AddrSet(Ipv4 addr, Port port)
     : v4(addr, port)
-{
-}
+{}
 
 SocketAddr::AddrSet::AddrSet(SocketAddrV4 socket_address)
     : v4(socket_address)
-{
-}
+{}

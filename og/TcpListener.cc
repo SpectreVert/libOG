@@ -10,13 +10,11 @@ using namespace og;
 
 TcpListener::TcpListener()
     : Socket(AF_INET, SOCK_STREAM, 0)
-{
-}
+{}
 
 TcpListener::TcpListener(Handle handle)
     : Socket(handle)
-{
-}
+{}
 
 int TcpListener::listen(int backlog)
 {

@@ -17,8 +17,8 @@ namespace og {
 enum Status {
     e_failure = -1,
     e_success = 0,
+    e_again,
     e_closed,
-    e_would_block,
     e_in_progress
 };
 

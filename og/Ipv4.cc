@@ -13,18 +13,15 @@ using namespace og;
 
 Ipv4::Ipv4()
     : m_address(0)
-{
-}
+{}
 
 Ipv4::Ipv4(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4)
     : m_address(htonl(b1 << 24 | b2 << 16 | b3 << 8 | b4))
-{
-}
+{}
 
 Ipv4::Ipv4(uint32_t address)
     : m_address(htonl(address))
-{
-}
+{}
 
 Ipv4::Ipv4(const char* address)
     : m_address(0)

@@ -21,8 +21,7 @@ Socket::Socket(int dom, int type, int prot)
 
 Socket::Socket(Handle handle)
     : m_handle(handle)
-{
-}
+{}
 
 Socket::Handle Socket::handle() const
 {

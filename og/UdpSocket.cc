@@ -25,7 +25,7 @@ int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf)
         return e_success;
 
     if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }
@@ -42,7 +42,7 @@ int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf, std::size_t& received
 
     received = 0;
     if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }
@@ -55,7 +55,7 @@ int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const& buf)
         return e_success;
 
     if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }
@@ -72,7 +72,7 @@ int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const &buf, std::size_t
 
     sent = 0;
     if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }

@@ -11,13 +11,11 @@ using namespace og;
 
 TcpStream::TcpStream()
     : Socket(AF_INET, SOCK_STREAM, 0)
-{
-}
+{}
 
 TcpStream::TcpStream(Handle handle)
     : Socket(handle)
-{
-}
+{}
 
 Socket::Handle TcpStream::mk_handle(SocketAddr const& peer_address)
 {
@@ -68,7 +66,7 @@ int TcpStream::send(RawBuffer const& buf)
         return e_success;
 
     if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }
@@ -85,7 +83,7 @@ int TcpStream::send(RawBuffer const &buf, std::size_t& sent)
 
     sent = 0;
     if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }
@@ -100,7 +98,7 @@ int TcpStream::recv(RawBuffer& buf)
     if (res == 0)
         return e_closed;
     else if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }
@@ -119,7 +117,7 @@ int TcpStream::recv(RawBuffer& buf, std::size_t& recv)
     if (res == 0)
         return e_closed;
     else if (errno == EAGAIN || errno == EWOULDBLOCK)
-        return e_would_block;
+        return e_again;
 
     return e_failure;
 }

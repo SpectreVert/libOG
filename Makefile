@@ -40,3 +40,5 @@ uninstall:
 
 clean:
 	rm -f ${LIB} ${OBJ}
+
+.PHONY: all options re install uninstall clean

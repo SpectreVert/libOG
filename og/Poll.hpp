@@ -8,7 +8,7 @@
 #ifndef OG_POLL_HPP_
 #define OG_POLL_HPP_
 
-#include "og/internal.hpp"
+#include "og/defs.hpp"
 #include "og/Socket.hpp"
 
 #if defined(OG_SYSTEM_LINUX) or defined(OG_SYSTEM_ANDROID)

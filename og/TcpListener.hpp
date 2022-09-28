@@ -9,27 +9,28 @@
 #ifndef OG_TCPLISTENER_HPP_
 #define OG_TCPLISTENER_HPP_
 
+#include "og/Socket.hpp"
 #include "og/SocketAddr.hpp"
-#include "og/TcpStream.hpp"
 
 #include <memory>
 
 namespace og {
 
-class TcpListener : public Socket {
-public:
+struct TcpStream;
+
+struct TcpListener : public Socket {
     virtual ~TcpListener() = default;
     TcpListener();
-    TcpListener(Handle handle);
+    TcpListener(s32 socketfd);
 
-    virtual int listen(int backlog);
+    s32 listen(s32 backlog);
 
-    virtual Handle accept_handle();
-    virtual Handle accept_handle(SocketAddr &peer_address);
-    virtual std::unique_ptr<TcpStream> accept();
-    virtual std::unique_ptr<TcpStream> accept(SocketAddr &peer_address);
+    s32 accept_handle();
+    s32 accept_handle(SocketAddr &peer_address);
+    std::unique_ptr<TcpStream> accept();
+    std::unique_ptr<TcpStream> accept(SocketAddr &peer_address);
 
-}; // class TcpListener
+}; // struct TcpListener
 
 } // namespace og
 

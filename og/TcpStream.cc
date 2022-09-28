@@ -4,8 +4,10 @@
  * 02-05-2021 @ 01:04:20
 */
 
-#include "og/Error.hpp"
 #include "og/TcpStream.hpp"
+
+#include <arpa/inet.h>
+#include <cerrno>
 
 using namespace og;
 
@@ -13,15 +15,15 @@ TcpStream::TcpStream()
     : Socket(AF_INET, SOCK_STREAM, 0)
 {}
 
-TcpStream::TcpStream(Handle handle)
+TcpStream::TcpStream(s32 handle)
     : Socket(handle)
 {}
 
-Socket::Handle TcpStream::mk_handle(SocketAddr const& peer_address)
+s32 TcpStream::mk_handle(SocketAddr const& peer_address)
 {
-    Handle handle = intl::open(AF_INET, SOCK_STREAM, 0);
+    s32 handle = intl::open(AF_INET, SOCK_STREAM, 0);
 
-    if (handle == k_bad_socket)
+    if (handle == k_bad_socketfd)
         return handle;
 
     if (intl::connect(handle, peer_address) == 0 || errno == EINPROGRESS)
@@ -29,14 +31,14 @@ Socket::Handle TcpStream::mk_handle(SocketAddr const& peer_address)
 
     intl::close(handle);
 
-    return k_bad_socket;
+    return k_bad_socketfd;
 }
 
 std::unique_ptr<TcpStream> TcpStream::mk_stream(SocketAddr const& peer_address)
 {
-    Handle handle = intl::open(AF_INET, SOCK_STREAM, 0);
+    s32 handle = intl::open(AF_INET, SOCK_STREAM, 0);
 
-    if (handle == k_bad_socket)
+    if (handle == k_bad_socketfd)
         return std::nullptr_t{};
 
     if (intl::connect(handle, peer_address) == 0 || errno == EINPROGRESS)
@@ -58,9 +60,9 @@ int TcpStream::connect(SocketAddr const& peer_address)
     return e_failure;
 }
 
-int TcpStream::send(RawBuffer const& buf)
+int TcpStream::send(Buffer const& buf)
 {
-    ssize_t res = intl::send(m_handle, buf);
+    s64 res = intl::send(m_handle, buf);
 
     if (res != -1)
         return e_success;
@@ -71,13 +73,13 @@ int TcpStream::send(RawBuffer const& buf)
     return e_failure;
 }
 
-int TcpStream::send(RawBuffer const &buf, std::size_t& sent)
+int TcpStream::send(Buffer const &buf, u32& sent)
 {
-    ssize_t res = intl::send(m_handle, buf);
+    s64 res = intl::send(m_handle, buf);
 
     if (res != -1)
     {
-        sent = static_cast<std::size_t>(res);
+        sent = static_cast<u32>(res);
         return e_success;
     }
 
@@ -88,9 +90,9 @@ int TcpStream::send(RawBuffer const &buf, std::size_t& sent)
     return e_failure;
 }
 
-int TcpStream::recv(RawBuffer& buf)
+int TcpStream::recv(Buffer& buf)
 {
-    ssize_t res = intl::recv(m_handle, buf);
+    s64 res = intl::recv(m_handle, buf);
 
     if (res > 0)
         return e_success;
@@ -103,13 +105,13 @@ int TcpStream::recv(RawBuffer& buf)
     return e_failure;
 }
 
-int TcpStream::recv(RawBuffer& buf, std::size_t& recv)
+int TcpStream::recv(Buffer& buf, u32& recv)
 {
-    ssize_t res = intl::recv(m_handle, buf);
+    s64 res = intl::recv(m_handle, buf);
 
     if (res > 0)
     {
-        recv = static_cast<std::size_t>(res);
+        recv = static_cast<u32>(res);
         return e_success;
     }
 

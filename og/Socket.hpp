@@ -9,29 +9,26 @@
 #ifndef OG_SOCKET_HPP_
 #define OG_SOCKET_HPP_
 
-#include "og/generic/ISource.hpp"
-#include "og/Internal.hpp"
+#include "og/internal.hpp"
 
 namespace og {
 
-class Socket : public ISource<intl::Handle> {
-public:
+struct Socket {
+    s32 m_handle{ k_bad_socketfd };
+
     virtual ~Socket();
     Socket() = default;
-    Socket(int dom, int type, int prot);
-    Socket(Handle);
+    Socket(s32 domain, s32 type, s32 protocol);
+    Socket(s32 socketfd);
 
-    virtual Handle handle() const;
-    virtual int mk_handle(int dom, int type, int prot);
-    virtual void set_handle(Handle);
-    virtual int close();
+    s32 close();
+    s32 mk_handle(int dom, int type, int prot);
+    void set_handle(s32 socketfd);
+    s32 handle() const;
 
-    virtual int bind(SocketAddr const& addr);
+    int bind(SocketAddr const& addr);
 
-protected:
-    Handle m_handle = k_bad_socket;
-
-}; // class Socket
+}; // struct Socket
 
 } // namespace og
 

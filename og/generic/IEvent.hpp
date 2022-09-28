@@ -6,27 +6,26 @@
  * see LICENSE
 */
 
-#ifndef _IEVENT_HPP
-#define _IEVENT_HPP
+#ifndef OG_IEVENT_HPP_
+#define OG_IEVENT_HPP_
 
-#include <utility>
+#include "og/defs.hpp"
 
 namespace og {
 
 struct IEvent {
-    using Tag = std::size_t;
-
     virtual ~IEvent() = default;
 
-    virtual Tag id() const = 0;
+    virtual u64 id() const = 0;
 
     virtual bool is_error() const = 0;
     virtual bool is_readable() const = 0;
     virtual bool is_read_closed() const = 0;
     virtual bool is_writable() const = 0;
     virtual bool is_write_closed() const = 0;
-};
+
+}; // struct IEvent
 
 } // namespace og
 
-#endif /* _IEVENT_HPP */
+#endif /* OG_IEVENT_HPP_ */

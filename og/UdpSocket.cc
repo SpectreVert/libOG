@@ -4,8 +4,10 @@
  * 04-08-2021 @ 15:40:31
 */
 
-#include "og/Error.hpp"
 #include "og/UdpSocket.hpp"
+
+#include <arpa/inet.h>
+#include <cerrno>
 
 using namespace og;
 
@@ -13,11 +15,11 @@ UdpSocket::UdpSocket()
     : Socket(AF_INET, SOCK_DGRAM, 0)
 {}
 
-UdpSocket::UdpSocket(Handle handle)
-    : Socket(handle)
+UdpSocket::UdpSocket(s32 socketfd)
+    : Socket(socketfd)
 {}
 
-int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf)
+int UdpSocket::recv_from(SocketAddr& addr, Buffer& buf)
 {
     ssize_t res = intl::recv_from(m_handle, addr, buf);
 
@@ -30,24 +32,24 @@ int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf)
     return e_failure;
 }
 
-int UdpSocket::recv_from(SocketAddr& addr, RawBuffer& buf, std::size_t& received)
+int UdpSocket::recv_from(SocketAddr& addr, Buffer& buf, u32& received_bytes)
 {
     ssize_t res = intl::recv_from(m_handle, addr, buf);
 
     if (res != -1)
     {
-        received = static_cast<std::size_t>(res);
+        received_bytes = static_cast<u32>(res);
         return e_success;
     }
 
-    received = 0;
+    received_bytes = 0;
     if (errno == EAGAIN || errno == EWOULDBLOCK)
         return e_again;
 
     return e_failure;
 }
 
-int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const& buf)
+int UdpSocket::send_to(SocketAddr const& addr, Buffer const& buf)
 {
     ssize_t res = intl::send_to(m_handle, addr, buf);
 
@@ -60,13 +62,16 @@ int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const& buf)
     return e_failure;
 }
 
-int UdpSocket::send_to(SocketAddr const& addr, RawBuffer const &buf, std::size_t& sent)
+int UdpSocket::send_to(
+    SocketAddr const &addr,
+    Buffer const &buf,
+    u32& sent)
 {
     ssize_t res = intl::send_to(m_handle, addr, buf);
 
     if (res != -1)
     {
-        sent = static_cast<std::size_t>(res);
+        sent = static_cast<u32>(res);
         return e_success;
     }
 

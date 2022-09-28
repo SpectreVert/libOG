@@ -4,56 +4,55 @@
  * 28-04-2021 @ 22:10:15
 */
 
-#include "og/Error.hpp"
 #include "og/Socket.hpp"
 
 using namespace og;
 
 Socket::~Socket()
 {
-    (void) close();
+    (void) this->close();
 }
 
-Socket::Socket(int dom, int type, int prot)
+Socket::Socket(s32 dom, s32 type, s32 prot)
 {
     (void) mk_handle(dom, type, prot);
 }
 
-Socket::Socket(Handle handle)
-    : m_handle(handle)
+Socket::Socket(s32 socketfd)
+    : m_handle(socketfd)
 {}
 
-Socket::Handle Socket::handle() const
+s32 Socket::close()
 {
-    return m_handle;
+    if (intl::close(m_handle) == -1)
+        return e_failure;
+
+    m_handle = k_bad_socketfd;
+
+    return e_success;
 }
 
-int Socket::mk_handle(int dom, int type, int prot)
+s32 Socket::mk_handle(s32 domain, s32 type, s32 protocol)
 {
-    m_handle = intl::open(dom, type, prot);
+    m_handle = intl::open(domain, type, protocol);
     
-    if (m_handle != k_bad_socket)
+    if (m_handle != k_bad_socketfd)
         return e_success;
 
     return e_failure;
 }
 
-void Socket::set_handle(Handle handle)
+void Socket::set_handle(s32 socketfd)
 {
-    m_handle = handle;
+    m_handle = socketfd;
 }
 
-int Socket::close()
+s32 Socket::handle() const
 {
-    if (intl::close(m_handle) == -1)
-        return e_failure;
-
-    m_handle = k_bad_socket;
-
-    return e_success;
+    return m_handle;
 }
 
-int Socket::bind(SocketAddr const& addr)
+s32 Socket::bind(SocketAddr const& addr)
 {
     return intl::bind(m_handle, addr);
 }

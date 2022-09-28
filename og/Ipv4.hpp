@@ -16,7 +16,7 @@
 namespace og {
 
 struct Ipv4 {
-    // static const Ipv4 k_loopback = "127.0.0.1";
+    /// static const Ipv4 k_loopback = "127.0.0.1";
 
     virtual ~Ipv4() = default;
     Ipv4();

@@ -11,7 +11,7 @@
 #ifndef OG_BUFFER_HPP_
 #define OG_BUFFER_HPP_
 
-#include "../ykz.config.hpp"
+#include "../og.config.hpp"
 #include "og/defs.hpp"
 
 namespace og {

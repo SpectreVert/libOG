@@ -8,7 +8,7 @@
 #ifndef OG_POLL_HPP_
 #define OG_POLL_HPP_
 
-#include "../ykz.config.hpp"
+#include "../og.config.hpp"
 #include "og/defs.hpp"
 #include "og/Socket.hpp"
 

@@ -12,7 +12,6 @@ OBJ = og/Ipv4.o\
 	  og/UdpSocket.o
 
 ifeq (${PLATFORM}, linux)
-	OBJ += og/internal/unix.o
 	OBJ += og/epoll/Event.o og/epoll/Poll.o
 endif
 

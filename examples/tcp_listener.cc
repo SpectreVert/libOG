@@ -11,11 +11,6 @@
 #include "og/Poll.hpp"
 #include "og/TcpListener.hpp"
 
-/* TODO: include Error.hpp in headers
- * that use the return codes
-*/
-#include "og/Error.hpp"
-
 #define L 1
 
 int main(int ac, char* av[])
@@ -25,8 +20,8 @@ int main(int ac, char* av[])
 	og::TcpListener listener;
 	og::SocketAddr addr(og::Ipv4(127, 0, 0, 1), 6970);
 	og::Poll poll;
-	og::Poll::Events events;
-	og::RawBuffer data; (void) data;
+	og::Events events;
+	og::Buffer data; (void) data;
 
 	if (listener.bind(addr) < 0)
 		goto error;
@@ -40,13 +35,13 @@ int main(int ac, char* av[])
 	for (;;) {
 		poll.poll(events, -1); // not timeout -> wait infinite
 
-		auto event = events[0];
+		auto event = events.front();
 		{
 			if (event.is_readable())
 			{
-				auto new_stream = listener.try_accept();
+				auto new_handle = listener.accept_handle();
 
-				if (!new_stream)
+				if (new_handle == og::k_bad_socketfd)
 					goto error;
 
 				std::cerr << "Accepted socket" << std::endl;

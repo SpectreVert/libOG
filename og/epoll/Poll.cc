@@ -6,11 +6,10 @@
 
 #include "og/Poll.hpp"
 #include "og/epoll/Event.hpp"
+#include "og/internal.hpp"
 
 #include <sys/epoll.h>
 
-#include <cassert>
-#include <cerrno>
 #include <cstring>
 #include <fcntl.h>
 

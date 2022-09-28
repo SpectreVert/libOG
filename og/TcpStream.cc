@@ -5,9 +5,7 @@
 */
 
 #include "og/TcpStream.hpp"
-
-#include <arpa/inet.h>
-#include <cerrno>
+#include "og/internal.hpp"
 
 using namespace og;
 

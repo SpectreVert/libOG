@@ -7,8 +7,6 @@
 
 #include "og/Ipv4.hpp"
 
-#include <cstring>
-
 using namespace og;
 
 Ipv4::Ipv4()

@@ -9,7 +9,8 @@
 #ifndef OG_SOCKET_HPP_
 #define OG_SOCKET_HPP_
 
-#include "og/internal.hpp"
+#include "og/defs.hpp"
+#include "SocketAddr.hpp"
 
 namespace og {
 

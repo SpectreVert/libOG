@@ -5,6 +5,7 @@
 */
 
 #include "og/TcpListener.hpp"
+#include "og/internal.hpp"
 #include "og/TcpStream.hpp"
 
 using namespace og;

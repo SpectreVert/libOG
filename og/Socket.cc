@@ -4,6 +4,7 @@
  * 28-04-2021 @ 22:10:15
 */
 
+#include "og/internal.hpp"
 #include "og/Socket.hpp"
 
 using namespace og;

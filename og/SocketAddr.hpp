@@ -9,7 +9,7 @@
 #ifndef OG_SOCKETADDR_HPP_
 #define OG_SOCKETADDR_HPP_
 
-#include "og/internal.hpp"
+#include "og/defs.hpp"
 #include "og/Ipv4.hpp"
 
 namespace og {

@@ -4,8 +4,9 @@
  * 29-04-2021 @ 00:52:30
 */
 
-#include "og/Error.hpp"
 #include "og/SocketAddr.hpp"
+
+#include <cassert>
 
 using namespace og;
 

@@ -9,11 +9,12 @@
 #ifndef OG_SOCKETADDR_HPP_
 #define OG_SOCKETADDR_HPP_
 
+#include "og/internal.hpp"
 #include "og/Ipv4.hpp"
 
 namespace og {
 
-using Port = uint16_t;
+typedef u16 Port;
 
 //! Ipv4 socket address
 //!

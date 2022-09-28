@@ -3,17 +3,16 @@
 include config.mk
 
 LIB=libOG.a
-TARGET=libOG
 
-OBJ = og/Internal.o\
-	og/Ipv4.o\
-	og/Socket.o\
-	og/SocketAddr.o\
-	og/TcpListener.o\
-	og/TcpStream.o\
-	og/UdpSocket.o
+OBJ = og/Ipv4.o\
+	  og/Socket.o\
+	  og/SocketAddr.o\
+	  og/TcpListener.o\
+	  og/TcpStream.o\
+	  og/UdpSocket.o
 
 ifeq (${PLATFORM}, linux)
+	OBJ += og/internal/unix.o
 	OBJ += og/epoll/Event.o og/epoll/Poll.o
 endif
 

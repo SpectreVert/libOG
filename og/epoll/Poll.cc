@@ -4,25 +4,28 @@
  * 27-04-2021 @ 15:47:57
 */
 
-#include "og/epoll/Poll.hpp"
-#include "og/Error.hpp"
-#include "og/Internal.hpp"
+#include "og/Poll.hpp"
+#include "og/epoll/Event.hpp"
 
+#include <sys/epoll.h>
+
+#include <cassert>
+#include <cerrno>
 #include <cstring>
-#include <fcntl.h> // O_CLOEXEC
+#include <fcntl.h>
 
 using namespace og;
 
 Poll::~Poll()
 {
-    intl::close(m_epoll_fd);
+    intl::close(m_pollfd);
 }
 
 Poll::Poll()
 {
-    m_epoll_fd = epoll_create1(O_CLOEXEC);
+    m_pollfd = epoll_create1(O_CLOEXEC);
 
-    if (m_epoll_fd != -1)
+    if (m_pollfd != -1)
         return;
 
     /* epoll_create1 can fail because it's not implemented,
@@ -30,23 +33,23 @@ Poll::Poll()
     if (errno == ENOSYS || errno == EINVAL)
     {
         /* see kernel 2.6.8 patch notes */
-        m_epoll_fd = epoll_create(1024);
+        m_pollfd = epoll_create(1024);
     }
 
-    assert(m_epoll_fd != -1);
-    assert(intl::set_cloexec(m_epoll_fd, true) != -1);
+    assert(m_pollfd != -1);
+    assert(intl::set_cloexec(m_pollfd, true) != -1);
 }
 
-int Poll::poll(Events& events, int timeout)
+s32 Poll::poll(Events& events, s32 timeout)
 {
-    int nb;
+    s32 nb;
     
     assert(timeout >= -1);
     std::memset((void*) events.data(), 0, events.size() * sizeof(og::Event));
 
     for (;;)
     {
-        nb = epoll_wait(m_epoll_fd, events.data(), events.size(), timeout);
+        nb = epoll_wait(m_pollfd, events.data(), events.size(), timeout);
         
         if (nb == 0)
         {
@@ -69,10 +72,9 @@ int Poll::poll(Events& events, int timeout)
     return e_success;
 }
 
-// TODO: Source const&
-int Poll::add(Source& src, Tag tag, Concern concern)
+s32 Poll::add(Socket& socket, u64 id, u16 concern)
 {
-    uint32_t bits{0};
+    u32 bits{0};
     epoll_event event{0, {0}};
 
     /* if the fd we're using needs to be shared, we're
@@ -90,16 +92,14 @@ int Poll::add(Source& src, Tag tag, Concern concern)
         bits |= EPOLLIN;
 
     event.events = bits;
-    event.data.u64 = tag;
+    event.data.u64 = id;
 
-    return epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, src.handle(), &event);
+    return epoll_ctl(m_pollfd, EPOLL_CTL_ADD, socket.handle(), &event);
 }
 
-//! this function re_registers an fd/concern pair; but
-//! cannot take e_shared as concern.
-int Poll::refresh(Source& src, Tag tag, Concern concern)
+s32 Poll::refresh(Socket& socket, u64 id, u16 concern)
 {
-    uint32_t bits{EPOLLET};
+    u32 bits{EPOLLET};
     epoll_event event{0, {0}};
 
     if (concern & e_shared)
@@ -114,14 +114,14 @@ int Poll::refresh(Source& src, Tag tag, Concern concern)
         bits |= EPOLLIN;
 
     event.events = bits;
-    event.data.u64 = tag;
+    event.data.u64 = id;
 
-    return epoll_ctl(m_epoll_fd, EPOLL_CTL_MOD, src.handle(), &event);
+    return epoll_ctl(m_pollfd, EPOLL_CTL_MOD, socket.handle(), &event);
 }
 
-int Poll::forget(Source& src)
+int Poll::forget(Socket& socket)
 {
     epoll_event event{0, {0}};
 
-    return epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, src.handle(), &event);
+    return epoll_ctl(m_pollfd, EPOLL_CTL_DEL, socket.handle(), &event);
 }

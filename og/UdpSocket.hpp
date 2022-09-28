@@ -9,23 +9,22 @@
 #ifndef OG_UDPSOCKET_HPP_
 #define OG_UDPSOCKET_HPP_
 
-#include "og/RawBuffer.hpp"
+#include "og/Buffer.hpp"
 #include "og/Socket.hpp"
 
 namespace og {
 
-class UdpSocket : public Socket {
-public:
+struct UdpSocket : public Socket {
     virtual ~UdpSocket() = default;
     UdpSocket();
-    UdpSocket(Handle);
+    UdpSocket(s32 socketfd);
 
-    virtual int recv_from(SocketAddr&, RawBuffer&);
-    virtual int recv_from(SocketAddr&, RawBuffer&, std::size_t&);
-    virtual int send_to(SocketAddr const&, RawBuffer const&);
-    virtual int send_to(SocketAddr const&, RawBuffer const&, std::size_t&);
+    s32 recv_from(SocketAddr&, Buffer& buf);
+    s32 recv_from(SocketAddr&, Buffer& buf, u32& received_bytes);
+    s32 send_to(SocketAddr const&, Buffer const& buf);
+    s32 send_to(SocketAddr const&, Buffer const& buf, u32& received_bytes);
 
-}; // class UdpSocket
+}; // struct UdpSocket
 
 } // namespace og
 

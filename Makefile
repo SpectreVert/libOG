@@ -9,7 +9,8 @@ OBJ = og/Ipv4.o\
 	  og/SocketAddr.o\
 	  og/TcpListener.o\
 	  og/TcpStream.o\
-	  og/UdpSocket.o
+	  og/UdpSocket.o\
+	  og/internal.o
 
 ifeq (${PLATFORM}, linux)
 	OBJ += og/epoll/Event.o og/epoll/Poll.o

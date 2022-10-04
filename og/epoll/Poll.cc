@@ -71,7 +71,7 @@ s32 Poll::poll(Events& events, s32 timeout)
     return e_success;
 }
 
-s32 Poll::add(Socket& socket, u64 id, u16 concern)
+s32 Poll::add(s32 socketfd, u64 id, u16 concern)
 {
     u32 bits{0};
     epoll_event event{0, {0}};
@@ -93,10 +93,17 @@ s32 Poll::add(Socket& socket, u64 id, u16 concern)
     event.events = bits;
     event.data.u64 = id;
 
-    return epoll_ctl(m_pollfd, EPOLL_CTL_ADD, socket.handle(), &event);
+    return epoll_ctl(m_pollfd, EPOLL_CTL_ADD, socketfd, &event);
+
 }
 
-s32 Poll::refresh(Socket& socket, u64 id, u16 concern)
+s32 Poll::add(Socket& socket, u64 id, u16 concern)
+{
+    return add(socket.handle(), id, concern);
+}
+
+s32 Poll::refresh(s32 socketfd, u64 id, u16 concern)
+
 {
     u32 bits{EPOLLET};
     epoll_event event{0, {0}};
@@ -115,12 +122,22 @@ s32 Poll::refresh(Socket& socket, u64 id, u16 concern)
     event.events = bits;
     event.data.u64 = id;
 
-    return epoll_ctl(m_pollfd, EPOLL_CTL_MOD, socket.handle(), &event);
+    return epoll_ctl(m_pollfd, EPOLL_CTL_MOD, socketfd, &event);
+}
+
+s32 Poll::refresh(Socket& socket, u64 id, u16 concern)
+{
+    return refresh(socket.handle(), id, concern);
+}
+
+int Poll::forget(s32 socketfd)
+{
+    epoll_event event{0, {0}};
+
+    return epoll_ctl(m_pollfd, EPOLL_CTL_DEL, socketfd, &event);
 }
 
 int Poll::forget(Socket& socket)
 {
-    epoll_event event{0, {0}};
-
-    return epoll_ctl(m_pollfd, EPOLL_CTL_DEL, socket.handle(), &event);
+    return forget(socket.handle());
 }

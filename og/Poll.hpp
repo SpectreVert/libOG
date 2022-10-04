@@ -36,8 +36,11 @@ struct Poll {
 
     s32 poll(Events& events, int timeout);
 
+    s32 add(s32 socketfd, u64 id, u16 concern);
     s32 add(Socket& socket, u64 id, u16 concern);
+    s32 refresh(s32 socketfd, u64 id, u16 concern);
     s32 refresh(Socket& socket, u64 id, u16 concern);
+    s32 forget(s32 socketfd);
     s32 forget(Socket& socket);
 
 }; // struct Poll

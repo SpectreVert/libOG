@@ -39,8 +39,8 @@ s64 recv_from(s32 socketfd, SocketAddr& address, Buffer &buf);
 s64 send(s32 socketfd, Buffer const &buf);
 s64 send_to(s32 socketfd, SocketAddr const& address, Buffer const& buf);
 
-s32 set_cloexec(s32 socketfd, bool on);
-s32 set_nonblock(s32 socketfd, bool on);
+s32 set_cloexec(s32 socketfd, s32 on);
+s32 set_nonblock(s32 socketfd, s32 on);
 
 } // namespace intl
 

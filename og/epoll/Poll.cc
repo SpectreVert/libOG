@@ -36,7 +36,7 @@ Poll::Poll()
     }
 
     assert(m_pollfd != -1);
-    assert(intl::set_cloexec(m_pollfd, true) != -1);
+    assert(intl::set_cloexec(m_pollfd, 1) != -1);
 }
 
 s32 Poll::poll(Events& events, s32 timeout)

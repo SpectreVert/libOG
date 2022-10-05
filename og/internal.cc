@@ -10,7 +10,7 @@ namespace og {
 
 namespace intl {
 
-s32 set_cloexec(s32 socketfd, bool on)
+s32 set_cloexec(s32 socketfd, s32 on)
 {
     s32 res;
 
@@ -21,7 +21,7 @@ s32 set_cloexec(s32 socketfd, bool on)
     return res;
 }
 
-s32 set_nonblock(s32 socketfd, bool on)
+s32 set_nonblock(s32 socketfd, s32 on)
 {
     s32 res;
 
@@ -71,8 +71,8 @@ s32 listen(s32 socketfd, s32 backlog)
 s32 accept(s32 socketfd, SocketAddr& new_address)
 {
     s32 newfd;
-    sockaddr addr;
-    socklen_t addr_size;
+    sockaddr addr{0, {0}};
+    socklen_t addr_size{0};
 
     do
         newfd = ::accept(socketfd, &addr, &addr_size);
@@ -81,9 +81,9 @@ s32 accept(s32 socketfd, SocketAddr& new_address)
     if (newfd == k_bad_socketfd)
         return newfd;
 
-    s32 res = set_cloexec(newfd, true);
+    s32 res = set_cloexec(newfd, 1);
     if (!res)
-        res = set_nonblock(newfd, true);
+        res = set_nonblock(newfd, 1);
 
     if (res)
     {
